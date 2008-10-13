@@ -1,0 +1,26 @@
+{
+    "total_rows": 2,
+    "offset": 0,
+    "rows": [
+        {
+            "id" : "doc1",
+            "key" : "1",
+            "value" : 
+            {
+                "_id" : "doc1",
+                "_rev" : "1",
+                "value" : "foo"
+            }
+        },
+        {
+            "id" : "doc2",
+            "key" : "1",
+            "value" : 
+            {
+                "_id" : "doc2",
+                "_rev" : "1",
+                "value" : "bar"
+            }
+        }
+    ]
+ }

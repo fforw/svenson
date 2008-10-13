@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/compile/log4j.jar"/>
+	<classpathentry kind="lib" path="lib/compile/commons-beanutils.jar"/>
+	<classpathentry kind="lib" path="lib/test/hamcrest-all.jar"/>
+	<classpathentry kind="lib" path="lib/test/junit.jar"/>
+	<classpathentry kind="lib" path="lib/test/easymock.jar"/>
+	<classpathentry kind="lib" path="lib/compile/commons-logging.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
