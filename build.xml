@@ -2,12 +2,12 @@
 <!-- ====================================================================== 
      28.05.2008 09:12:15                                                        
 
-     jcouchdb    
-     couchdb driver offering typed JSON conversion
+     svenson    
+     flexible Java5 JSON library
                    
      shelmberger                                                                
      ====================================================================== -->
-<project name="svenson" default="jar">
+<project name="svenson" default="dist">
 
     <property file="build.properties" />
 
@@ -25,14 +25,6 @@
 
     <target name="clean">
         <delete dir="${project.build}" />
-    </target>
-
-    <target name="mrproper" depends="clean">
-        <delete>
-            <fileset dir="${project.libs}">
-                <include name="**/*.jar"/>
-            </fileset>
-        </delete>
     </target>
 
     <target name="init">
@@ -64,19 +56,17 @@
         </copy>
     </target>
 
-    <target name="jar" depends="compile" description="Build jar file">
+    <target name="dist" depends="compile" description="Create distribution files">
         <jar destfile="${project.build}/${ant.project.name}-${project.version}.jar">
             <fileset dir="${project.classes}" includes="**/*" excludes="log4j.properties,**/*.jar" />
         </jar>
-    </target>
-
-    <target name="copy" depends="jar" description="copy jar file to ffcouch">
-        <delete>
-            <fileset dir="${basedir}/../ffcouch/WebContent/WEB-INF/lib/" includes="${ant.project.name}-*.jar"/>
-        </delete> 
-        <copy todir="${basedir}/../ffcouch/WebContent/WEB-INF/lib/">
-            <fileset dir="${project.build}" includes="${ant.project.name}-${project.version}.jar"/>
-        </copy>
+        <zip destfile="${project.build}/${ant.project.name}-${project.version}-src.zip">
+            <zipfileset prefix="${ant.project.name}-${project.version}/" dir="${basedir}">
+                <include name="**/*"/>
+                <exclude name="bin/**/*"/>
+                <exclude name="**/*.jar"/>
+            </zipfileset>
+        </zip>
     </target>
     
     <target name="test" depends="clean,compile" description="run unit tests">
