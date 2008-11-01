@@ -12,9 +12,9 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 
-public class FieldValueBasedDocumentMapperTestCase
+public class FieldValueBasedTypeMapperTestCase
 {
-    protected static Logger log = Logger.getLogger(FieldValueBasedDocumentMapperTestCase.class);
+    protected static Logger log = Logger.getLogger(FieldValueBasedTypeMapperTestCase.class);
 
     @Test
     public void thatItWorks() throws IOException
@@ -26,8 +26,10 @@ public class FieldValueBasedDocumentMapperTestCase
         		"}\n" +
         		"";
 
+        log.info(json);
+
         JSONParser parser = new JSONParser();
-        FieldValueBasedDocumentMapper mapper = new FieldValueBasedDocumentMapper();
+        FieldValueBasedTypeMapper mapper = new FieldValueBasedTypeMapper();
         mapper.setParsePathInfo(".rows[]");
         mapper.addFieldValueMapping("foo", Foo.class);
         mapper.addFieldValueMapping("bar", Bar.class);

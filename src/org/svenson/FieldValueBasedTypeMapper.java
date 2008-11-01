@@ -7,30 +7,38 @@ import org.svenson.tokenize.Token;
 import org.svenson.tokenize.TokenType;
 
 /**
- * Uses a discriminator field to convert the documents of a query into
- * configured types. For example if you have documents like
- * <code>{ "type" : "foo" , ... }</code> and
- * <code>{ "type" : "bar" , ... }</code>, you can use the following code to
- * convert them into the appropriate types:
- *
+ * Maps parts of an JSON dataset to a set of configured types based on a field
+ * of that part. The class is an example of how to implement a {@link TypeMapper}.
+ * <p>
+ * If you have the case of JSON dataset containing different possible types that
+ * you can tell apart by the contents of a single field inside the types, this class
+ * can help you.
+ * <p>
+ * Imagine you have a JSON dataset like this:
+ * <pre><code>{
+    "total_rows": 3,
+    "offset": 0,
+    "rows": [{ "type":"foo", "value":"aaa" },{ "type":"bar", "value":"bbb" },{ "value":"ccc","type":"bar"  }]
+}
+</code></pre>
+You can now parse the objects in the rows array into Foo and Bar instances by setting up a parser like this:
  * <pre><code>
- * JSONParser parser = new JSONParser();
- * FieldBasedDocumentMapper mapper = new FieldBasedDocumentMapper();
- * mapper.addFieldValueMapping(&quot;foo&quot;, Foo.class);
- * mapper.addFieldValueMapping(&quot;bar&quot;, Bar.class);
- * parser.setTypeMapper(mapper);
+        JSONParser parser = new JSONParser();
+        FieldValueBasedTypeMapper mapper = new FieldValueBasedTypeMapper();
+        mapper.setParsePathInfo(".rows[]");
+        mapper.addFieldValueMapping("foo", Foo.class);
+        mapper.addFieldValueMapping("bar", Bar.class);
+        parser.setTypeMapper(mapper);
+</code></pre>
  *
- * ViewResult&lt;Map&gt; result = db.listDocuments(null, parser);
- * </code></pre>
- *
- * See the TestCase for this class for a full example.
+ * There is also a test case for this class that does implement this example.
  *
  * @author shelmberger
  */
-public class FieldValueBasedDocumentMapper extends AbstractMapBasedTypeMapper<String>
+public class FieldValueBasedTypeMapper extends AbstractMapBasedTypeMapper<String>
 {
     /**
-     * Field whose value is used to tell one type from the other.
+     * Field whose value is used to tell one type from the other. (default "type")
      */
     String discriminatorField = "type";
 
@@ -52,10 +60,6 @@ public class FieldValueBasedDocumentMapper extends AbstractMapBasedTypeMapper<St
 
     /**
      * Sets the parse path info at which the type discrimination is applied.
-     * Default is <code>".rows[].value"</code> which is the parse path info
-     * for a couchdb view result transformation. This method is only present for
-     * complete configurability of the {@link FieldValueBasedDocumentMapper},
-     * use only if you know what you're doing.
      *
      * @param parsePathInfo
      */
