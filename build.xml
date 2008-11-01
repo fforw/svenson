@@ -64,7 +64,6 @@
             <zipfileset prefix="${ant.project.name}-${project.version}/" dir="${basedir}">
                 <include name="**/*"/>
                 <exclude name="bin/**/*"/>
-                <exclude name="**/*.jar"/>
             </zipfileset>
         </zip>
     </target>
