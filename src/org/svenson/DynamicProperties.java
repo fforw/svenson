@@ -3,7 +3,7 @@ package org.svenson;
 import java.util.Set;
 
 /**
- * Interface that allows classes to also have dynamic attributes
+ * Interface that allows classes to also have dynamic properties
  *
  * @author shelmberger
  *

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.couchjson;
+package org.svenson;
 
 public class InnerBean
 {

@@ -1,6 +1,6 @@
 package org.svenson;
 
-import org.svenson.parse.JSONTokenizer;
+import org.svenson.tokenize.JSONTokenizer;
 
 /**
  * Inspects the current position of a tokenizer and decides what type to use for that object.

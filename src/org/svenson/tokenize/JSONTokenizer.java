@@ -1,8 +1,11 @@
-package org.svenson.parse;
+package org.svenson.tokenize;
+
+import org.svenson.JSONParseException;
 
 /**
- * JSON Tokenizer. Parses the json text into {@link Token}s, can push back one
- * token, is stateful / not reusable / not thread safe.
+ * JSON Tokenizer. Parses the json text into {@link Token}s. Tokens can be
+ * pushed back into the Tokenizer for resetting the token stream to a previous
+ * position. The Tokenizer is stateful and not thread-safe.
  *
  * @author shelmberger
  *
@@ -16,7 +19,32 @@ public class JSONTokenizer
     private Token headToken = new Token(TokenType.NULL, null);
     private Token curToken = headToken;
 
+    private boolean allowSingleQuotes = false;
+
+    /**
+     * Constructs a new tokenizer instance for the given JSON string.
+     *
+     * @param json
+     */
     public JSONTokenizer(String json)
+    {
+        this(json, false);
+    }
+
+    public boolean isAllowSingleQuotes()
+    {
+        return allowSingleQuotes;
+    }
+
+    /**
+     * Constructs a new tokenizer instance for the given JSON string. If allowSingleQuotes
+     * is <code>true</code>, the parser will also allow the JSON to contain quoted string that are
+     * quoted with single quotes.
+     *
+     * @param json
+     * @param allowSingleQuotes
+     */
+    public JSONTokenizer(String json, boolean allowSingleQuotes)
     {
         if (json == null)
         {
@@ -24,6 +52,7 @@ public class JSONTokenizer
         }
 
         this.json = json.toCharArray();
+        this.allowSingleQuotes = allowSingleQuotes;
     }
 
     /**
@@ -45,7 +74,12 @@ public class JSONTokenizer
         }
     }
 
-    private void ensureKeyword(String word)
+    /**
+     * Ensures that the token stream stand on the given identifier suffix. This
+     * is used to e.g. check if "rue" is really following an initial 't'.
+     * @param word
+     */
+    private void ensureKeywordSuffix(String word)
     {
         if (index + word.length() > json.length || !new String(json,index,word.length()).equals(word) )
         {
@@ -77,14 +111,12 @@ public class JSONTokenizer
 
         Token token ;
 
-        int start = index;
         char c1 = nextChar();
         switch(c1)
         {
             case '"':
-            case '\'':
             {
-                token = parseString();
+                token = parseString(c1);
                 break;
             }
             case '[':
@@ -106,15 +138,15 @@ public class JSONTokenizer
                 token = new Token(TokenType.COMMA, ",");
                 break;
             case 't':
-                ensureKeyword("rue");
+                ensureKeywordSuffix("rue");
                 token = new Token(TokenType.TRUE, Boolean.TRUE);
                 break;
             case 'f':
-                ensureKeyword("alse");
+                ensureKeywordSuffix("alse");
                 token = new Token(TokenType.FALSE, Boolean.FALSE);
                 break;
             case 'n':
-                ensureKeyword("ull");
+                ensureKeywordSuffix("ull");
                 token = new Token(TokenType.NULL);
                 break;
             default:
@@ -124,6 +156,13 @@ public class JSONTokenizer
                     token = parseNumber(c1);
                     break;
                 }
+
+                if (c1 == '\'' && allowSingleQuotes)
+                {
+                    token = parseString(c1);
+                    break;
+                }
+
                 throw new JSONParseException("Unexpected character '"+c1+"'");
             }
         }
@@ -151,11 +190,19 @@ public class JSONTokenizer
         curToken = oldToken.prev;
     }
 
+    /**
+     * Resets the tokenizer to the first parsing position.
+     */
     public void reset()
     {
         curToken = headToken;
     }
 
+    /**
+     * Parses the current parsing stream position into a token with the type {@link TokenType#INTEGER} or {@link TokenType#DECIMAL}.
+     * @param c1
+     * @return
+     */
     private Token parseNumber(char c1)
     {
         if ( c1 == '-')
@@ -196,6 +243,11 @@ public class JSONTokenizer
         }
     }
 
+    /**
+     * Parses the given string into a token with the type {@link TokenType#DECIMAL}.
+     * @param number
+     * @return
+     */
     private Token parseDecimal(String number)
     {
         try
@@ -209,17 +261,20 @@ public class JSONTokenizer
         }
     }
 
-    private Token parseString()
+    /**
+     * Parses the current position into a quoted string quoted by the given
+     * quote char.
+     * @param quoteChar character that starts and ends this quoted string. must be a single or a double quote.
+     * @return
+     */
+    private Token parseString(char quoteChar)
     {
-        index--;
-        char quoteChar = this.nextChar();
         StringBuilder sb = new StringBuilder();
         boolean escape = false;
         boolean endOfString = false;
         while (index < json.length)
         {
             char c = nextChar();
-
 
             if ((endOfString = (c == quoteChar && !escape)))
             {
@@ -292,6 +347,10 @@ public class JSONTokenizer
         }
     }
 
+    /**
+     * Returns an info string containing the line and column of the current parsing position.
+     * @return
+     */
     private String info()
     {
         int column = 1, line = 1;
@@ -318,11 +377,20 @@ public class JSONTokenizer
         return "at line "+line+", column "+column;
     }
 
+    /**
+     * Returns <code>true</code> if the given character is either a carriage return or linefeed
+     * @param c
+     * @return
+     */
     private boolean isCR(char c)
     {
         return c == '\r' || c == '\n';
     }
 
+    /**
+     * Returns the next character.
+     * @return
+     */
     private char nextChar()
     {
         return json[index++];
@@ -336,6 +404,10 @@ public class JSONTokenizer
         index--;
     }
 
+    /**
+     * Skips all white-space at the current parsing position; will set the
+     * position to the first non-whitespace character.
+     */
     private void skipWhiteSpace()
     {
         while (index < json.length)

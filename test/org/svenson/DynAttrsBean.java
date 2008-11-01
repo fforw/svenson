@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.couchjson;
+package org.svenson;
 
 import org.svenson.AbstractDynamicProperties;
 

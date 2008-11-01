@@ -1,4 +1,4 @@
-package org.couchjson;
+package org.svenson;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -15,8 +15,8 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.svenson.JSONParseException;
 import org.svenson.JSONParser;
-import org.svenson.parse.JSONParseException;
 
 public class JSONParserTestCase
 {

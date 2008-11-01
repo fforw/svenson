@@ -1,4 +1,4 @@
-package org.couchjson;
+package org.svenson;
 
 
 

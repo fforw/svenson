@@ -13,10 +13,9 @@ import java.util.Map;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
-import org.svenson.parse.JSONParseException;
-import org.svenson.parse.JSONTokenizer;
-import org.svenson.parse.Token;
-import org.svenson.parse.TokenType;
+import org.svenson.tokenize.JSONTokenizer;
+import org.svenson.tokenize.Token;
+import org.svenson.tokenize.TokenType;
 import org.svenson.util.ExceptionWrapper;
 
 /**
@@ -307,7 +306,7 @@ public class JSONParser
                 key = tokenizer.expectNext( TokenType.STRING);
             }
 
-            String name = JSONPropertyHelper.getPropertyNameFromAnnotation(cx.target, (String)key.value());
+            String name = getPropertyNameFromAnnotation(cx.target, (String)key.value());
             if (name.length() == 0)
             {
                 throw new JSONParseException("Invalid empty property name");
@@ -655,5 +654,30 @@ public class JSONParser
         {
             return super.toString()+", target = "+target+", memberType = "+memberType+", info = "+info;
         }
+    }
+
+    private static String getPropertyNameFromAnnotation(Object target, String value)
+    {
+        for (PropertyDescriptor pd : PropertyUtils.getPropertyDescriptors(target.getClass()))
+        {
+            JSONProperty jsonProperty = null;
+            Method readMethod = pd.getReadMethod();
+            Method writeMethod = pd.getWriteMethod();
+
+            if (readMethod != null)
+            {
+                jsonProperty = readMethod.getAnnotation(JSONProperty.class);
+            }
+            if (jsonProperty == null && writeMethod != null)
+            {
+                jsonProperty = writeMethod.getAnnotation(JSONProperty.class);
+            }
+
+            if (jsonProperty != null && jsonProperty.value().equals(value))
+            {
+                return pd.getName();
+            }
+        }
+        return value;
     }
 }

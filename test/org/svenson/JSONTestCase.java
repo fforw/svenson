@@ -1,4 +1,4 @@
-package org.couchjson;
+package org.svenson;
 
 import static org.easymock.EasyMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;

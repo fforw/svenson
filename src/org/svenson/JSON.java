@@ -16,8 +16,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
- * Tool class with only static methods used to construct <a
- * href="http://json.org">JSON</a> representations of nested java object
+ * Generates <a href="http://json.org">JSON</a> representations of nested java object
  * graphs. The object graphs can contain the following components:
  * <ul>
  * <li>Primitives, Booleans and Strings</li>
@@ -32,6 +31,9 @@ import java.util.StringTokenizer;
  * @license BSD revised
  * @see JSONable
  * @see JSONifier
+ * @see JSONProperty
+ * @see DynamicProperties
+ * @see AbstractDynamicProperties
  */
 public class JSON
 {

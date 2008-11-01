@@ -3,37 +3,44 @@ package org.svenson.util;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import org.svenson.CouchJSONException;
+import org.svenson.SvensonRuntimeException;
 
+/**
+ * Wraps checked exceptions in unchecked {@link SvensonRuntimeException}. Allows to customizes
+ * the handling of checked exceptions in the library for each specific type.
+ *
+ * @author shelmberger
+ *
+ */
 public class ExceptionWrapper
 {
-    public static CouchJSONException wrap(InstantiationException e)
+    public static SvensonRuntimeException wrap(InstantiationException e)
     {
-        return new CouchJSONException(e);
+        return new SvensonRuntimeException(e);
     }
 
-    public static CouchJSONException wrap(IllegalAccessException e)
+    public static SvensonRuntimeException wrap(IllegalAccessException e)
     {
-        return new CouchJSONException(e);
+        return new SvensonRuntimeException(e);
     }
 
-    public static CouchJSONException wrap(InvocationTargetException e)
+    public static SvensonRuntimeException wrap(InvocationTargetException e)
     {
-        return new CouchJSONException(e);
+        return new SvensonRuntimeException("InvocationTargetException, target is"+e.getTargetException());
     }
 
-    public static CouchJSONException wrap(NoSuchMethodException e)
+    public static SvensonRuntimeException wrap(NoSuchMethodException e)
     {
-        return new CouchJSONException(e);
+        return new SvensonRuntimeException(e);
     }
 
-    public static CouchJSONException wrap(IOException e)
+    public static SvensonRuntimeException wrap(IOException e)
     {
-        return new CouchJSONException(e);
+        return new SvensonRuntimeException(e);
     }
 
-    public static CouchJSONException wrap(ClassNotFoundException e)
+    public static SvensonRuntimeException wrap(ClassNotFoundException e)
     {
-        return new CouchJSONException(e);
+        return new SvensonRuntimeException(e);
     }
 }

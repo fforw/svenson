@@ -1,4 +1,4 @@
-package org.couchjson.parse;
+package org.svenson.tokenize;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -9,10 +9,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.svenson.parse.JSONParseException;
-import org.svenson.parse.JSONTokenizer;
-import org.svenson.parse.Token;
-import org.svenson.parse.TokenType;
+import org.svenson.JSONParseException;
+import org.svenson.tokenize.JSONTokenizer;
+import org.svenson.tokenize.Token;
+import org.svenson.tokenize.TokenType;
 
 public class JSONTokenizerTestCase
 {
@@ -22,7 +22,7 @@ public class JSONTokenizerTestCase
     {
         List<Token> tokens = new ArrayList<Token>();
 
-        JSONTokenizer tokenizer = new JSONTokenizer(json);
+        JSONTokenizer tokenizer = new JSONTokenizer(json, true);
         Token token;
         while ( (token = tokenizer.next()).type() != TokenType.END)
         {
@@ -44,7 +44,7 @@ public class JSONTokenizerTestCase
         }
         else
         {
-            return new Token(type, type.getDefaultContent());
+            return new Token(type, type.getValidContent());
         }
     }
 
@@ -171,5 +171,18 @@ public class JSONTokenizerTestCase
 
             assertThat(token, is(token2));
         }
+    }
+
+    @Test
+    public void thatSingleQuotesAreNotAllowedByDefault()
+    {
+        JSONTokenizer t = new JSONTokenizer("[]");
+        assertThat(t.isAllowSingleQuotes(), is(false));
+    }
+
+    @Test(expected = JSONParseException.class)
+    public void thatSingleQuotesAreRejectedIfNotAllowed()
+    {
+        new JSONTokenizer("'foo'", false).next();
     }
 }

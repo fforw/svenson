@@ -1,7 +1,14 @@
-package org.svenson.parse;
+package org.svenson;
 
+
+/**
+ * Is thrown when an error happens during JSON parsing.
+ *
+ * @author shelmberger
+ *
+ */
 public class JSONParseException
-    extends RuntimeException
+    extends SvensonRuntimeException
 {
     private static final long serialVersionUID = 2916869311842277595L;
 
