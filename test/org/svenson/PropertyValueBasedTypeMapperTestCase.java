@@ -12,9 +12,9 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 
-public class FieldValueBasedTypeMapperTestCase
+public class PropertyValueBasedTypeMapperTestCase
 {
-    protected static Logger log = Logger.getLogger(FieldValueBasedTypeMapperTestCase.class);
+    protected static Logger log = Logger.getLogger(PropertyValueBasedTypeMapperTestCase.class);
 
     @Test
     public void thatItWorks() throws IOException
@@ -29,7 +29,7 @@ public class FieldValueBasedTypeMapperTestCase
         log.info(json);
 
         JSONParser parser = new JSONParser();
-        FieldValueBasedTypeMapper mapper = new FieldValueBasedTypeMapper();
+        PropertyValueBasedTypeMapper mapper = new PropertyValueBasedTypeMapper();
         mapper.setParsePathInfo(".rows[]");
         mapper.addFieldValueMapping("foo", Foo.class);
         mapper.addFieldValueMapping("bar", Bar.class);

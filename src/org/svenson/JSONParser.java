@@ -38,6 +38,13 @@ public class JSONParser
 
     private TypeMapper typeMapper;
 
+    private final static JSONParser defaultJSONParser = new JSONParser();
+
+    public static JSONParser defaultJSONParser()
+    {
+        return defaultJSONParser;
+    }
+
     private Map<Class,Class> interfaceMappings = new HashMap<Class, Class>();
 
     {
@@ -105,13 +112,13 @@ public class JSONParser
      *  <p>
      *  for example: using a type hint
      *  <br><br>
-     *  <code>parser.setTypeHint(".foo[]", Foo.class);</code>
+     *  <code>parser.setTypeHint(".foos[]", Foo.class);</code>
      *  <br><br>
      *   would map a json string like:
      *
      *  <pre>
      *  {
-     *      "foo" : [ ... ]
+     *      "foos" : [ ... ]
      *  }
      *  </pre>
      *
@@ -538,7 +545,6 @@ public class JSONParser
 
     private Class getTypeHint(String parsePathInfo, JSONTokenizer tokenizer, String name)
     {
-
         Class typeHint = typeHints.get(parsePathInfo);
 
         if (log.isDebugEnabled())
@@ -548,7 +554,12 @@ public class JSONParser
 
         if (typeMapper != null)
         {
-            typeHint = typeMapper.getTypeHint(tokenizer, parsePathInfo, typeHint);
+            Class typeHintFromTypeMapper = typeMapper.getTypeHint(tokenizer, parsePathInfo, typeHint);
+
+            if (typeHintFromTypeMapper != null)
+            {
+                typeHint = typeHintFromTypeMapper;
+            }
         }
 
         return typeHint;

@@ -24,7 +24,7 @@ import org.svenson.tokenize.TokenType;
 You can now parse the objects in the rows array into Foo and Bar instances by setting up a parser like this:
  * <pre><code>
         JSONParser parser = new JSONParser();
-        FieldValueBasedTypeMapper mapper = new FieldValueBasedTypeMapper();
+        PropertyValueBasedTypeMapper mapper = new PropertyValueBasedTypeMapper();
         mapper.setParsePathInfo(".rows[]");
         mapper.addFieldValueMapping("foo", Foo.class);
         mapper.addFieldValueMapping("bar", Bar.class);
@@ -35,7 +35,7 @@ You can now parse the objects in the rows array into Foo and Bar instances by se
  *
  * @author shelmberger
  */
-public class FieldValueBasedTypeMapper extends AbstractMapBasedTypeMapper<String>
+public class PropertyValueBasedTypeMapper extends AbstractMapBasedTypeMapper<String>
 {
     /**
      * Field whose value is used to tell one type from the other. (default "type")

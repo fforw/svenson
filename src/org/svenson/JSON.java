@@ -368,9 +368,9 @@ public class JSON
     /**
      * Returns a JSON representation of the given object as String.
      *
-     * @return JSON representation
      * @param o
-     *          object
+     * @param ignoredProps
+     * @return
      */
     public String forValue(Object o, List<String> ignoredProps)
     {

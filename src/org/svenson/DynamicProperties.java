@@ -26,7 +26,7 @@ public interface DynamicProperties
     Object getProperty(String name);
 
     /**
-     * Returns the set of available attribute names.
+     * Returns the set of available dynamic attribute names.
      *
      * @return
      */
