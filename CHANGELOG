@@ -1,0 +1,4 @@
+Changes from 1.2.1 to 1.2.2:
+
+ * allow JSONParser to be configured to accept single quotes as JSON quotes
+

@@ -47,6 +47,8 @@ public class JSONParser
 
     private Map<Class,Class> interfaceMappings = new HashMap<Class, Class>();
 
+    private boolean allowSingleQuotes;
+
     {
         interfaceMappings.put(Collection.class, ArrayList.class);
         interfaceMappings.put(List.class, ArrayList.class);
@@ -133,7 +135,7 @@ public class JSONParser
 
     public Object parse( String json)
     {
-        JSONTokenizer tokenizer = new JSONTokenizer(json);
+        JSONTokenizer tokenizer = createTokenizer(json);
 
         Token token = tokenizer.next();
         if (token.isType(TokenType.BRACKET_OPEN))
@@ -160,7 +162,7 @@ public class JSONParser
      */
     public <T> T parse(Class<T> targetType, String json)
     {
-        JSONTokenizer tokenizer = new JSONTokenizer(json);
+        JSONTokenizer tokenizer = createTokenizer(json);
 
         if (targetType == null)
         {
@@ -211,6 +213,21 @@ public class JSONParser
         }
     }
 
+    /**
+     * Allows single quotes to be used for quoting JSON strings.
+     *
+     * @param allowSingleQuotes
+     */
+    public void setAllowSingleQuotes(boolean allowSingleQuotes)
+    {
+        this.allowSingleQuotes = allowSingleQuotes;
+    }
+
+    private JSONTokenizer createTokenizer(String json)
+    {
+        JSONTokenizer tokenizer = new JSONTokenizer(json, allowSingleQuotes);
+        return tokenizer;
+    }
 
     /**
      * Expects the next object of the given tokenizer to be an array and parses it into the given {@link ParseContext}
