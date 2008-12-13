@@ -14,15 +14,21 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.junit.Before;
 import org.junit.Test;
-import org.svenson.JSONParseException;
-import org.svenson.JSONParser;
 
 public class JSONParserTestCase
 {
     protected static Logger log = Logger.getLogger(JSONParserTestCase.class);
 
-    private JSONParser parser = new JSONParser();
+    private JSONParser parser;
+
+    @Before
+    public void initParser()
+    {
+        parser = new JSONParser();
+
+    }
 
     @Test
     public void thatParsingIntoMapWorks()
@@ -187,5 +193,19 @@ public class JSONParserTestCase
         parser.parse(ArrayList.class, "[,1]");
     }
 
+    @Test
+    public void thatTypeHintsWork()
+    {
+        String json = "{\"child\":{\"foo\":\"bar!\"}}";
+        ContainerBean containerBean = parser.parse(ContainerBean.class, json);
+        assertThat(containerBean, is(notNullValue()));
+        assertThat(containerBean.getChildBean(), is(HashMap.class));
 
+        parser.addTypeHint(".child", DynAttrsBean.class);
+        containerBean = parser.parse(ContainerBean.class, json);
+        assertThat(containerBean, is(notNullValue()));
+        assertThat(containerBean.getChildBean(), is(DynAttrsBean.class));
+        DynAttrsBean b = (DynAttrsBean)containerBean.getChildBean();
+        assertThat(b.getFoo(), is("bar!"));
+    }
 }
