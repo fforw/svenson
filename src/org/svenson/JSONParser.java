@@ -330,7 +330,8 @@ public class JSONParser
                 key = tokenizer.expectNext( TokenType.STRING);
             }
 
-            String name = getPropertyNameFromAnnotation(cx.target, (String)key.value());
+            String jsonName = (String)key.value();
+            String name = getPropertyNameFromAnnotation(cx.target, jsonName);
             if (name.length() == 0)
             {
                 throw new JSONParseException("Invalid empty property name");
@@ -368,7 +369,7 @@ public class JSONParser
                         memberType = getTypeHintFromAnnotation(cx, name);
                     }
 
-                    newTarget = createNewTargetInstance(cx.getMemberType(), cx.getParsePathInfo(name), tokenizer, name, true);
+                    newTarget = createNewTargetInstance(cx.getMemberType(), cx.getParsePathInfo(jsonName), tokenizer, name, true);
                     parseObjectInto(cx.push(newTarget, memberType, "."+name), tokenizer);
                 }
                 else if (valueType == TokenType.BRACKET_OPEN)
@@ -377,7 +378,7 @@ public class JSONParser
 
                     if (isProperty || containerIsMap)
                     {
-                        newTarget = createNewTargetInstance(cx.getMemberType(), cx.getParsePathInfo(name), tokenizer, name, false);
+                        newTarget = createNewTargetInstance(cx.getMemberType(), cx.getParsePathInfo(jsonName), tokenizer, name, false);
                         Class memberType = getTypeHintFromAnnotation(cx, name);
                         parseArrayInto(cx.push(newTarget,memberType, "."+name), tokenizer);
                     }
