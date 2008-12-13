@@ -5,6 +5,12 @@ import org.svenson.TypeMapper;
 import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
 
+/**
+ * TypeMapper that just logs the calls
+ *
+ * @author shelmberger
+ *
+ */
 public class TokenLogger
     implements TypeMapper
 {
