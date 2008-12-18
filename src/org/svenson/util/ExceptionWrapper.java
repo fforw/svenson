@@ -1,5 +1,6 @@
 package org.svenson.util;
 
+import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -14,7 +15,7 @@ import org.svenson.SvensonRuntimeException;
  */
 public class ExceptionWrapper
 {
-    public static SvensonRuntimeException wrap(InstantiationException e)
+    public static SvensonRuntimeException wrap(IntrospectionException e)
     {
         return new SvensonRuntimeException(e);
     }
@@ -35,6 +36,11 @@ public class ExceptionWrapper
     }
 
     public static SvensonRuntimeException wrap(IOException e)
+    {
+        return new SvensonRuntimeException(e);
+    }
+
+    public static SvensonRuntimeException wrap( InstantiationException e)
     {
         return new SvensonRuntimeException(e);
     }
