@@ -305,7 +305,7 @@ public class JSONParser
     private void parseObjectInto(ParseContext cx, JSONTokenizer tokenizer) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
     {
         boolean containerIsMap = Map.class.isAssignableFrom(cx.target.getClass());
-        boolean containerIsDynAttrs = DynamicProperties.class.isAssignableFrom(cx.target.getClass());
+        boolean containerIsDynAttrs = cx.target instanceof DynamicProperties;
 
         boolean first = true;
         while (true)
@@ -376,7 +376,7 @@ public class JSONParser
                 {
                     //Class memberType = null;
 
-                    if (isProperty || containerIsMap)
+                    if (isProperty || containerIsMap || containerIsDynAttrs)
                     {
                         newTarget = createNewTargetInstance(cx.getMemberType(), cx.getParsePathInfo(jsonName), tokenizer, name, false);
                         Class memberType = getTypeHintFromAnnotation(cx, name);
@@ -685,7 +685,7 @@ public class JSONParser
         }
     }
 
-    private static String getPropertyNameFromAnnotation(Object target, String value)
+    public static String getPropertyNameFromAnnotation(Object target, String value)
     {
         for (PropertyDescriptor pd : PropertyUtils.getPropertyDescriptors(target.getClass()))
         {

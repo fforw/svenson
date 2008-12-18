@@ -1,6 +1,7 @@
 package org.svenson;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -207,5 +208,21 @@ public class JSONParserTestCase
         assertThat(containerBean.getChildBean(), is(DynAttrsBean.class));
         DynAttrsBean b = (DynAttrsBean)containerBean.getChildBean();
         assertThat(b.getFoo(), is("bar!"));
+    }
+
+    @Test
+    public void thatParsingIntoAClassPropertyWorks()
+    {
+        BeanWithClassProperty bean = parser.parse(BeanWithClassProperty.class, "{\"classProperty\":\"java.lang.String\"}");
+
+        assertThat(bean, is(notNullValue()));
+        assertThat(bean.getClassProperty(), equalTo(String.class));
+    }
+
+    @Test
+    public void thatArraysCanBeParsedIntoDynamicProperties()
+    {
+        DynAttrsBean bean = parser.parse(DynAttrsBean.class, "{\"438793569376\":[42,12]}");
+        assertThat(bean.getProperty("438793569376"), is(ArrayList.class));
     }
 }
