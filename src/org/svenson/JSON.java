@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.svenson.util.ExceptionWrapper;
+
 /**
  * Generates <a href="http://json.org">JSON</a> representations of nested java object
  * graphs. The object graphs can contain the following components:
@@ -204,81 +206,94 @@ public class JSON
      */
     private void dumpObject(StringBuilder out, Object o, char separator, List<String> ignoredProps)
     {
-        try
+        if (o == null)
         {
-            if (o == null)
+            out.append("null");
+        }
+        else
+        {
+            Class oClass = o.getClass();
+
+            JSONifier jsonifier;
+
+            if (oClass.isPrimitive())
             {
-                out.append("null");
+                out.append(o);
+            }
+            else if (Number.class.isAssignableFrom(oClass) || oClass.equals(Boolean.class) ||
+                oClass.equals(Character.class))
+            {
+                out.append(o);
+            }
+            else if (o instanceof String)
+            {
+                quote(out, (String) o);
+            }
+            else if (o instanceof Collection)
+            {
+                out.append("[");
+                for (Iterator i = ((Collection) o).iterator(); i.hasNext();)
+                {
+                    dumpObject(out, i.next(), i.hasNext() ? ',' : '\0', ignoredProps);
+                }
+                out.append("]");
+            }
+            else if (o.getClass().isArray())
+            {
+                out.append("[");
+                int len = Array.getLength(o);
+                for (int i = 0; i < len; i++)
+                {
+                    dumpObject(out, Array.get(o, i), ((i < (len - 1)) ? ',' : '\0'), ignoredProps);
+                }
+                out.append("]");
+            }
+            else if (o instanceof Map)
+            {
+                out.append("{");
+                Map m = (Map) o;
+                for (Iterator i = m.keySet().iterator(); i.hasNext();)
+                {
+                    Object key = i.next();
+
+                    dumpObject(out, key.toString(), '\0', ignoredProps);
+                    out.append(":");
+                    dumpObject(out, m.get(key), i.hasNext() ? ',' : '\0', ignoredProps);
+                }
+                out.append("}");
+            }
+            else if ((jsonifier = jsonifiers.get(oClass)) != null)
+            {
+                out.append(jsonifier.toJSON(o));
+            }
+            else if (o instanceof JSONable)
+            {
+                out.append(((JSONable) o).toJSON());
+            }
+            else if (o instanceof Class)
+            {
+                quote(out, ((Class)o).getName());
             }
             else
             {
-                Class oClass = o.getClass();
+                BeanInfo info;
+                try
+                {
+                    info = Introspector.getBeanInfo(o.getClass());
+                }
+                catch (IntrospectionException e)
+                {
+                    throw ExceptionWrapper.wrap(e);
+                }
+                out.append("{");
+                boolean first = true;
+                PropertyDescriptor[] pds = info.getPropertyDescriptors();
+                for (int cp = 0; cp < pds.length; cp++)
+                {
 
-                JSONifier jsonifier;
+                    try
+                    {
 
-                if (oClass.isPrimitive())
-                {
-                    out.append(o);
-                }
-                else if (Number.class.isAssignableFrom(oClass) || oClass.equals(Boolean.class) ||
-                    oClass.equals(Character.class))
-                {
-                    out.append(o);
-                }
-                else if (o instanceof String)
-                {
-                    quote(out, (String) o);
-                }
-                else if (o instanceof Collection)
-                {
-                    out.append("[");
-                    for (Iterator i = ((Collection) o).iterator(); i.hasNext();)
-                    {
-                        dumpObject(out, i.next(), i.hasNext() ? ',' : '\0', ignoredProps);
-                    }
-                    out.append("]");
-                }
-                else if (o.getClass().isArray())
-                {
-                    out.append("[");
-                    int len = Array.getLength(o);
-                    for (int i = 0; i < len; i++)
-                    {
-                        dumpObject(out, Array.get(o, i), ((i < (len - 1)) ? ',' : '\0'),
-                            ignoredProps);
-                    }
-                    out.append("]");
-                }
-                else if (o instanceof Map)
-                {
-                    out.append("{");
-                    Map m = (Map) o;
-                    for (Iterator i = m.keySet().iterator(); i.hasNext();)
-                    {
-                        Object key = i.next();
-
-                        dumpObject(out, key.toString(), '\0', ignoredProps);
-                        out.append(":");
-                        dumpObject(out, m.get(key), i.hasNext() ? ',' : '\0', ignoredProps);
-                    }
-                    out.append("}");
-                }
-                else if ((jsonifier = jsonifiers.get(oClass)) != null)
-                {
-                    out.append(jsonifier.toJSON(o));
-                }
-                else if (o instanceof JSONable)
-                {
-                    out.append(((JSONable) o).toJSON());
-                }
-                else
-                {
-                    BeanInfo info = Introspector.getBeanInfo(o.getClass());
-                    out.append("{");
-                    boolean first = true;
-                    PropertyDescriptor[] pds = info.getPropertyDescriptors();
-                    for (int cp = 0; cp < pds.length; cp++)
-                    {
                         PropertyDescriptor pd = pds[cp];
                         Method method = pd.getReadMethod();
                         Method writeMethod = pd.getWriteMethod();
@@ -311,44 +326,41 @@ public class JSON
                                     }
                                     quote(out, name);
                                     out.append(':');
-                                    dumpObject(out, value, '\0',
-                                        ignoredProps);
+                                    dumpObject(out, value, '\0', ignoredProps);
                                     first = false;
                                 }
                             }
                         }
+
                     }
-                    if (o instanceof DynamicProperties)
+                    catch (IllegalAccessException e)
                     {
-                        DynamicProperties dynAttrs = (DynamicProperties)o;
-                        for (String name : dynAttrs.propertyNames())
-                        {
-                            out.append(',');
-                            quote(out, name);
-                            out.append(':');
-                            dumpObject(out, dynAttrs.getProperty(name),'\0',ignoredProps);
-                        }
+                        throw ExceptionWrapper.wrap(e);
+                    }
+                    catch (InvocationTargetException e)
+                    {
+                        throw ExceptionWrapper.wrap(e);
                     }
 
-                    out.append("}");
                 }
+                if (o instanceof DynamicProperties)
+                {
+                    DynamicProperties dynAttrs = (DynamicProperties) o;
+                    for (String name : dynAttrs.propertyNames())
+                    {
+                        out.append(',');
+                        quote(out, name);
+                        out.append(':');
+                        dumpObject(out, dynAttrs.getProperty(name), '\0', ignoredProps);
+                    }
+                }
+
+                out.append("}");
             }
-            if (separator != '\0')
-            {
-                out.append(separator);
-            }
         }
-        catch (IntrospectionException ie)
+        if (separator != '\0')
         {
-            throw new RuntimeException("Can't introspect bean ", ie);
-        }
-        catch (IllegalAccessException iae)
-        {
-            throw new RuntimeException("Can't access bean property ", iae);
-        }
-        catch (InvocationTargetException ite)
-        {
-            throw new RuntimeException("Error getting bean property ", ite);
+            out.append(separator);
         }
     }
 
