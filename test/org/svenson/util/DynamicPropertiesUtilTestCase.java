@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import java.util.Set;
 
 import org.junit.Test;
-import org.svenson.DynAttrsBean;
 
 
 public class DynamicPropertiesUtilTestCase
@@ -15,7 +14,7 @@ public class DynamicPropertiesUtilTestCase
     @Test
     public void thatGetAllPropertyNamesWorks()
     {
-        DynAttrsBean bean = new DynAttrsBean();
+        DynPropTestBean bean = new DynPropTestBean();
         bean.setFoo("bar");
         bean.setProperty("baz", 42);
 
@@ -23,7 +22,7 @@ public class DynamicPropertiesUtilTestCase
 
         assertThat(names, is(notNullValue()));
         assertThat(names.size(),is(2));
-        assertThat(names.contains("foo"),is(true));
+        assertThat(names.contains("_foo"),is(true));
         assertThat(names.contains("baz"),is(true));
 
     }
@@ -31,22 +30,22 @@ public class DynamicPropertiesUtilTestCase
     @Test
     public void thatGetBeanPropertyNamesWorks()
     {
-        DynAttrsBean bean = new DynAttrsBean();
+        DynPropTestBean bean = new DynPropTestBean();
 
         Set<String> names = DynamicPropertiesUtil.getBeanPropertyNames(bean);
 
         assertThat(names, is(notNullValue()));
         assertThat(names.size(),is(1));
-        assertThat(names.contains("foo"),is(true));
+        assertThat(names.contains("_foo"),is(true));
 
     }
 
     @Test
     public void thatReadingBeanPropertiesWorks()
     {
-        DynAttrsBean bean = new DynAttrsBean();
+        DynPropTestBean bean = new DynPropTestBean();
         bean.setFoo("bar!");
-        assertThat((String)DynamicPropertiesUtil.getProperty(bean, "foo"), is("bar!"));
+        assertThat((String)DynamicPropertiesUtil.getProperty(bean, "_foo"), is("bar!"));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -59,9 +58,9 @@ public class DynamicPropertiesUtilTestCase
     @Test
     public void thatWritingBeanPropertiesWorks()
     {
-        DynAttrsBean bean = new DynAttrsBean();
+        DynPropTestBean bean = new DynPropTestBean();
 
-        DynamicPropertiesUtil.setProperty(bean, "foo", "bar!");
+        DynamicPropertiesUtil.setProperty(bean, "_foo", "bar!");
         assertThat(bean.getFoo(), is("bar!"));
     }
 

@@ -19,9 +19,10 @@ import org.svenson.JSONParser;
 public class DynamicPropertiesUtil
 {
     /**
-     * Returns all properties of this dynamic properties object including the java bean properties.
-     * @param dynamicProperties
-     * @return
+     * Returns the names of all properties of this dynamic properties object including the java bean properties.
+     * Note that the method will return the <em>JSON property name</em> of the java bean methods.
+     * @param dynamicProperties     DynamicProperties object
+     * @return a set containing all property names, both dynamic and static (JSON) names.
      */
     public static Set<String> getAllPropertyNames(DynamicProperties dynamicProperties)
     {
@@ -31,7 +32,7 @@ public class DynamicPropertiesUtil
     }
 
     /**
-     * Returns all readable and writable bean property names of the given object
+     * Returns all readable and writable bean property JSON names of the given object.
      * @param dynamicProperties object
      * @return
      */
@@ -45,7 +46,7 @@ public class DynamicPropertiesUtil
             Method writeMethod = pd.getWriteMethod();
             if (readMethod != null && writeMethod != null)
             {
-               String name = JSONParser.getPropertyNameFromAnnotation(dynamicProperties, pd.getName());
+               String name = JSONParser.getJSONPropertyNameFromDescriptor(dynamicProperties, pd);
                names.add(name);
             }
         }
@@ -53,90 +54,100 @@ public class DynamicPropertiesUtil
     }
 
     /**
-     * Gets the bean or dynamic property with the given name. if the class has a
-     * bean property with the given name, the value of that property is
-     * returned. otherwise, the dynamic property with the given name is
-     * returned.
+     * Gets the bean or dynamic property with the given JSON property name. if
+     * the class has a bean property with the given name, the value of that
+     * property is returned. otherwise, the dynamic property with the given name
+     * is returned.
      *
-     * @param dynamicProperties     java bean
-     * @param name                  property name
-     * @return                      the property value.
-     *
-     * @throws IllegalArgumentException if there is no bean property with the given name on the given dynamicProperties object and the class of the bean
-     *                                  does not implement {@link DynamicProperties}
+     * @param dynamicProperties java bean
+     * @param name JSON property name
+     * @return the property value.
+     * @throws IllegalArgumentException if there is no bean property with the
+     *             given name on the given dynamicProperties object and the
+     *             class of the bean does not implement
+     *             {@link DynamicProperties}
      */
-    public static Object getProperty(Object dynamicProperties, String name) throws IllegalArgumentException
+    public static Object getProperty(Object dynamicProperties, String name)
+        throws IllegalArgumentException
     {
-        if (PropertyUtils.isReadable(dynamicProperties, name))
+        try
         {
-            try
+            String propertyName = JSONParser.getPropertyNameFromAnnotation(dynamicProperties, name);
+            if (PropertyUtils.isReadable(dynamicProperties, propertyName))
             {
-                return PropertyUtils.getProperty(dynamicProperties, name);
+                return PropertyUtils.getProperty(dynamicProperties, propertyName);
             }
-            catch (IllegalAccessException e)
+            else if (dynamicProperties instanceof DynamicProperties)
             {
-                throw ExceptionWrapper.wrap(e);
+                return ((DynamicProperties) dynamicProperties).getProperty(name);
             }
-            catch (InvocationTargetException e)
+            else
             {
-                throw ExceptionWrapper.wrap(e);
-            }
-            catch (NoSuchMethodException e)
-            {
-                throw ExceptionWrapper.wrap(e);
+                throw new IllegalArgumentException(dynamicProperties +
+                    " has no JSON property with the name '" + name +
+                    "' and does not implements DynamicProperties");
             }
         }
-        else if (dynamicProperties instanceof DynamicProperties)
+        catch (IllegalAccessException e)
         {
-            return ((DynamicProperties)dynamicProperties).getProperty(name);
+            throw ExceptionWrapper.wrap(e);
         }
-        else
+        catch (InvocationTargetException e)
         {
-            throw new IllegalArgumentException(dynamicProperties+" has no bean property with the name '"+name+"' and does not implements DynamicProperties");
+            throw ExceptionWrapper.wrap(e);
+        }
+        catch (NoSuchMethodException e)
+        {
+            throw ExceptionWrapper.wrap(e);
         }
     }
 
     /**
-     * Sets the bean or dynamic property with the given name to the given value. if the class has a
-     * bean property with the given name, the value of that property is
-     * overwritten. otherwise, the dynamic property with the given name is
-     * overwritten.
+     * Sets the bean or dynamic property with the given JSON property name to
+     * the given value. if the class has a bean property with the given name,
+     * the value of that property is overwritten. otherwise, the dynamic
+     * property with the given name is overwritten.
      *
-     * @param dynamicProperties         bean or dynamic properties instance
-     * @param name                      property name
-     * @param value                     property value
-     *
-     * @throws IllegalArgumentException if there is no bean property with the given name on the given dynamicProperties object and the class of the bean
-     *                                  does not implement {@link DynamicProperties}
+     * @param dynamicProperties bean or dynamic properties instance
+     * @param name JSON property name
+     * @param value property value
+     * @throws IllegalArgumentException if there is no bean property with the
+     *             given name on the given dynamicProperties object and the
+     *             class of the bean does not implement
+     *             {@link DynamicProperties}
      */
-    public static void setProperty(Object dynamicProperties, String name, Object value) throws IllegalArgumentException
+    public static void setProperty(Object dynamicProperties, String name, Object value)
+        throws IllegalArgumentException
     {
-        if (PropertyUtils.isWriteable(dynamicProperties, name))
+        try
         {
-            try
+            String propertyName = JSONParser.getPropertyNameFromAnnotation(dynamicProperties, name);
+            if (PropertyUtils.isWriteable(dynamicProperties, propertyName))
             {
-                PropertyUtils.setProperty(dynamicProperties, name, value);
+                PropertyUtils.setProperty(dynamicProperties, propertyName, value);
             }
-            catch (IllegalAccessException e)
+            else if (dynamicProperties instanceof DynamicProperties)
             {
-                throw ExceptionWrapper.wrap(e);
+                ((DynamicProperties) dynamicProperties).setProperty(name, value);
             }
-            catch (InvocationTargetException e)
+            else
             {
-                throw ExceptionWrapper.wrap(e);
-            }
-            catch (NoSuchMethodException e)
-            {
-                throw ExceptionWrapper.wrap(e);
+                throw new IllegalArgumentException(dynamicProperties +
+                    " has no JSON property with the name '" + name +
+                    "' and does not implements DynamicProperties");
             }
         }
-        else if (dynamicProperties instanceof DynamicProperties)
+        catch (IllegalAccessException e)
         {
-            ((DynamicProperties)dynamicProperties).setProperty(name,value);
+            throw ExceptionWrapper.wrap(e);
         }
-        else
+        catch (InvocationTargetException e)
         {
-            throw new IllegalArgumentException(dynamicProperties+" has no bean property with the name '"+name+"' and does not implements DynamicProperties");
+            throw ExceptionWrapper.wrap(e);
+        }
+        catch (NoSuchMethodException e)
+        {
+            throw ExceptionWrapper.wrap(e);
         }
     }
 }

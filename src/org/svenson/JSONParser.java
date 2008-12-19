@@ -685,28 +685,57 @@ public class JSONParser
         }
     }
 
+    /**
+     * Returns the java bean property name for the given json property name.
+     *
+     * @param target    bean
+     * @param value     json property name
+     * @return java bean name, not guaranteed to actually exist.
+     *
+     */
     public static String getPropertyNameFromAnnotation(Object target, String value)
     {
         for (PropertyDescriptor pd : PropertyUtils.getPropertyDescriptors(target.getClass()))
         {
-            JSONProperty jsonProperty = null;
-            Method readMethod = pd.getReadMethod();
-            Method writeMethod = pd.getWriteMethod();
+            String jsonPropertyName = getJSONPropertyNameFromDescriptor(target, pd);
 
-            if (readMethod != null)
-            {
-                jsonProperty = readMethod.getAnnotation(JSONProperty.class);
-            }
-            if (jsonProperty == null && writeMethod != null)
-            {
-                jsonProperty = writeMethod.getAnnotation(JSONProperty.class);
-            }
-
-            if (jsonProperty != null && jsonProperty.value().equals(value))
+            if (jsonPropertyName.equals(value))
             {
                 return pd.getName();
             }
         }
         return value;
+    }
+
+    /**
+     * Returns the JSON property name for the given property descriptor
+     *
+     * @param bean
+     * @param pd
+     * @return
+     */
+    public static String getJSONPropertyNameFromDescriptor(Object bean, PropertyDescriptor pd)
+    {
+        Method readMethod = pd.getReadMethod();
+        Method writeMethod = pd.getWriteMethod();
+
+        JSONProperty jsonProperty = null;
+        if (readMethod != null)
+        {
+            jsonProperty = readMethod.getAnnotation(JSONProperty.class);
+        }
+        if (jsonProperty == null && writeMethod != null)
+        {
+            jsonProperty = writeMethod.getAnnotation(JSONProperty.class);
+        }
+
+        if (jsonProperty != null && !jsonProperty.value().equals("") )
+        {
+            return jsonProperty.value();
+        }
+        else
+        {
+            return pd.getName();
+        }
     }
 }
