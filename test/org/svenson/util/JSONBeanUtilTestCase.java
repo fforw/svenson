@@ -9,7 +9,7 @@ import java.util.Set;
 import org.junit.Test;
 
 
-public class DynamicPropertiesUtilTestCase
+public class JSONBeanUtilTestCase
 {
     @Test
     public void thatGetAllPropertyNamesWorks()
@@ -18,7 +18,7 @@ public class DynamicPropertiesUtilTestCase
         bean.setFoo("bar");
         bean.setProperty("baz", 42);
 
-        Set<String> names = DynamicPropertiesUtil.getAllPropertyNames(bean);
+        Set<String> names = JSONBeanUtil.getAllPropertyNames(bean);
 
         assertThat(names, is(notNullValue()));
         assertThat(names.size(),is(2));
@@ -32,7 +32,7 @@ public class DynamicPropertiesUtilTestCase
     {
         DynPropTestBean bean = new DynPropTestBean();
 
-        Set<String> names = DynamicPropertiesUtil.getBeanPropertyNames(bean);
+        Set<String> names = JSONBeanUtil.getBeanPropertyNames(bean);
 
         assertThat(names, is(notNullValue()));
         assertThat(names.size(),is(1));
@@ -45,14 +45,14 @@ public class DynamicPropertiesUtilTestCase
     {
         DynPropTestBean bean = new DynPropTestBean();
         bean.setFoo("bar!");
-        assertThat((String)DynamicPropertiesUtil.getProperty(bean, "_foo"), is("bar!"));
+        assertThat((String)JSONBeanUtil.getProperty(bean, "_foo"), is("bar!"));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void thatReadingUndefinedBeanPropertiesDoesNotWork()
     {
         Object bean = new Object();
-        DynamicPropertiesUtil.getProperty(bean, "bar");
+        JSONBeanUtil.getProperty(bean, "bar");
     }
 
     @Test
@@ -60,7 +60,7 @@ public class DynamicPropertiesUtilTestCase
     {
         DynPropTestBean bean = new DynPropTestBean();
 
-        DynamicPropertiesUtil.setProperty(bean, "_foo", "bar!");
+        JSONBeanUtil.setProperty(bean, "_foo", "bar!");
         assertThat(bean.getFoo(), is("bar!"));
     }
 
@@ -68,6 +68,6 @@ public class DynamicPropertiesUtilTestCase
     public void thatWritingUndefinedBeanPropertiesDoesNotWork()
     {
         Object bean = new Object();
-        DynamicPropertiesUtil.setProperty(bean, "bar", "bar!");
+        JSONBeanUtil.setProperty(bean, "bar", "bar!");
     }
 }

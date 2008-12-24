@@ -1,6 +1,9 @@
 svenson json library change log:
 ================================
 
+Changes from 1.2.6 to 1.2.7:
+ * rename DynamicPropertiesUtil to JSONBeanUtil (keep DynamicPropertiesUtil as deprecated)
+
 Changes from 1.2.5 to 1.2.6:
 
  * Make DynamicPropertiesUtil support maps, too.
