@@ -348,7 +348,11 @@ public class JSON
                     DynamicProperties dynAttrs = (DynamicProperties) o;
                     for (String name : dynAttrs.propertyNames())
                     {
-                        out.append(',');
+                        if (!first)
+                        {
+                            out.append(',');
+                        }
+                        first = false;
                         quote(out, name);
                         out.append(':');
                         dumpObject(out, dynAttrs.getProperty(name), '\0', ignoredProps);

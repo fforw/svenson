@@ -85,6 +85,16 @@ public class JSONTestCase
         verify(jsonifierMock);
     }
 
+    @Test
+    public void testThatIgnoredPropertiesWork()
+    {
+        IgnoredPropertyBean bean = new IgnoredPropertyBean();
+        bean.setProperty("foo", "bar");
+
+        assertThat(JSON.forValue(bean), is("{\"foo\":\"bar\"}"));
+
+    }
+
     public static class SimpleBean
     {
         private Object foo,bar;

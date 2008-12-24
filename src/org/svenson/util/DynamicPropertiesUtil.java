@@ -4,6 +4,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -81,6 +82,10 @@ public class DynamicPropertiesUtil
             {
                 return ((DynamicProperties) dynamicProperties).getProperty(name);
             }
+            else if (dynamicProperties instanceof Map)
+            {
+                return ((Map)dynamicProperties).get(name);
+            }
             else
             {
                 throw new IllegalArgumentException(dynamicProperties +
@@ -129,6 +134,10 @@ public class DynamicPropertiesUtil
             else if (dynamicProperties instanceof DynamicProperties)
             {
                 ((DynamicProperties) dynamicProperties).setProperty(name, value);
+            }
+            else if (dynamicProperties instanceof Map)
+            {
+                ((Map)dynamicProperties).put(name, value);
             }
             else
             {

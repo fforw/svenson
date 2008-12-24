@@ -1,7 +1,18 @@
 svenson json library change log:
 ================================
 
+Changes from 1.2.5 to 1.2.6:
+
+ * Make DynamicPropertiesUtil support maps, too.
+ * bugfix: remove trailing comma in JSON output for DynamicProperties objects whose java bean properties all happen to be ignored.
+
+Changes from 1.2.4 to 1.2.5:
+
+ * Make DynamicPropertiesUtil always use JSON names, which was the initial purpose of writing it -- having a dynamic way to handle all JSON properties.
+
+
 Changes from 1.2.3 to 1.2.4:
+
  * fixed bug with java class properties
  * fixed bug where you couldn't feed an JSON array to a DynamicProperties object
  * added org.svenson.util.DynamicPropertiesUtil to handle the java beans of DynamicProperties objects dynamically.
