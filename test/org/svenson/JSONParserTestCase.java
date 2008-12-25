@@ -225,4 +225,10 @@ public class JSONParserTestCase
         DynAttrsBean bean = parser.parse(DynAttrsBean.class, "{\"438793569376\":[42,12]}");
         assertThat(bean.getProperty("438793569376"), is(ArrayList.class));
     }
+
+    @Test(expected = JSONParseException.class)
+    public void thatJSONNamesWin()
+    {
+        ContainerBean bean = parser.parse(ContainerBean.class, "{\"childBean\":\"foo\"}");
+    }
 }

@@ -331,11 +331,11 @@ public class JSONParser
             }
 
             String jsonName = (String)key.value();
-            String name = getPropertyNameFromAnnotation(cx.target, jsonName);
-            if (name.length() == 0)
+            if (jsonName.length() == 0)
             {
                 throw new JSONParseException("Invalid empty property name");
             }
+            String name = getPropertyNameFromAnnotation(cx.target, jsonName);
 
             tokenizer.expectNext(TokenType.COLON);
 
@@ -343,13 +343,18 @@ public class JSONParser
 
             TokenType valueType = valueToken.type();
 
-            boolean isProperty = PropertyUtils.isWriteable(cx.target, name);
+            boolean isProperty = name != null && PropertyUtils.isWriteable(cx.target, name);
 
-            Method addMethod = getAddMethod(cx.target, name);
+            Method addMethod = getAddMethod(cx.target, jsonName);
 
             if (!(isProperty || containerIsMap ||containerIsDynAttrs || addMethod != null))
             {
-                throw new JSONParseException("Cannot set property "+name+" on "+cx.target.getClass());
+                throw new JSONParseException("Cannot set property "+jsonName+" on "+cx.target.getClass());
+            }
+
+            if (name == null)
+            {
+                name = jsonName;
             }
 
             Object value;
@@ -704,7 +709,8 @@ public class JSONParser
                 return pd.getName();
             }
         }
-        return value;
+
+        return null;
     }
 
     /**

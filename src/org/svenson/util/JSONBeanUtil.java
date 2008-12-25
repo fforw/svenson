@@ -22,24 +22,34 @@ public class JSONBeanUtil
     /**
      * Returns the names of all properties of this dynamic properties object including the java bean properties.
      * Note that the method will return the <em>JSON property name</em> of the java bean methods.
-     * @param dynamicProperties     DynamicProperties object
+     * @param bean     DynamicProperties object
      * @return a set containing all property names, both dynamic and static (JSON) names.
      */
-    public static Set<String> getAllPropertyNames(DynamicProperties dynamicProperties)
+    public static Set<String> getAllPropertyNames(Object bean)
     {
-        Set<String> names  = new HashSet<String>( dynamicProperties.propertyNames());
-        names.addAll( getBeanPropertyNames(dynamicProperties));
+
+        Set<String> names  = new HashSet<String>( );
+
+        if (bean instanceof DynamicProperties)
+        {
+            names.addAll(((DynamicProperties)bean).propertyNames());
+        }
+        if (bean instanceof Map)
+        {
+            names.addAll(((Map)bean).keySet());
+        }
+        names.addAll( getBeanPropertyNames(bean));
         return names;
     }
 
     /**
      * Returns all readable and writable bean property JSON names of the given object.
-     * @param dynamicProperties object
+     * @param bean object
      * @return
      */
-    public static Set<String> getBeanPropertyNames(Object dynamicProperties)
+    public static Set<String> getBeanPropertyNames(Object bean)
     {
-        PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(dynamicProperties.getClass());
+        PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(bean.getClass());
         Set<String> names  = new HashSet<String>();
         for (PropertyDescriptor pd : pds)
         {
@@ -47,7 +57,7 @@ public class JSONBeanUtil
             Method writeMethod = pd.getWriteMethod();
             if (readMethod != null && writeMethod != null)
             {
-               String name = JSONParser.getJSONPropertyNameFromDescriptor(dynamicProperties, pd);
+               String name = JSONParser.getJSONPropertyNameFromDescriptor(bean, pd);
                names.add(name);
             }
         }
@@ -60,7 +70,7 @@ public class JSONBeanUtil
      * property is returned. otherwise, the dynamic property with the given name
      * is returned.
      *
-     * @param dynamicProperties java bean
+     * @param bean java bean
      * @param name JSON property name
      * @return the property value.
      * @throws IllegalArgumentException if there is no bean property with the
@@ -68,27 +78,27 @@ public class JSONBeanUtil
      *             class of the bean does not implement
      *             {@link DynamicProperties}
      */
-    public static Object getProperty(Object dynamicProperties, String name)
+    public static Object getProperty(Object bean, String name)
         throws IllegalArgumentException
     {
         try
         {
-            String propertyName = JSONParser.getPropertyNameFromAnnotation(dynamicProperties, name);
-            if (PropertyUtils.isReadable(dynamicProperties, propertyName))
+            String propertyName = JSONParser.getPropertyNameFromAnnotation(bean, name);
+            if (PropertyUtils.isReadable(bean, propertyName))
             {
-                return PropertyUtils.getProperty(dynamicProperties, propertyName);
+                return PropertyUtils.getProperty(bean, propertyName);
             }
-            else if (dynamicProperties instanceof DynamicProperties)
+            else if (bean instanceof DynamicProperties)
             {
-                return ((DynamicProperties) dynamicProperties).getProperty(name);
+                return ((DynamicProperties) bean).getProperty(name);
             }
-            else if (dynamicProperties instanceof Map)
+            else if (bean instanceof Map)
             {
-                return ((Map)dynamicProperties).get(name);
+                return ((Map)bean).get(name);
             }
             else
             {
-                throw new IllegalArgumentException(dynamicProperties +
+                throw new IllegalArgumentException(bean +
                     " has no JSON property with the name '" + name +
                     "' and does not implements DynamicProperties");
             }
@@ -113,7 +123,7 @@ public class JSONBeanUtil
      * the value of that property is overwritten. otherwise, the dynamic
      * property with the given name is overwritten.
      *
-     * @param dynamicProperties bean or dynamic properties instance
+     * @param bean bean or dynamic properties instance
      * @param name JSON property name
      * @param value property value
      * @throws IllegalArgumentException if there is no bean property with the
@@ -121,27 +131,27 @@ public class JSONBeanUtil
      *             class of the bean does not implement
      *             {@link DynamicProperties}
      */
-    public static void setProperty(Object dynamicProperties, String name, Object value)
+    public static void setProperty(Object bean, String name, Object value)
         throws IllegalArgumentException
     {
         try
         {
-            String propertyName = JSONParser.getPropertyNameFromAnnotation(dynamicProperties, name);
-            if (PropertyUtils.isWriteable(dynamicProperties, propertyName))
+            String propertyName = JSONParser.getPropertyNameFromAnnotation(bean, name);
+            if (PropertyUtils.isWriteable(bean, propertyName))
             {
-                PropertyUtils.setProperty(dynamicProperties, propertyName, value);
+                PropertyUtils.setProperty(bean, propertyName, value);
             }
-            else if (dynamicProperties instanceof DynamicProperties)
+            else if (bean instanceof DynamicProperties)
             {
-                ((DynamicProperties) dynamicProperties).setProperty(name, value);
+                ((DynamicProperties) bean).setProperty(name, value);
             }
-            else if (dynamicProperties instanceof Map)
+            else if (bean instanceof Map)
             {
-                ((Map)dynamicProperties).put(name, value);
+                ((Map)bean).put(name, value);
             }
             else
             {
-                throw new IllegalArgumentException(dynamicProperties +
+                throw new IllegalArgumentException(bean +
                     " has no JSON property with the name '" + name +
                     "' and does not implements DynamicProperties");
             }
