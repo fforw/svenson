@@ -2,6 +2,10 @@ package org.svenson;
 
 public class IgnoredPropertyBean extends AbstractDynamicProperties
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private String test;
 
     @JSONProperty(ignore = true)

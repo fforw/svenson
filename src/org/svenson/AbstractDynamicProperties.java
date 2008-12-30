@@ -11,6 +11,8 @@ import java.util.Set;
  */
 public abstract class AbstractDynamicProperties implements DynamicProperties
 {
+    private static final long serialVersionUID = -2474994145266650492L;
+
     private Map<String,Object> attrs = new HashMap<String, Object>();
 
     public Object getProperty(String name)

@@ -84,7 +84,7 @@ public class JSONBeanUtil
         try
         {
             String propertyName = JSONParser.getPropertyNameFromAnnotation(bean, name);
-            if (PropertyUtils.isReadable(bean, propertyName))
+            if (propertyName != null && PropertyUtils.isReadable(bean, propertyName))
             {
                 return PropertyUtils.getProperty(bean, propertyName);
             }
@@ -137,7 +137,7 @@ public class JSONBeanUtil
         try
         {
             String propertyName = JSONParser.getPropertyNameFromAnnotation(bean, name);
-            if (PropertyUtils.isWriteable(bean, propertyName))
+            if (propertyName != null && PropertyUtils.isWriteable(bean, propertyName))
             {
                 PropertyUtils.setProperty(bean, propertyName, value);
             }

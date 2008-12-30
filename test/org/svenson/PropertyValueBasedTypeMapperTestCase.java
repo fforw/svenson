@@ -52,6 +52,10 @@ public class PropertyValueBasedTypeMapperTestCase
 
     public static class Foo extends AbstractDynamicProperties
     {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
         private String type, value;
 
         public String getType()
@@ -83,6 +87,11 @@ public class PropertyValueBasedTypeMapperTestCase
 
     public static class Bar extends Foo
     {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
 
     }
 }

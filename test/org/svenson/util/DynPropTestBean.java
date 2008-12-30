@@ -5,6 +5,10 @@ import org.svenson.JSONProperty;
 
 public class DynPropTestBean extends AbstractDynamicProperties
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private String foo;
 
     @JSONProperty("_foo")
