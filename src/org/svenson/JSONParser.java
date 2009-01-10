@@ -181,13 +181,17 @@ public class JSONParser
             TokenType type = token.type();
             if (type == TokenType.BRACE_OPEN)
             {
-                t = (T) createNewTargetInstance(targetType, "", tokenizer, "", true);
+                t = (T) createNewTargetInstance(targetType, true);
                 parseObjectInto(new ParseContext(t,null), tokenizer);
             }
             else if (type == TokenType.BRACKET_OPEN)
             {
-                t = (T) createNewTargetInstance(targetType, "", tokenizer, "", false);
+                t = (T) createNewTargetInstance(targetType, false);
                 parseArrayInto(new ParseContext(t,null), tokenizer);
+            }
+            else if (type == TokenType.STRING && Enum.class.isAssignableFrom(targetType) )
+            {
+                return (T)Enum.valueOf((Class<Enum>)targetType, (String)token.value());
             }
             else
             {
@@ -260,13 +264,14 @@ public class JSONParser
             }
 
             Object value;
+            Class typeHint = getTypeHint(cx.getMemberType(), cx.getParsePathInfo("[]"), tokenizer, "[]");
             if (valueType.isPrimitive())
             {
                 value = valueToken.value();
 
-                if(cx.getMemberType() != null)
+                if(typeHint != null)
                 {
-                    value = convertValueTo(value, cx.getMemberType());
+                    value = convertValueTo(value, typeHint);
                 }
             }
             else
@@ -274,12 +279,12 @@ public class JSONParser
                 Object newTarget = null;
                 if (valueType == TokenType.BRACE_OPEN)
                 {
-                    newTarget = createNewTargetInstance(cx.getMemberType(), cx.getParsePathInfo("[]"), tokenizer, "[]", true);
+                    newTarget = createNewTargetInstance(typeHint, true);
                     parseObjectInto(cx.push(newTarget,null,"[]"), tokenizer);
                 }
                 else if (valueType == TokenType.BRACKET_OPEN)
                 {
-                    newTarget = createNewTargetInstance(cx.getMemberType(), cx.getParsePathInfo("[]"), tokenizer, "[]", false);
+                    newTarget = createNewTargetInstance(typeHint, false);
                     parseArrayInto(cx.push(newTarget,null,"[]"), tokenizer);
                 }
                 else
@@ -357,10 +362,16 @@ public class JSONParser
                 name = jsonName;
             }
 
+            Class typeHint = getTypeHint( cx.getMemberType(), cx.getParsePathInfo(jsonName), tokenizer, name);
             Object value;
             if (valueType.isPrimitive())
             {
                 value = valueToken.value();
+
+                if(typeHint != null)
+                {
+                    value = convertValueTo(value, typeHint);
+                }
             }
             else
             {
@@ -374,7 +385,7 @@ public class JSONParser
                         memberType = getTypeHintFromAnnotation(cx, name);
                     }
 
-                    newTarget = createNewTargetInstance(cx.getMemberType(), cx.getParsePathInfo(jsonName), tokenizer, name, true);
+                    newTarget = createNewTargetInstance(typeHint, true);
                     parseObjectInto(cx.push(newTarget, memberType, "."+name), tokenizer);
                 }
                 else if (valueType == TokenType.BRACKET_OPEN)
@@ -383,7 +394,7 @@ public class JSONParser
 
                     if (isProperty || containerIsMap || containerIsDynAttrs)
                     {
-                        newTarget = createNewTargetInstance(cx.getMemberType(), cx.getParsePathInfo(jsonName), tokenizer, name, false);
+                        newTarget = createNewTargetInstance(typeHint, false);
                         Class memberType = getTypeHintFromAnnotation(cx, name);
                         parseArrayInto(cx.push(newTarget,memberType, "."+name), tokenizer);
                     }
@@ -494,7 +505,11 @@ public class JSONParser
             return null;
         }
 
-        if (!targetClass.isAssignableFrom(value.getClass()))
+        if (value instanceof String && Enum.class.isAssignableFrom(targetClass))
+        {
+            value = Enum.valueOf((Class<Enum>)targetClass, (String)value);
+        }
+        else if (!targetClass.isAssignableFrom(value.getClass()))
         {
             value = ConvertUtils.convert(value.toString(), targetClass);
         }
@@ -502,24 +517,8 @@ public class JSONParser
     }
 
 
-    private Object createNewTargetInstance(Class typeHint, String parsePathInfo, JSONTokenizer tokenizer, String name, boolean object)
+    private Object createNewTargetInstance(Class typeHint, boolean object)
     {
-        if (log.isDebugEnabled())
-        {
-            log.debug("typeHint = "+typeHint+", name = "+name+", object = "+object);
-        }
-
-        Class cls = getTypeHint( parsePathInfo,tokenizer,name);
-
-        if (cls != null)
-        {
-            typeHint = cls;
-            if (log.isDebugEnabled())
-            {
-                log.debug("set typeHint to  "+typeHint);
-            }
-        }
-
         if (typeHint == null || typeHint.equals(Object.class))
         {
             if (object)
@@ -548,7 +547,6 @@ public class JSONParser
                     log.debug("interface replaced with "+typeHint);
                 }
             }
-
         }
 
         try
@@ -557,13 +555,33 @@ public class JSONParser
         }
         catch (InstantiationException e)
         {
-            log.error("XXX",e);
             throw ExceptionWrapper.wrap(e);
         }
         catch (IllegalAccessException e)
         {
             throw ExceptionWrapper.wrap(e);
         }
+    }
+
+    private Class getTypeHint(Class typeHint, String parsePathInfo, JSONTokenizer tokenizer, String name)
+    {
+        if (log.isDebugEnabled())
+        {
+            log.debug("typeHint = "+typeHint+", name = "+name);
+        }
+
+        Class cls = getTypeHint( parsePathInfo,tokenizer,name);
+
+        if (cls != null)
+        {
+            typeHint = cls;
+            if (log.isDebugEnabled())
+            {
+                log.debug("set typeHint to  "+typeHint);
+            }
+        }
+
+        return typeHint;
     }
 
     private Class getTypeHint(String parsePathInfo, JSONTokenizer tokenizer, String name)

@@ -231,4 +231,28 @@ public class JSONParserTestCase
     {
         ContainerBean bean = parser.parse(ContainerBean.class, "{\"childBean\":\"foo\"}");
     }
+
+    @Test
+    public void thatEnumParsingWorks()
+    {
+        TestEnum e = parser.parse(TestEnum.class, "\"VAL1\"");
+        assertThat(e, is (TestEnum.VAL1));
+    }
+
+    @Test
+    public void thatBeanWithEnumParsingWorks()
+    {
+        BeanWithEnum bean = parser.parse(BeanWithEnum.class, "{\"testEnum\":\"VAL2\"}");
+
+        assertThat(bean.getTestEnum(),is(TestEnum.VAL2));
+    };
+
+    @Test
+    public void thatTypeMappingWithEnumParsingWorks()
+    {
+        parser.addTypeHint(".qerw", TestEnum.class);
+        Map bean = parser.parse(Map.class, "{\"qerw\":\"VAL2\"}");
+
+        assertThat((TestEnum)bean.get("qerw"),is(TestEnum.VAL2));
+    };
 }

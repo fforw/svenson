@@ -274,6 +274,10 @@ public class JSON
             {
                 quote(out, ((Class)o).getName());
             }
+            else if (o instanceof Enum)
+            {
+                quote(out, ((Enum)o).name());
+            }
             else
             {
                 BeanInfo info;

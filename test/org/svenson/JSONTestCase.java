@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static junit.framework.TestCase.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -95,6 +96,15 @@ public class JSONTestCase
 
     }
 
+    @Test
+    public void thatEnumGeneratioWorks()
+    {
+        Map m = new HashMap();
+        m.put("test", TestEnum.VAL1);
+
+        assertThat(JSON.forValue(m), is("{\"test\":\"VAL1\"}"));
+    }
+
     public static class SimpleBean
     {
         private Object foo,bar;
@@ -119,4 +129,5 @@ public class JSONTestCase
     public static class JSONifiedBean
     {
     }
+
 }

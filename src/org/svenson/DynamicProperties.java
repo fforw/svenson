@@ -1,6 +1,5 @@
 package org.svenson;
 
-import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -9,7 +8,7 @@ import java.util.Set;
  * @author shelmberger
  *
  */
-public interface DynamicProperties extends Serializable
+public interface DynamicProperties
 {
     /**
      * Sets the attribute with the given name to the given value.
