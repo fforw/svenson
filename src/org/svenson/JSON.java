@@ -424,8 +424,17 @@ public class JSON
                 char c = s.charAt(i);
                 switch (c)
                 {
+                    
                     case '"':
-                        buf.append("\\\"");
+                    case '\'':
+                        if (c == quoteChar)
+                        {
+                            buf.append("\\"+c);
+                        }
+                        else
+                        {
+                            buf.append(c);
+                        }
                         break;
                     case '/':
                         buf.append("\\/");

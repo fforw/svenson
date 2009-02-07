@@ -104,6 +104,20 @@ public class JSONTestCase
 
         assertThat(JSON.forValue(m), is("{\"test\":\"VAL1\"}"));
     }
+    
+    public void thatQuoteQuotingWorksInAllModes()
+    {
+        JSON json = new JSON();
+        json.setQuoteChar('\'');
+        
+        assertThat(json.quote("\""), is("\""));
+        assertThat(json.quote("'"), is("\\\'"));
+        
+        json.setQuoteChar('"');
+        
+        assertThat(json.quote("\""), is("\\\""));
+        assertThat(json.quote("'"), is("\'"));
+    }
 
     public static class SimpleBean
     {
