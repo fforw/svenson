@@ -52,7 +52,7 @@ public class JSON
 
     public JSON(char quoteChar)
     {
-        this.quoteChar = quoteChar;
+        setQuoteChar(quoteChar);
     }
 
     public static JSON defaultJSON()
@@ -494,6 +494,11 @@ public class JSON
 
     public void setQuoteChar(char c)
     {
+        if (c != '"' && c != '\'')
+        {
+            throw new IllegalArgumentException("quote char must be ' or \"");
+        }
+        
         this.quoteChar = c;
     }
 }
