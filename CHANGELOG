@@ -1,7 +1,12 @@
+
 svenson json library change log:
 ================================
 
 Changes from 1.2.6 to 1.2.7:
+
+ * fix for stupid quote char quoting bug when using a single quote as JSON quoting character
+ * Added parsing from and to enums. Enums generate their name is String value and can be parsed from such a String.
+ * bugfix: prevent writing to java bean properties with named @JSONProperty with their old, now invalid name.
  * rename DynamicPropertiesUtil to JSONBeanUtil (keep DynamicPropertiesUtil as deprecated)
 
 Changes from 1.2.5 to 1.2.6:
