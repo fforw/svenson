@@ -2,6 +2,10 @@
 svenson json library change log:
 ================================
 
+Changes from 1.2.7 to 1.2.8:
+
+ * embarassing failure to account for Beans as properties of other beans fixed. Thanks to Dave Bordoley for finding this.
+
 Changes from 1.2.6 to 1.2.7:
 
  * fix for stupid quote char quoting bug when using a single quote as JSON quoting character
