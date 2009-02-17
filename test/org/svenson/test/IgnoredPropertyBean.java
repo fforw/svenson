@@ -1,4 +1,7 @@
-package org.svenson;
+package org.svenson.test;
+
+import org.svenson.AbstractDynamicProperties;
+import org.svenson.JSONProperty;
 
 public class IgnoredPropertyBean extends AbstractDynamicProperties
 {

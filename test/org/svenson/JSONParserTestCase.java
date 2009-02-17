@@ -17,6 +17,14 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+import org.svenson.test.Bean;
+import org.svenson.test.BeanWithClassProperty;
+import org.svenson.test.BeanWithEnum;
+import org.svenson.test.ContainerBean;
+import org.svenson.test.DynAttrsBean;
+import org.svenson.test.FooBean;
+import org.svenson.test.MediaEntry;
+import org.svenson.test.TestEnum;
 
 public class JSONParserTestCase
 {
@@ -255,4 +263,13 @@ public class JSONParserTestCase
 
         assertThat((TestEnum)bean.get("qerw"),is(TestEnum.VAL2));
     };
+
+    @Test
+    public void thatBeanPropertiesWork()
+    {
+        MediaEntry entry = JSONParser.defaultJSONParser().parse(MediaEntry.class, "{\"media\":{\"type\":\"text\\/html\"}}");
+        assertThat(entry, is(notNullValue()));
+        assertThat(entry.getMedia(), is(notNullValue()));
+        assertThat(entry.getMedia().getType(), is("text/html"));
+    }
 }

@@ -1,4 +1,6 @@
-package org.svenson;
+package org.svenson.test;
+
+import org.svenson.JSONProperty;
 
 public class ContainerBean
 {

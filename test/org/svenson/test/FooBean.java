@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.svenson;
+package org.svenson.test;
 
 import java.util.ArrayList;
 import java.util.List;

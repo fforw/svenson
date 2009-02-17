@@ -264,7 +264,7 @@ public class JSONParser
             }
 
             Object value;
-            Class typeHint = getTypeHint(cx.getMemberType(), cx.getParsePathInfo("[]"), tokenizer, "[]");
+            Class typeHint = getTypeHint(cx, cx.getParsePathInfo("[]"), tokenizer, "[]", false);
             if (valueType.isPrimitive())
             {
                 value = valueToken.value();
@@ -362,7 +362,7 @@ public class JSONParser
                 name = jsonName;
             }
 
-            Class typeHint = getTypeHint( cx.getMemberType(), cx.getParsePathInfo(jsonName), tokenizer, name);
+            Class typeHint = getTypeHint( cx, cx.getParsePathInfo(jsonName), tokenizer, name, isProperty);
             Object value;
             if (valueType.isPrimitive())
             {
@@ -563,25 +563,68 @@ public class JSONParser
         }
     }
 
-    private Class getTypeHint(Class typeHint, String parsePathInfo, JSONTokenizer tokenizer, String name)
+    private Class getTypeHint(ParseContext cx, String parsePathInfo, JSONTokenizer tokenizer, String name, boolean isProperty)
     {
+        Class memberType = cx.getMemberType();
+        
+        if (memberType == null && isProperty)
+        {
+            Class typeOfProperty = getTypeOfProperty(cx, name);
+            if (typeOfProperty != null)
+            {
+                memberType = typeOfProperty;
+            }
+        }
+        
         if (log.isDebugEnabled())
         {
-            log.debug("typeHint = "+typeHint+", name = "+name);
+            log.debug("typeHint = "+memberType+", name = "+name);
         }
 
         Class cls = getTypeHint( parsePathInfo,tokenizer,name);
 
         if (cls != null)
         {
-            typeHint = cls;
+            memberType = cls;
             if (log.isDebugEnabled())
             {
-                log.debug("set typeHint to  "+typeHint);
+                log.debug("set typeHint to  "+memberType);
             }
         }
+        return memberType;
+    }
 
-        return typeHint;
+    private Class getTypeOfProperty(ParseContext cx, String name)
+    {
+        Class result = null;
+        Object target = cx.target;
+        PropertyDescriptor pd;
+        try
+        {
+            pd = PropertyUtils.getPropertyDescriptor(target, name);
+
+            if (pd != null)
+            {
+                Method m = pd.getWriteMethod();
+                if (m != null)
+                {
+                    result = m.getParameterTypes()[0];
+                }
+            }
+        }
+        catch (IllegalAccessException e)
+        {
+            throw ExceptionWrapper.wrap(e);
+        }
+        catch (InvocationTargetException e)
+        {
+            throw ExceptionWrapper.wrap(e);
+        }
+        catch (NoSuchMethodException e)
+        {
+            throw ExceptionWrapper.wrap(e);
+        }
+        return result;
     }
 
     private Class getTypeHint(String parsePathInfo, JSONTokenizer tokenizer, String name)

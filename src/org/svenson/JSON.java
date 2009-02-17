@@ -84,7 +84,12 @@ public class JSON
         StringBuilder out = new StringBuilder();
         dumpObject(out, o);
 
-        String s = out.toString();
+        return formatJSON(out.toString());
+    }
+    
+    public static String formatJSON(String s)
+    {
+        
         StringBuilder sb = new StringBuilder(s.length() * 3 / 2);
         StringTokenizer st = new StringTokenizer(s, "{}[],\"", true);
         int icnt = 0;
@@ -155,7 +160,7 @@ public class JSON
      * @param cnt
      *          level of indentation
      */
-    private void newLine(StringBuilder sb, int cnt)
+    private static void newLine(StringBuilder sb, int cnt)
     {
         sb.append(NEWLINE);
         for (int i = 0; i < cnt; i++)

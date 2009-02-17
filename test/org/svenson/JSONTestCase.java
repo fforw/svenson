@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.svenson.JSON;
 import org.svenson.JSONable;
 import org.svenson.JSONifier;
+import org.svenson.test.IgnoredPropertyBean;
+import org.svenson.test.TestEnum;
 
 
 public class JSONTestCase

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.svenson;
+package org.svenson.test;
 
 public class Bar
 {

@@ -9,6 +9,7 @@
 	<classpathentry kind="lib" path="lib/test/junit.jar"/>
 	<classpathentry kind="lib" path="lib/test/easymock.jar"/>
 	<classpathentry kind="lib" path="lib/compile/commons-logging.jar"/>
+	<classpathentry kind="lib" path="lib/test/mersenne-twister-1.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
