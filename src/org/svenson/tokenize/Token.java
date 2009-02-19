@@ -65,7 +65,7 @@ public class Token
      * Returns the value of the token
      * @return
      */
-    public Object value()
+    public final Object value()
     {
         return value;
     }
@@ -74,7 +74,7 @@ public class Token
      * Returns the type of the token
      * @return
      */
-    public TokenType type()
+    public final TokenType type()
     {
         return type;
     }
