@@ -16,6 +16,18 @@ import org.svenson.tokenize.TokenType;
 
 public class JSONTokenizerTestCase
 {
+    @Test
+    public void testHex()
+    {
+        int i=0;
+        for (char c = '0' ; c <= '9' ; c++)
+        {
+            assertThat(JSONTokenizer.hexValue(c), is(i++));
+        }
+        
+    }
+    
+    
     protected static Logger log = Logger.getLogger(JSONTokenizerTestCase.class);
 
     private List<Token> tokenize(String json)
@@ -162,7 +174,7 @@ public class JSONTokenizerTestCase
     @Test
     public void thatPushBackWorks()
     {
-        JSONTokenizer tokenizer = new JSONTokenizer("{\"foo\":[1,1.2,true,false,null]}");
+        JSONTokenizer tokenizer = new JSONTokenizer("{\"foo\":[1,1.2,true,false,null]}", false);
         Token token;
         while ( (token = tokenizer.next()).type() != TokenType.END)
         {
@@ -176,7 +188,7 @@ public class JSONTokenizerTestCase
     @Test
     public void thatSingleQuotesAreNotAllowedByDefault()
     {
-        JSONTokenizer t = new JSONTokenizer("[]");
+        JSONTokenizer t = new JSONTokenizer("[]", false);
         assertThat(t.isAllowSingleQuotes(), is(false));
     }
 

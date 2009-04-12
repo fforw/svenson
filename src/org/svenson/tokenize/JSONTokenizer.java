@@ -1,5 +1,8 @@
 package org.svenson.tokenize;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import org.svenson.JSONParseException;
 
 /**
@@ -12,23 +15,21 @@ import org.svenson.JSONParseException;
  */
 public class JSONTokenizer
 {
-    private String json;
-    private int index;
+//    private String json;
+//    private int index;
+    private JSONCharacterSource source;
     private boolean isDecimal;
 
+    private char pushedBack;
+    
     private Token headToken = new Token(TokenType.NULL, null);
     private Token curToken = headToken;
 
     private boolean allowSingleQuotes = false;
 
-    /**
-     * Constructs a new tokenizer instance for the given JSON string.
-     *
-     * @param json
-     */
-    public JSONTokenizer(String json)
+    public void destroy()
     {
-        this(json, false);
+        source.destroy();
     }
 
     public boolean isAllowSingleQuotes()
@@ -51,10 +52,35 @@ public class JSONTokenizer
             throw new IllegalArgumentException("json string cannot be null.");
         }
 
-        this.json = json;
+        this.source = new StringJSONSource(json);
+        //this.source = new InputStreamSource( new ByteArrayInputStream(json.getBytes()), json.length() );
         this.allowSingleQuotes = allowSingleQuotes;
     }
 
+    /**
+     * Constructs a new tokenizer instance for the given InputStream and length. If allowSingleQuotes
+     * is <code>true</code>, the parser will also allow the JSON to contain quoted string that are
+     * quoted with single quotes.
+     *
+     * @param json
+     * @param allowSingleQuotes
+     */
+    public JSONTokenizer(InputStream is, int length, boolean allowSingleQuotes)
+    {
+        if (is == null)
+        {
+            throw new IllegalArgumentException("input stream cannot be null.");
+        }
+        
+        if (length < 0)
+        {
+            throw new IllegalArgumentException("length cannot be negative");            
+        }
+
+        this.source = new InputStreamSource( is, length);
+        this.allowSingleQuotes = allowSingleQuotes;
+    }
+    
     /**
      * Returns <code>true</code> if the given character is a number character.
      */
@@ -82,11 +108,18 @@ public class JSONTokenizer
     private void ensureKeywordSuffix(String word)
     {
         int length = word.length();
-        if (index + length > json.length() || !json.substring(index, index + length).equals(word) )
+        for (int i = 0; i < length ; i++)
         {
-            throw new JSONParseException("invalid keyword "+info()+" (should be "+word+")");
+            if (nextChar() != word.charAt(i))
+            {
+                throw new JSONParseException("invalid keyword at index "+source.getIndex()+" (should be '" + word + "')");
+            }
         }
-        index += length;
+    }
+
+    private boolean bytesAvailable(int length)
+    {
+        return source.getIndex() + length <= source.getLength();
     }
     /**
      * Returns the next token.
@@ -103,7 +136,7 @@ public class JSONTokenizer
 
         skipWhiteSpace();
 
-        if (index >= json.length())
+        if (source.getIndex() >= source.getLength() && pushedBack == 0)
         {
             return new Token(TokenType.END);
         }
@@ -112,7 +145,7 @@ public class JSONTokenizer
 
         Token token ;
 
-        char c1 = json.charAt(index++);
+        char c1 = nextChar();
         switch(c1)
         {
             case '"':
@@ -164,7 +197,7 @@ public class JSONTokenizer
                     break;
                 }
 
-                throw new JSONParseException("Unexpected character '"+c1+"'");
+                throw new JSONParseException("Unexpected character '" + c1 + "'");
             }
         }
 
@@ -211,18 +244,23 @@ public class JSONTokenizer
             isDecimal = false;
         }
 
-        int start = index-1;
-        while( index < json.length())
+        StringBuilder sb = new StringBuilder();
+        sb.append(c1);
+        
+        char c;
+        final int length = source.getLength();
+        while (source.getIndex() < length)
         {
-            char c = json.charAt(index++);
+            c = nextChar();
             if (!isNumberCharacter(c))
             {
-                back();
+                pushBack(c);
                 break;
             }
-        }
+            sb.append(c);
+        } 
 
-        String number = json.substring(start, index);
+        String number = sb.toString();
 
         if (isDecimal)
         {
@@ -242,6 +280,11 @@ public class JSONTokenizer
                 return parseDecimal(number);
             }
         }
+    }
+
+    private void pushBack(char c)
+    {
+        pushedBack = c;
     }
 
     /**
@@ -274,16 +317,9 @@ public class JSONTokenizer
         {
             StringBuilder sb = new StringBuilder();
             boolean escape = false;
-            boolean endOfString = false;
-            while (index < json.length())
+            char c;
+            while ((c = nextChar()) != quoteChar || escape)
             {
-                char c = json.charAt(index++);
-    
-                if ((endOfString = (c == quoteChar && !escape)))
-                {
-                    break;
-                }
-    
                 if (c == '\\')
                 {
                     if (escape)
@@ -317,9 +353,8 @@ public class JSONTokenizer
                             sb.append('\t');
                             break;
                         case 'u':
-                            char unicode = (char) Integer.parseInt(json.substring(index, index + 4), 16);
-                            index += 4;
-                            sb.append(unicode);
+                            int unicode = (hexValue(nextChar()) << 12) + (hexValue(nextChar()) << 8) + (hexValue(nextChar()) << 4) + hexValue(nextChar()); 
+                            sb.append((char)unicode);
                             break;
                         default:
                             throw new JSONParseException("Illegal escape character "+c+" / "+Integer.toHexString(c));
@@ -336,19 +371,33 @@ public class JSONTokenizer
                 }
             }
     
-            if (endOfString)
-            {
-                return new Token(TokenType.STRING, sb.toString());
-            }
-            else
-            {
-                throw new JSONParseException("Unexpected end of string, missing quote "+info());
-            }
+            return new Token(TokenType.STRING, sb.toString());
         }
         catch(StringIndexOutOfBoundsException e)
         {
-            throw new JSONParseException("unexpected end of unicode sequence",e);
+            throw new JSONParseException("Error parsing json",e);
         }
+    }
+    
+    private final static int HEX_LETTER_OFFSET = 'A' - '9' - 1;
+    
+    static int hexValue(char c)
+    {
+        int n = c;
+        if (n >= 'a')
+        {
+            n = n & ~32;
+        }
+        n -=  '0';
+        if (n > 9)
+        {
+            n -= HEX_LETTER_OFFSET;
+        }
+        if (n < 0 || n > 15)
+        {
+            throw new NumberFormatException("Invalid hex character " + c);
+        }
+        return n;
     }
 
     /**
@@ -357,28 +406,7 @@ public class JSONTokenizer
      */
     private String info()
     {
-        int column = 1, line = 1;
-
-        boolean isCR,wasCR = false;
-
-        for (int i=0; i < json.length(); i++)
-        {
-            char c = json.charAt(i);
-            isCR = isCR(c);
-            if (wasCR && !isCR)
-            {
-                line++;
-                column = 0;
-            }
-            else
-            {
-                column++;
-            }
-            wasCR = isCR;
-        }
-
-
-        return "at line "+line+", column "+column;
+        return "at character offset " + source.getIndex();
     }
 
     /**
@@ -395,17 +423,18 @@ public class JSONTokenizer
      * Returns the next character.
      * @return
      */
-//    private char nextChar()
-//    {
-//        return json.charAt(index++);
-//    }
-
-    /**
-     * Goes back one char.
-     */
-    private void back()
+    private char nextChar()
     {
-        index--;
+        if (pushedBack != 0)
+        {
+            char c = pushedBack;
+            pushedBack = 0;
+            return c;
+        }
+        else
+        {
+            return source.nextChar();
+        }
     }
 
     /**
@@ -414,10 +443,10 @@ public class JSONTokenizer
      */
     private void skipWhiteSpace()
     {
-        while (index < json.length())
+        final int length = source.getLength();
+        while (source.getIndex() < length)
         {
-            char c = json.charAt(index++);
-
+            char c = nextChar();
             switch(c)
             {
                 case ' ':
@@ -427,10 +456,10 @@ public class JSONTokenizer
                 case '\t':
                     break;
                 default:
-                    back();
+                    pushBack(c);
                     return;
             }
-        }
+        } 
     }
 
     /**

@@ -1,6 +1,7 @@
 package org.svenson;
 
 import java.beans.PropertyDescriptor;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -147,16 +148,18 @@ public class JSONParser
 
     public Object parse( String json)
     {
-        JSONTokenizer tokenizer = createTokenizer(json);
+        JSONTokenizer tokenizer = new JSONTokenizer(json, allowSingleQuotes);
 
         Token token = tokenizer.next();
+        tokenizer.pushBack(token);
+
         if (token.isType(TokenType.BRACKET_OPEN))
         {
-            return parse( ArrayList.class, json);
+            return parse( ArrayList.class, tokenizer);
         }
         else if (token.isType(TokenType.BRACE_OPEN))
         {
-            return parse( HashMap.class, json);
+            return parse( HashMap.class, tokenizer);
         }
         else
         {
@@ -164,6 +167,27 @@ public class JSONParser
         }
     }
 
+    public Object parse( InputStream is, int length)
+    {
+        JSONTokenizer tokenizer = new JSONTokenizer(is, length, allowSingleQuotes);
+
+        Token token = tokenizer.next();
+        tokenizer.pushBack(token);
+        
+        if (token.isType(TokenType.BRACKET_OPEN))
+        {
+            return parse( ArrayList.class, tokenizer);
+        }
+        else if (token.isType(TokenType.BRACE_OPEN))
+        {
+            return parse( HashMap.class, tokenizer);
+        }
+        else
+        {
+            throw new JSONParseException("Expected [ or { but found "+token);
+        }
+    }
+    
 
     /**
      * Parses a JSON String
@@ -174,7 +198,6 @@ public class JSONParser
      */
     public <T> T parse(Class<T> targetType, String json)
     {
-        JSONTokenizer tokenizer = createTokenizer(json);
 
         if (targetType == null)
         {
@@ -186,6 +209,36 @@ public class JSONParser
             throw new IllegalArgumentException("json string cannot be null");
         }
 
+        JSONTokenizer tokenizer = new JSONTokenizer(json, allowSingleQuotes);
+        return parse(targetType, tokenizer);
+    }
+
+    /**
+     * Parses a JSON String
+     * @param <T> The type to parse the root object into
+     * @param targetType   Runtime class for <T>
+     * @param json  json string
+     * @return the resulting object
+     */
+    public <T> T parse(Class<T> targetType, InputStream is, int length)
+    {
+
+        if (targetType == null)
+        {
+            throw new IllegalArgumentException("target type cannot be null");
+        }
+
+        if (is == null)
+        {
+            throw new IllegalArgumentException("input stream cannot be null");
+        }
+
+        JSONTokenizer tokenizer = new JSONTokenizer(is, length, allowSingleQuotes);
+        return parse(targetType, tokenizer);
+    }
+
+    private <T> T parse(Class<T> targetType, JSONTokenizer tokenizer)
+    {
         T t;
         try
         {
@@ -229,6 +282,7 @@ public class JSONParser
         }
     }
 
+    
     /**
      * Allows single quotes to be used for quoting JSON strings.
      *
@@ -237,12 +291,6 @@ public class JSONParser
     public void setAllowSingleQuotes(boolean allowSingleQuotes)
     {
         this.allowSingleQuotes = allowSingleQuotes;
-    }
-
-    private JSONTokenizer createTokenizer(String json)
-    {
-        JSONTokenizer tokenizer = new JSONTokenizer(json, allowSingleQuotes);
-        return tokenizer;
     }
 
     /**
