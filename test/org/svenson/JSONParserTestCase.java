@@ -38,7 +38,6 @@ public class JSONParserTestCase
         parser = new JSONParser();
 
     }
-
     @Test
     public void thatParsingIntoMapWorks()
     {
@@ -271,5 +270,9 @@ public class JSONParserTestCase
         assertThat(entry, is(notNullValue()));
         assertThat(entry.getMedia(), is(notNullValue()));
         assertThat(entry.getMedia().getType(), is("text/html"));
+    }
+
+    @Test
+    public void testParse() {
     }
 }

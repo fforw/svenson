@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
+import org.svenson.tokenize.JSONCharacterSource;
 import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
 import org.svenson.tokenize.TokenType;
@@ -146,49 +147,52 @@ public class JSONParser
         this.typeHints.put(key, typeHint);
     }
 
-    public Object parse( String json)
+    public final Object parse( String json)
     {
         JSONTokenizer tokenizer = new JSONTokenizer(json, allowSingleQuotes);
-
-        Token token = tokenizer.next();
-        tokenizer.pushBack(token);
-
-        if (token.isType(TokenType.BRACKET_OPEN))
+        try
         {
-            return parse( ArrayList.class, tokenizer);
+            return parse(tokenizer);
         }
-        else if (token.isType(TokenType.BRACE_OPEN))
+        finally
         {
-            return parse( HashMap.class, tokenizer);
-        }
-        else
-        {
-            throw new JSONParseException("Expected [ or { but found "+token);
+            tokenizer.destroy();
         }
     }
 
-    public Object parse( InputStream is, int length)
+    public final Object parse( JSONCharacterSource source)
     {
-        JSONTokenizer tokenizer = new JSONTokenizer(is, length, allowSingleQuotes);
-
-        Token token = tokenizer.next();
-        tokenizer.pushBack(token);
-        
-        if (token.isType(TokenType.BRACKET_OPEN))
+        JSONTokenizer tokenizer = new JSONTokenizer(source , allowSingleQuotes);
+        try
         {
-            return parse( ArrayList.class, tokenizer);
+            return parse(tokenizer);
         }
-        else if (token.isType(TokenType.BRACE_OPEN))
+        finally
         {
-            return parse( HashMap.class, tokenizer);
-        }
-        else
-        {
-            throw new JSONParseException("Expected [ or { but found "+token);
+            tokenizer.destroy();
         }
     }
     
+    private Object parse(JSONTokenizer tokenizer)
+    {
+        Token token = tokenizer.next();
+        tokenizer.pushBack(token);
 
+        if (token.isType(TokenType.BRACKET_OPEN))
+        {
+            return parse( ArrayList.class, tokenizer);
+        }
+        else if (token.isType(TokenType.BRACE_OPEN))
+        {
+            return parse( HashMap.class, tokenizer);
+        }
+        else
+        {
+            throw new JSONParseException("Expected [ or { but found "+token);
+        }
+    }
+
+    
     /**
      * Parses a JSON String
      * @param <T> The type to parse the root object into
@@ -196,7 +200,7 @@ public class JSONParser
      * @param json  json string
      * @return the resulting object
      */
-    public <T> T parse(Class<T> targetType, String json)
+    final public <T> T parse(Class<T> targetType, String json)
     {
 
         if (targetType == null)
@@ -210,7 +214,14 @@ public class JSONParser
         }
 
         JSONTokenizer tokenizer = new JSONTokenizer(json, allowSingleQuotes);
-        return parse(targetType, tokenizer);
+        try
+        {
+            return parse(targetType, tokenizer);
+        }
+        finally
+        {
+            tokenizer.destroy();
+        }
     }
 
     /**
@@ -220,7 +231,7 @@ public class JSONParser
      * @param json  json string
      * @return the resulting object
      */
-    public <T> T parse(Class<T> targetType, InputStream is, int length)
+    final public <T> T parse(Class<T> targetType, JSONCharacterSource source)
     {
 
         if (targetType == null)
@@ -228,13 +239,20 @@ public class JSONParser
             throw new IllegalArgumentException("target type cannot be null");
         }
 
-        if (is == null)
+        if (source == null)
         {
-            throw new IllegalArgumentException("input stream cannot be null");
+            throw new IllegalArgumentException("character source cannot be null");
         }
 
-        JSONTokenizer tokenizer = new JSONTokenizer(is, length, allowSingleQuotes);
-        return parse(targetType, tokenizer);
+        JSONTokenizer tokenizer = new JSONTokenizer(source, allowSingleQuotes);
+        try
+        {
+            return parse(targetType, tokenizer);
+        }
+        finally
+        {
+            tokenizer.destroy();
+        }
     }
 
     private <T> T parse(Class<T> targetType, JSONTokenizer tokenizer)

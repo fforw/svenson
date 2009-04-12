@@ -1,6 +1,5 @@
 package org.svenson.tokenize;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,10 +17,13 @@ public class InputStreamSource
     private int index;
     private int length;
 
-    public InputStreamSource(InputStream inputStream, int length)
+    private boolean close;
+
+    public InputStreamSource(InputStream inputStream, int length, boolean close)
     {
-        this.reader = new BufferedReader( new InputStreamReader(inputStream));
+        this.reader = new InputStreamReader(inputStream);
         this.length = length;
+        this.close = close;
     }
 
     @Override
@@ -58,14 +60,16 @@ public class InputStreamSource
     @Override
     public void destroy()
     {
-        try
+        if (close)
         {
-            reader.close();
-        }
-        catch (IOException e)
-        {
-            throw ExceptionWrapper.wrap(e);
+            try
+            {
+                reader.close();
+            }
+            catch (IOException e)
+            {
+                throw ExceptionWrapper.wrap(e);
+            }
         }
     }
-
 }

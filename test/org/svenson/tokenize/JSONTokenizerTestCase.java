@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Test;
 import org.svenson.JSONParseException;
 import org.svenson.tokenize.JSONTokenizer;
@@ -24,7 +25,39 @@ public class JSONTokenizerTestCase
         {
             assertThat(JSONTokenizer.hexValue(c), is(i++));
         }
+
+        i=10;
+        for (char c = 'a' ; c <= 'f' ; c++)
+        {
+            assertThat(JSONTokenizer.hexValue(c), is(i++));
+        }
+
+        i=10;
+        for (char c = 'A' ; c <= 'F' ; c++)
+        {
+            assertThat(JSONTokenizer.hexValue(c), is(i++));
+        }
+
+        ensureInvalidHex('\0', '0');
+        ensureInvalidHex((char)('9' + 1), 'A');
+        ensureInvalidHex((char)('F' + 1), 'a');
+        ensureInvalidHex((char)('f' + 1), '\uffff');
         
+    }
+
+    private void ensureInvalidHex(char start, char end)
+    {
+        for (char c = start ; c < end ; c++)
+        {
+            try
+            {
+                JSONTokenizer.hexValue(c);
+                Assert.fail("'"+ c + "' is not a valid hex character");
+            }
+            catch(NumberFormatException nfe)
+            {
+            }
+        }
     }
     
     

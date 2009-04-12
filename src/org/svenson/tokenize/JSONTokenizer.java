@@ -1,8 +1,5 @@
 package org.svenson.tokenize;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import org.svenson.JSONParseException;
 
 /**
@@ -15,27 +12,17 @@ import org.svenson.JSONParseException;
  */
 public class JSONTokenizer
 {
-//    private String json;
-//    private int index;
     private JSONCharacterSource source;
+
     private boolean isDecimal;
 
     private char pushedBack;
     
     private Token headToken = new Token(TokenType.NULL, null);
+
     private Token curToken = headToken;
 
     private boolean allowSingleQuotes = false;
-
-    public void destroy()
-    {
-        source.destroy();
-    }
-
-    public boolean isAllowSingleQuotes()
-    {
-        return allowSingleQuotes;
-    }
 
     /**
      * Constructs a new tokenizer instance for the given JSON string. If allowSingleQuotes
@@ -65,22 +52,26 @@ public class JSONTokenizer
      * @param json
      * @param allowSingleQuotes
      */
-    public JSONTokenizer(InputStream is, int length, boolean allowSingleQuotes)
+    public JSONTokenizer(JSONCharacterSource source, boolean allowSingleQuotes)
     {
-        if (is == null)
+        if (source == null)
         {
-            throw new IllegalArgumentException("input stream cannot be null.");
+            throw new IllegalArgumentException("character source cannot be null.");
         }
-        
-        if (length < 0)
-        {
-            throw new IllegalArgumentException("length cannot be negative");            
-        }
-
-        this.source = new InputStreamSource( is, length);
+        this.source = source;
         this.allowSingleQuotes = allowSingleQuotes;
     }
     
+    public void destroy()
+    {
+        source.destroy();
+    }
+
+    public boolean isAllowSingleQuotes()
+    {
+        return allowSingleQuotes;
+    }
+
     /**
      * Returns <code>true</code> if the given character is a number character.
      */
@@ -388,16 +379,24 @@ public class JSONTokenizer
         {
             n = n & ~32;
         }
-        n -=  '0';
-        if (n > 9)
+        
+        if ( (n >= '0' && n <= '9') || (n >= 'A' && n <= 'F'))
         {
-            n -= HEX_LETTER_OFFSET;
+            n -= '0';
+            if (n > 9)
+            {
+                return n - HEX_LETTER_OFFSET;
+            }
+            else
+            {
+                return n;
+            }
+            
         }
-        if (n < 0 || n > 15)
+        else
         {
             throw new NumberFormatException("Invalid hex character " + c);
         }
-        return n;
     }
 
     /**
