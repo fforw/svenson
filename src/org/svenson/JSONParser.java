@@ -47,6 +47,8 @@ public class JSONParser
 
     private Map<Class,Class> interfaceMappings = new HashMap<Class, Class>();
 
+    private List<ObjectFactory> objectFactories = new ArrayList<ObjectFactory>();
+    
     private boolean allowSingleQuotes;
 
     {
@@ -107,6 +109,16 @@ public class JSONParser
         this.interfaceMappings = interfaceMappings;
     }
 
+    public void addObjectFactory(ObjectFactory objectFactory)
+    {
+        if (objectFactory == null)
+        {
+            throw new IllegalArgumentException("objectFactory can't be null");
+        }
+        
+        objectFactories.add(objectFactory);
+    }
+    
     /**
      * Sets a type hint for a given parsing path location.
      * Locations matching that type hint use the mapped
@@ -551,6 +563,13 @@ public class JSONParser
 
         try
         {
+            for (ObjectFactory factory : objectFactories)
+            {
+                if (factory.supports(typeHint))
+                {
+                    return factory.create(typeHint);
+                }
+            }
             return typeHint.newInstance();
         }
         catch (InstantiationException e)
