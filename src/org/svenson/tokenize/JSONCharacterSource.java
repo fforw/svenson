@@ -12,16 +12,12 @@ import java.io.IOException;
 public interface JSONCharacterSource
 {
     /**
-     * Returns the next character
+     * Returns the next character or -1 if the end of the character stream was reached.
      * @return
      * @throws IOException 
      */
-    char nextChar();
-    /**
-     * Returns the complete JSON dataset length in characters.
-     * @return
-     */
-    int getLength();
+    int nextChar();
+
     /**
      * Returns the current character index.
      * 
@@ -30,7 +26,7 @@ public interface JSONCharacterSource
     int getIndex();
     
     /**
-     * 
+     * Allows implementations to close resources.
      */
     void destroy();
 }

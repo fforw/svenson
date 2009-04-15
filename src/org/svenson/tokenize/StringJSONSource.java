@@ -15,27 +15,24 @@ public class StringJSONSource
 
     private int index;
 
+    private int length;
+
     public StringJSONSource(String json)
     {
         this.json = json;
+        this.length = json.length();
     }
 
     @Override
-    public int getLength()
+    public int nextChar()
     {
-        return json.length();
-    }
-
-    @Override
-    public char nextChar()
-    {
-        try
+        if (index < length)
         {
-            return json.charAt(index++);
+            return json.charAt(index++);            
         }
-        catch(StringIndexOutOfBoundsException e)
+        else
         {
-            throw new JSONParseException("Invalid json position "+(index-1));
+            return -1;
         }
     }
 
@@ -50,5 +47,4 @@ public class StringJSONSource
     {
         // nothing to do
     }
-
 }
