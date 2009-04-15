@@ -175,8 +175,7 @@ public class JSONParser
     
     private Object parse(JSONTokenizer tokenizer)
     {
-        Token token = tokenizer.next();
-        tokenizer.pushBack(token);
+        Token token = tokenizer.peekToken();
 
         if (token.isType(TokenType.BRACKET_OPEN))
         {
@@ -186,9 +185,13 @@ public class JSONParser
         {
             return parse( HashMap.class, tokenizer);
         }
+        else if (token.isType(TokenType.NULL) || token.isType(TokenType.FALSE) || token.isType(TokenType.TRUE) || token.isType(TokenType.INTEGER) || token.isType(TokenType.DECIMAL) || token.isType(TokenType.STRING))
+        {
+            return token.value();
+        }
         else
         {
-            throw new JSONParseException("Expected [ or { but found "+token);
+            throw new JSONParseException("Invalid start token "+token);
         }
     }
 

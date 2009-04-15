@@ -14,15 +14,6 @@ import org.svenson.util.Util;
 public class Token
 {
     /**
-     * The next token in the token stream or <code>null</code>
-     */
-    Token next;
-    /**
-     * The previous token in the token stream or <code>null</code>
-     */
-    Token prev;
-
-    /**
      * The value of this token.
      */
     private Object value;
@@ -32,15 +23,38 @@ public class Token
     private TokenType type;
 
     /**
-     * Constructs a token instance of the given token type with a <code>null</code> value
-     * @param type  token type
-     * @throws IllegalArgumentException if <code>null</code> is not a valid value for the given token type
+     * Contains a singleton instance for given token type order position for every token type
+     * that has a fixed value, <code>null</code> for all dynamic (class-restricted) token types.
      */
-    public Token(TokenType type) throws IllegalArgumentException
+    private final static Token[] SINGLETON_TOKENS = new Token[TokenType.values().length];
+    static
     {
-        this(type,null);
+        for (TokenType type : TokenType.values())
+        {
+            if (!type.isClassRestricted())
+            {
+                SINGLETON_TOKENS[type.ordinal()] = new Token(type, type.getValidContent());
+            }
+        }
     }
 
+    public static Token getToken(TokenType type)
+    {
+        return getToken(type, null);
+    }
+    
+    public static Token getToken(TokenType type, Object value)
+    {
+        if (type.isClassRestricted())
+        {
+            return new Token(type, value);
+        }
+        else
+        {
+            return SINGLETON_TOKENS[type.ordinal()];
+        }
+    }
+    
     /**
      * Creates a new Token with given value and the given token type
      *
@@ -48,7 +62,7 @@ public class Token
      * @param value     token value
      * @throws IllegalArgumentException if the given type is <code>null</code> or the given value is not valid for the given type.
      */
-    public Token(TokenType type, Object value) throws IllegalArgumentException
+    private Token(TokenType type, Object value) throws IllegalArgumentException
     {
         if (type == null)
         {
@@ -94,7 +108,7 @@ public class Token
     @Override
     public int hashCode()
     {
-        return 37+ 17 * type.hashCode() + 17 * Util.safeHashcode(value);
+        return 37 + 17 * type.hashCode() + 17 * Util.safeHashcode(value);
     }
 
     /**

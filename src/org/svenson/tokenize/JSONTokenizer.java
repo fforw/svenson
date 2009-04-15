@@ -1,5 +1,8 @@
 package org.svenson.tokenize;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.svenson.JSONParseException;
 
 /**
@@ -18,11 +21,13 @@ public class JSONTokenizer
 
     private char pushedBack;
     
-    private Token headToken = new Token(TokenType.NULL, null);
-
-    private Token curToken = headToken;
-
+    private List<Token> recordedTokens = new ArrayList<Token>();
+    
     private boolean allowSingleQuotes = false;
+
+    private boolean recording;
+
+    private boolean tokenPushedBack;
 
     /**
      * Constructs a new tokenizer instance for the given JSON string. If allowSingleQuotes
@@ -108,10 +113,6 @@ public class JSONTokenizer
         }
     }
 
-    private boolean bytesAvailable(int length)
-    {
-        return source.getIndex() + length <= source.getLength();
-    }
     /**
      * Returns the next token.
      * If there are no more tokens, a token with {@link TokenType#END} will be returned
@@ -119,17 +120,21 @@ public class JSONTokenizer
      */
     public final Token next()
     {
-        if (curToken != null && curToken.next != null)
+        if (tokenPushedBack)
         {
-            curToken = curToken.next;
-            return curToken;
+            Token token = recordedTokens.remove(0);
+            if (recordedTokens.size() == 0)
+            {
+                tokenPushedBack = false;
+            }
+            return token;
         }
 
         skipWhiteSpace();
 
         if (source.getIndex() >= source.getLength() && pushedBack == 0)
         {
-            return new Token(TokenType.END);
+            return Token.getToken(TokenType.END);
         }
 
         isDecimal = false;
@@ -145,34 +150,34 @@ public class JSONTokenizer
                 break;
             }
             case '[':
-                token = new Token(TokenType.BRACKET_OPEN, "[");
+                token = Token.getToken(TokenType.BRACKET_OPEN, "[");
                 break;
             case ']':
-                token = new Token(TokenType.BRACKET_CLOSE, "]");
+                token = Token.getToken(TokenType.BRACKET_CLOSE, "]");
                 break;
             case '{':
-                token = new Token(TokenType.BRACE_OPEN, "{");
+                token = Token.getToken(TokenType.BRACE_OPEN, "{");
                 break;
             case '}':
-                token = new Token(TokenType.BRACE_CLOSE, "}");
+                token = Token.getToken(TokenType.BRACE_CLOSE, "}");
                 break;
             case ':':
-                token = new Token(TokenType.COLON, ":");
+                token = Token.getToken(TokenType.COLON, ":");
                 break;
             case ',':
-                token = new Token(TokenType.COMMA, ",");
+                token = Token.getToken(TokenType.COMMA, ",");
                 break;
             case 't':
                 ensureKeywordSuffix("rue");
-                token = new Token(TokenType.TRUE, Boolean.TRUE);
+                token = Token.getToken(TokenType.TRUE, Boolean.TRUE);
                 break;
             case 'f':
                 ensureKeywordSuffix("alse");
-                token = new Token(TokenType.FALSE, Boolean.FALSE);
+                token = Token.getToken(TokenType.FALSE, Boolean.FALSE);
                 break;
             case 'n':
                 ensureKeywordSuffix("ull");
-                token = new Token(TokenType.NULL);
+                token = Token.getToken(TokenType.NULL);
                 break;
             default:
             {
@@ -192,9 +197,10 @@ public class JSONTokenizer
             }
         }
 
-        curToken.next = token;
-        token.prev = curToken;
-        curToken = token;
+        if (recording)
+        {
+            recordedTokens.add(token);
+        }
 
         return token;
     }
@@ -207,20 +213,18 @@ public class JSONTokenizer
      */
     public void pushBack(Token oldToken)
     {
-        if (oldToken.prev == null)
+        int index = recordedTokens.indexOf(oldToken);
+        
+        if (index < -1)
         {
-            throw new IllegalStateException("oldToken.prev cannot be null");
+            throw new IllegalStateException("Can't rollback to non-recorded token " + oldToken);
         }
-
-        curToken = oldToken.prev;
-    }
-
-    /**
-     * Resets the tokenizer to the first parsing position.
-     */
-    public void reset()
-    {
-        curToken = headToken;
+        else if (index > 0)
+        {
+            recordedTokens = recordedTokens.subList(index, recordedTokens.size());
+        }
+        tokenPushedBack = true;
+        recording = false;
     }
 
     /**
@@ -262,7 +266,7 @@ public class JSONTokenizer
             try
             {
                 long l = Long.parseLong(number );
-                return new Token(TokenType.INTEGER, l);
+                return Token.getToken(TokenType.INTEGER, l);
             }
             catch(NumberFormatException nfe)
             {
@@ -288,7 +292,7 @@ public class JSONTokenizer
         try
         {
             double d = Double.parseDouble(number);
-            return new Token(TokenType.DECIMAL, d);
+            return Token.getToken(TokenType.DECIMAL, d);
         }
         catch(NumberFormatException nfe)
         {
@@ -362,7 +366,7 @@ public class JSONTokenizer
                 }
             }
     
-            return new Token(TokenType.STRING, sb.toString());
+            return Token.getToken(TokenType.STRING, sb.toString());
         }
         catch(StringIndexOutOfBoundsException e)
         {
@@ -474,5 +478,23 @@ public class JSONTokenizer
         Token t = next();
         t.expect(types);
         return t;
+    }
+
+    public void startRecording()
+    {
+        recording = true;
+    }
+
+    public Token peekToken()
+    {
+        boolean wasRecording = recording;
+        startRecording();
+        Token token = next();
+        pushBack(token);
+        if (wasRecording)
+        {
+            startRecording();
+        }
+        return token;
     }
 }

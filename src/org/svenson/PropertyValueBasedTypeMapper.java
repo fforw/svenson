@@ -88,6 +88,7 @@ public class PropertyValueBasedTypeMapper extends AbstractMapBasedTypeMapper<Str
 
         if (this.parsePathInfo.equals(parsePathInfo))
         {
+            tokenizer.startRecording();
             Token first = tokenizer.next();
 
             if (first.type() == TokenType.END)

@@ -105,6 +105,6 @@ public enum TokenType
      */
     public boolean isPrimitive()
     {
-        return this == TRUE || this == FALSE || this == NULL || this == STRING || this == INTEGER || this == DECIMAL;
+        return this == STRING || this == TRUE || this == FALSE || this == NULL || this == INTEGER || this == DECIMAL;
     }
 }

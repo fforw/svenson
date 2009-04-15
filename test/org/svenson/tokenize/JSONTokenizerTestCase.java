@@ -2,6 +2,7 @@ package org.svenson.tokenize;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.svenson.JSONParseException;
+import org.svenson.JSONParser;
 import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
 import org.svenson.tokenize.TokenType;
@@ -78,18 +80,18 @@ public class JSONTokenizerTestCase
 
     private Token createToken(TokenType type, Object value)
     {
-        return new Token(type,value);
+        return Token.getToken(type,value);
     }
 
     private Token createToken(TokenType type)
     {
         if (type.isClassRestricted())
         {
-            return new Token(type, Integer.MIN_VALUE);
+            return Token.getToken(type, Integer.MIN_VALUE);
         }
         else
         {
-            return new Token(type, type.getValidContent());
+            return Token.getToken(type, type.getValidContent());
         }
     }
 
@@ -208,10 +210,12 @@ public class JSONTokenizerTestCase
     public void thatPushBackWorks()
     {
         JSONTokenizer tokenizer = new JSONTokenizer("{\"foo\":[1,1.2,true,false,null]}", false);
+        tokenizer.startRecording();
         Token token;
         while ( (token = tokenizer.next()).type() != TokenType.END)
         {
             tokenizer.pushBack(token);
+            tokenizer.startRecording();
             Token token2 = tokenizer.next();
 
             assertThat(token, is(token2));
@@ -229,5 +233,18 @@ public class JSONTokenizerTestCase
     public void thatSingleQuotesAreRejectedIfNotAllowed()
     {
         new JSONTokenizer("'foo'", false).next();
+    }
+    
+    @Test
+    public void testSimpleValueParsing()
+    {
+        JSONParser parser = JSONParser.defaultJSONParser();        
+        assertThat((String)parser.parse("\"abc\u0020äöüÄÖÜß\""), is("abc äöüÄÖÜß"));
+        assertThat((String)parser.parse("\"アカエラミノウミウシ\""), is("アカエラミノウミウシ"));
+        assertThat((Long)parser.parse("123"), is(123L));
+        assertThat((Double)parser.parse("123.4"), is(123.4));
+        assertThat(parser.parse("null"), is(nullValue()));
+        assertThat((Boolean)parser.parse("true"), is(true));
+        assertThat((Boolean)parser.parse("false"), is(false));
     }
 }
