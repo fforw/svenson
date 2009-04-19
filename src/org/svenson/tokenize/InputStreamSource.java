@@ -1,5 +1,6 @@
 package org.svenson.tokenize;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,7 +19,7 @@ public class InputStreamSource
 
     public InputStreamSource(InputStream inputStream, boolean close)
     {
-        this.reader = new InputStreamReader(inputStream);
+        this.reader = new BufferedReader( new InputStreamReader(inputStream));
         this.close = close;
     }
 

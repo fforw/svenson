@@ -1,7 +1,7 @@
 package org.svenson;
 
+import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -19,6 +21,7 @@ import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
 import org.svenson.tokenize.TokenType;
 import org.svenson.util.ExceptionWrapper;
+import org.svenson.util.ValueHolder;
 
 /**
  * Converts JSON strings into graphs of java objects. It offers
@@ -562,17 +565,43 @@ public class JSONParser
         return null;
     }
 
+    private static ConcurrentMap<Class, ValueHolder<Map<String,Method>>> classToAddMethods = new ConcurrentHashMap<Class, ValueHolder<Map<String,Method>>>();
+    
     private Method getAddMethod(Object bean, String name)
     {
-        String addMethodName = "add"+name.substring(0,1).toUpperCase()+name.substring(1);
-        for (Method m : bean.getClass().getMethods())
+        ValueHolder<Map<String,Method>> holder = new ValueHolder<Map<String,Method>>();
+        
+        Class cls = bean.getClass();
+        ValueHolder<Map<String,Method>> existing = classToAddMethods.putIfAbsent(cls, holder);
+        if (existing != null)
         {
-            if (m.getName().equals(addMethodName) && (m.getModifiers() & Modifier.PUBLIC) != 0 && m.getParameterTypes().length == 1 )
+            holder = existing;
+        }
+        
+        Map<String,Method> addMethods = holder.getValue();
+        if (addMethods == null)
+        {
+            synchronized (holder)
             {
-                return m;
+                addMethods = holder.getValue();
+                if (addMethods == null)
+                {
+                    addMethods = new HashMap<String, Method>();
+                    for (Method m : cls.getMethods())
+                    {
+                        String methodName = m.getName();
+                        if (methodName.startsWith("add") && (m.getModifiers() & Modifier.PUBLIC) != 0 && m.getParameterTypes().length == 1 )
+                        {
+                            String propertyName = Introspector.decapitalize(methodName.substring(3));
+                            addMethods.put(propertyName, m);
+                        }
+                    }
+    
+                    holder.setValue(addMethods);
+                }
             }
         }
-        return null;
+        return addMethods.get(name);            
     }
 
     private <T> T convertValueTo(Object value, Class<T> targetClass)
@@ -737,48 +766,59 @@ public class JSONParser
         return typeHint;
     }
 
+    private static ConcurrentMap<Class,ValueHolder<Map<String,Class>>> classToTypeHintFromAnnotation = new ConcurrentHashMap<Class, ValueHolder<Map<String,Class>>>();
+        
     private Class getTypeHintFromAnnotation(ParseContext cx, String name)
     {
+        Class cls = cx.target.getClass();
 
-        try
+        ValueHolder<Map<String,Class>> holder = new ValueHolder<Map<String,Class>>();
+        ValueHolder<Map<String,Class>> existing = classToTypeHintFromAnnotation.putIfAbsent(cls, holder);
+        if (existing != null)
         {
-            Object target = cx.target;
-            PropertyDescriptor pd = PropertyUtils.getPropertyDescriptor(target, name);
+            holder = existing;
+        }
 
-            if (pd != null)
+        Map<String,Class> typeHintsFromAnnotation = holder.getValue();
+        if (typeHintsFromAnnotation == null)
+        {
+            synchronized (holder)
             {
-                Method readMethod = pd.getReadMethod();
-                Method writeMethod = pd.getWriteMethod();
+                typeHintsFromAnnotation = holder.getValue();
+                if (typeHintsFromAnnotation == null)
+                {
+                    typeHintsFromAnnotation = new HashMap<String, Class>();
 
-                JSONTypeHint typeHintAnnotation = null;
-                if (writeMethod != null)
-                {
-                    typeHintAnnotation = writeMethod.getAnnotation(JSONTypeHint.class);
-                }
-                if (typeHintAnnotation == null && readMethod != null)
-                {
-                    typeHintAnnotation = readMethod.getAnnotation(JSONTypeHint.class);
-                }
-                if (typeHintAnnotation != null)
-                {
-                    return typeHintAnnotation.value();
+                    for (Method m : cls.getMethods())
+                    {
+                        JSONTypeHint typeHintAnnotation = m.getAnnotation(JSONTypeHint.class);
+                        if (typeHintAnnotation != null)
+                        {
+                            String propertyName = getPropertyNameFromMethod(m);
+                            if (propertyName != null)
+                            {
+                                typeHintsFromAnnotation.put(propertyName, typeHintAnnotation.value());
+                            }
+                        }
+                    }
+                    holder.setValue( typeHintsFromAnnotation);
                 }
             }
+        }
+        return typeHintsFromAnnotation.get(name);
+    }
 
-            return null;
-        }
-        catch (IllegalAccessException e)
+    private String getPropertyNameFromMethod(Method m)
+    {
+        String methodName = m.getName();
+        boolean isIsser = methodName.startsWith("is");
+        boolean isGetter = isIsser || methodName.startsWith("get");
+        boolean isSetter = methodName.startsWith("set");
+        if (isGetter || isSetter)
         {
-            throw ExceptionWrapper.wrap(e);
+            return Introspector.decapitalize(methodName.substring(isIsser ? 2 : 3));
         }
-        catch (InvocationTargetException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (NoSuchMethodException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
+        return null;
     }
 
     private class ParseContext

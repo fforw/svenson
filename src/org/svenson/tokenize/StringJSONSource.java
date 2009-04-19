@@ -1,6 +1,5 @@
 package org.svenson.tokenize;
 
-import org.svenson.JSONParseException;
 
 /**
  * String implementation for the {@link JSONCharacterSource} interface for full in-memory
