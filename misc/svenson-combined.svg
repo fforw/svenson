@@ -10,7 +10,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="1176"
-   height="559"
+   height="700"
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.46"
@@ -145,9 +145,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="405.23029"
-     inkscape:cy="281.1494"
+     inkscape:zoom="0.5"
+     inkscape:cx="-244.10407"
+     inkscape:cy="333.24743"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -392,5 +392,45 @@
          x="1061.8618"
          sodipodi:role="line"
          id="tspan3399">streaming</tspan></text>
+    <rect
+       y="621.68365"
+       x="100.38672"
+       height="32"
+       width="32"
+       id="rect3403"
+       style="opacity:1;fill:#29a16b;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:MgOpen Moderna;-inkscape-font-specification:MgOpen Moderna"
+       x="147.86194"
+       y="647.05438"
+       id="text3405"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3407"
+         x="147.86194"
+         y="647.05438">live objects at test end</tspan></text>
+    <rect
+       style="opacity:1;fill:#2c57a1;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3409"
+       width="32"
+       height="32"
+       x="100.38672"
+       y="571.68365" />
+    <text
+       sodipodi:linespacing="100%"
+       id="text3411"
+       y="597.05438"
+       x="147.86194"
+       style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:MgOpen Moderna;-inkscape-font-specification:MgOpen Moderna"
+       xml:space="preserve"><tspan
+         y="597.05438"
+         x="147.86194"
+         id="tspan3413"
+         sodipodi:role="line">sum of all objects ever allocated</tspan><tspan
+         y="625.05438"
+         x="147.86194"
+         sodipodi:role="line"
+         id="tspan3415" /></text>
   </g>
 </svg>
