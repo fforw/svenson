@@ -4,6 +4,7 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.Writer;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -41,13 +42,30 @@ public class JSON
 {
     private final static JSON defaultJSON = new JSON();
 
+    public static JSON defaultJSON()
+    {
+        return defaultJSON;
+    }
+
     private Map<Class,JSONifier> jsonifiers=Collections.synchronizedMap(new HashMap<Class, JSONifier>());
 
     private char quoteChar;
 
+    private boolean escapeUnicodeChars = true;
+
     public JSON()
     {
         this('"');
+    }
+    
+    public void setEscapeUnicodeChars(boolean escapeUnicodeChars)
+    {
+        this.escapeUnicodeChars = escapeUnicodeChars;
+    }
+    
+    public boolean isEscapeUnicodeChars()
+    {
+        return escapeUnicodeChars;
     }
 
     public JSON(char quoteChar)
@@ -55,11 +73,7 @@ public class JSON
         setQuoteChar(quoteChar);
     }
 
-    public static JSON defaultJSON()
-    {
-        return defaultJSON;
-    }
-
+    
     public void registerJSONifier(Class c, JSONifier jsonifier)
     {
         jsonifiers.put(c, jsonifier);
@@ -70,6 +84,7 @@ public class JSON
         jsonifiers.clear();
     }
 
+       
     /**
      * Dumps the given object as formatted JSON representation. The method dumps
      * the object to JSON first and reformats it then, so it's not the fastest
@@ -81,10 +96,10 @@ public class JSON
      */
     public String dumpObjectFormatted(Object o)
     {
-        StringBuilder out = new StringBuilder();
+        StringBuilderSink out = new StringBuilderSink();
         dumpObject(out, o);
 
-        return formatJSON(out.toString());
+        return formatJSON(out.getContent());
     }
     
     public static String formatJSON(String s)
@@ -156,7 +171,7 @@ public class JSON
      * Adds a newline followed by a given number of indentation spaces.
      *
      * @param sb
-     *          StringStringBuilder
+     *          StringStreamBuilder
      * @param cnt
      *          level of indentation
      */
@@ -171,30 +186,30 @@ public class JSON
 
     /**
      * Dumps the given object as JSON representation into the given
-     * StringBuilder
+     * StreamBuilder
      *
      * @param out
-     *          StringBuilder
+     *          StreamBuilder
      * @param o
      *          objct
      */
-    public void dumpObject(StringBuilder out, Object o)
+    public void dumpObject(JSONCharacterSink out, Object o)
     {
         dumpObject(out, o, '\0', null);
     }
 
     /**
      * Dumps the given object as JSON representation into the given
-     * StringBuilder
+     * StreamBuilder
      *
      * @param out
-     *          StringBuilder
+     *          StreamBuilder
      * @param o
      *          objct
      * @param ignoredProps
      *          List containing the properties to be ignored.
      */
-    public void dumpObject(StringBuilder out, Object o,
+    public void dumpObject(JSONCharacterSink out, Object o,
             List<String> ignoredProps)
     {
         dumpObject(out, o, '\0', ignoredProps);
@@ -202,14 +217,14 @@ public class JSON
 
     /**
      * Dumps the given object as JSON representation followed by a separator
-     * into the given StringBuilder.
+     * into the given StreamBuilder.
      *
-     * @param out StringBuilder
+     * @param out StreamBuilder
      * @param o object
      * @param separator separator character to append after the object or
      *            <code>'\0'</code> to append no separator.
      */
-    private void dumpObject(StringBuilder out, Object o, char separator, List<String> ignoredProps)
+    private void dumpObject(JSONCharacterSink out, Object o, char separator, List<String> ignoredProps)
     {
         if (o == null)
         {
@@ -236,36 +251,36 @@ public class JSON
             }
             else if (o instanceof Collection)
             {
-                out.append("[");
+                out.append('[');
                 for (Iterator i = ((Collection) o).iterator(); i.hasNext();)
                 {
                     dumpObject(out, i.next(), i.hasNext() ? ',' : '\0', ignoredProps);
                 }
-                out.append("]");
+                out.append(']');
             }
             else if (o.getClass().isArray())
             {
-                out.append("[");
+                out.append('[');
                 int len = Array.getLength(o);
                 for (int i = 0; i < len; i++)
                 {
                     dumpObject(out, Array.get(o, i), ((i < (len - 1)) ? ',' : '\0'), ignoredProps);
                 }
-                out.append("]");
+                out.append(']');
             }
             else if (o instanceof Map)
             {
-                out.append("{");
+                out.append('{');
                 Map m = (Map) o;
                 for (Iterator i = m.keySet().iterator(); i.hasNext();)
                 {
                     Object key = i.next();
 
                     dumpObject(out, key.toString(), '\0', ignoredProps);
-                    out.append(":");
+                    out.append(':');
                     dumpObject(out, m.get(key), i.hasNext() ? ',' : '\0', ignoredProps);
                 }
-                out.append("}");
+                out.append('}');
             }
             else if ((jsonifier = jsonifiers.get(oClass)) != null)
             {
@@ -294,7 +309,7 @@ public class JSON
                 {
                     throw ExceptionWrapper.wrap(e);
                 }
-                out.append("{");
+                out.append('{');
                 boolean first = true;
                 PropertyDescriptor[] pds = info.getPropertyDescriptors();
                 for (int cp = 0; cp < pds.length; cp++)
@@ -368,7 +383,7 @@ public class JSON
                     }
                 }
 
-                out.append("}");
+                out.append('}');
             }
         }
         if (separator != '\0')
@@ -385,9 +400,14 @@ public class JSON
      */
     public String forValue(Object o)
     {
-        StringBuilder tmp = new StringBuilder();
+        StringBuilderSink tmp = new StringBuilderSink();
         dumpObject(tmp, o);
-        return tmp.toString();
+        return tmp.getContent();
+    }
+    
+    public void writeJSONToWriter(Object o, Writer w)
+    {
+        dumpObject(new WriterSink(w),o);
     }
 
     /**
@@ -399,102 +419,93 @@ public class JSON
      */
     public String forValue(Object o, List<String> ignoredProps)
     {
-        StringBuilder tmp = new StringBuilder();
+        StringBuilderSink tmp = new StringBuilderSink();
         dumpObject(tmp, o, ignoredProps);
-        return tmp.toString();
+        return tmp.getContent();
     }
 
     /**
      * Inserts the given String as quoted and escaped, JSON-conform String into
-     * the given StringBuilder.
+     * the given StreamBuilder.
      *
      * @param buf
-     *          StringBuilder
+     *          StreamBuilder
      * @param s
      *          String to quote and escape
      */
-    public void quote(StringBuilder buf, String s)
+    public void quote(JSONCharacterSink buf, String s)
     {
-        try
+        if (s == null)
         {
-            if (s == null)
-            {
-                buf.append("null");
-                return;
-            }
-
-            buf.append(quoteChar);
-            for (int i = 0; i < s.length(); i++)
-            {
-                char c = s.charAt(i);
-                switch (c)
-                {
-                    
-                    case '"':
-                    case '\'':
-                        if (c == quoteChar)
-                        {
-                            buf.append("\\"+c);
-                        }
-                        else
-                        {
-                            buf.append(c);
-                        }
-                        break;
-                    case '/':
-                        buf.append("\\/");
-                        break;
-                    case '\\':
-                        buf.append("\\\\");
-                        break;
-                    case '\b':
-                        buf.append("\\b");
-                        break;
-                    case '\f':
-                        buf.append("\\f");
-                        break;
-                    case '\n':
-                        buf.append("\\n");
-                        break;
-                    case '\r':
-                        buf.append("\\r");
-                        break;
-                    case '\t':
-                        buf.append("\\t");
-                        break;
-                    default:
-                        if (c < 32 || c > 126)
-                        {
-                            String h = Integer.toHexString(c);
-                            int len = h.length();
-                            if (len < 4)
-                            {
-                                h = "0000".substring(len) + h;
-                            }
-                            buf.append("\\u" + h);
-                        }
-                        else
-                        {
-                            buf.append(c);
-                        }
-                        break;
-                }
-            }
-            buf.append(quoteChar);
-
+            buf.append("null");
+            return;
         }
-        catch (Exception e)
+
+        buf.append(quoteChar);
+        for (int i = 0; i < s.length(); i++)
         {
-            // shouldn't happen
-            throw new RuntimeException("error quoting JSON string", e);
+            char c = s.charAt(i);
+            switch (c)
+            {
+                
+                case '"':
+                case '\'':
+                    if (c == quoteChar)
+                    {
+                        buf.append("\\"+c);
+                    }
+                    else
+                    {
+                        buf.append(c);
+                    }
+                    break;
+                case '/':
+                    buf.append("\\/");
+                    break;
+                case '\\':
+                    buf.append("\\\\");
+                    break;
+                case '\b':
+                    buf.append("\\b");
+                    break;
+                case '\f':
+                    buf.append("\\f");
+                    break;
+                case '\n':
+                    buf.append("\\n");
+                    break;
+                case '\r':
+                    buf.append("\\r");
+                    break;
+                case '\t':
+                    buf.append("\\t");
+                    break;
+                default:
+                    if (c < 32 || (c > 126 && escapeUnicodeChars))
+                    {
+                        String h = Integer.toHexString(c);
+                        int len = h.length();
+                        if (len < 4)
+                        {
+                            h = "0000".substring(len) + h;
+                        }
+                        buf.append("\\u" + h);
+                    }
+                    else
+                    {
+                        buf.append(c);
+                    }
+                    break;
+            }
         }
+        buf.append(quoteChar);
     }
 
     public String quote(String s)
     {
-        StringBuilder sb=new StringBuilder();
+        StringBuilderSink sb=new StringBuilderSink();
         quote(sb,s);
-        return sb.toString();
+        return sb.getContent();
     }
 
     public void setQuoteChar(char c)

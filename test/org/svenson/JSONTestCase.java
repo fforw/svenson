@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static junit.framework.TestCase.*;
 
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,24 +20,27 @@ import org.svenson.test.TestEnum;
 
 public class JSONTestCase
 {
-    private JSON JSON = new JSON();
+    private JSON json = new JSON();
 
     @Test
     public void testInt()
     {
-        assertThat(JSON.forValue(52), is("52"));
+        assertThat(json.forValue(52), is("52"));
     }
 
     @Test
     public void testString()
     {
-        assertThat(JSON.forValue("Hello äöü"), is("\"Hello \\u00e4\\u00f6\\u00fc\""));
+        assertThat(json.forValue("Hello äöü"), is("\"Hello \\u00e4\\u00f6\\u00fc\""));
+        JSON json2 = new JSON();
+        json2.setEscapeUnicodeChars(false);
+        assertThat(json2.forValue("Hello äöü"), is("\"Hello äöü\""));
     }
-
+    
     @Test
     public void testArray()
     {
-        assertEquals("[1,2,3]", JSON.forValue(new int[] { 1,2,3}));
+        assertEquals("[1,2,3]", json.forValue(new int[] { 1,2,3}));
     }
 
     @Test
@@ -46,15 +50,15 @@ public class JSONTestCase
         Map<String, Object> m=new TreeMap<String, Object>();
         m.put("foo", 42);
         m.put("bar", "baz");
-        assertEquals("{\"bar\":\"baz\",\"foo\":42}", JSON.forValue(m));
+        assertEquals("{\"bar\":\"baz\",\"foo\":42}", json.forValue(m));
     }
 
     @Test
     public void testBean()
     {
-        String json=JSON.forValue(new SimpleBean(new int[]{1,2},"baz"));
+        String jsonDataset=json.forValue(new SimpleBean(new int[]{1,2},"baz"));
         //assertEquals("{bar:\"baz\",_class:\""+JSONTestCase.class.getName()+"$SimpleBean\",foo:[1,2]}",json);
-        assertEquals("{\"bar\":\"baz\",\"foo\":[1,2]}",json);
+        assertEquals("{\"bar\":\"baz\",\"foo\":[1,2]}",jsonDataset);
     }
 
     @Test
@@ -64,27 +68,27 @@ public class JSONTestCase
 
         expect(jsonableMock.toJSON()).andReturn("{foo:1}");
         replay(jsonableMock);
-        assertThat(JSON.forValue(jsonableMock), is("{foo:1}"));
+        assertThat(json.forValue(jsonableMock), is("{foo:1}"));
         verify(jsonableMock);
     }
 
     @Test
     public void thatJSONifierWorks()
     {
-        JSON.deregisterJSONifiers();
+        json.deregisterJSONifiers();
 
-        assertThat(JSON.forValue(new JSONifiedBean()), is("{}"));
+        assertThat(json.forValue(new JSONifiedBean()), is("{}"));
 
         JSONifier jsonifierMock = createMock(JSONifier.class);
         final String jsonifierOutput = "{foo:1}";
         expect(jsonifierMock.toJSON(isA(JSONifiedBean.class))).andReturn(jsonifierOutput);
 
-        JSON.registerJSONifier(JSONifiedBean.class, jsonifierMock);
+        json.registerJSONifier(JSONifiedBean.class, jsonifierMock);
 
         replay(jsonifierMock);
-        String json = JSON.forValue(new JSONifiedBean());
+        String jsonDataset = json.forValue(new JSONifiedBean());
 
-        assertThat(json, is(jsonifierOutput));
+        assertThat(jsonDataset, is(jsonifierOutput));
         verify(jsonifierMock);
     }
 
@@ -94,7 +98,7 @@ public class JSONTestCase
         IgnoredPropertyBean bean = new IgnoredPropertyBean();
         bean.setProperty("foo", "bar");
 
-        assertThat(JSON.forValue(bean), is("{\"foo\":\"bar\"}"));
+        assertThat(json.forValue(bean), is("{\"foo\":\"bar\"}"));
 
     }
 
@@ -104,21 +108,31 @@ public class JSONTestCase
         Map m = new HashMap();
         m.put("test", TestEnum.VAL1);
 
-        assertThat(JSON.forValue(m), is("{\"test\":\"VAL1\"}"));
+        assertThat(json.forValue(m), is("{\"test\":\"VAL1\"}"));
     }
     
+    @Test
     public void thatQuoteQuotingWorksInAllModes()
     {
         JSON json = new JSON();
         json.setQuoteChar('\'');
         
-        assertThat(json.quote("\""), is("\""));
-        assertThat(json.quote("'"), is("\\\'"));
+        assertThat(json.quote("\""), is("'\"'"));
+        assertThat(json.quote("'"), is("'\\\''"));
         
         json.setQuoteChar('"');
         
-        assertThat(json.quote("\""), is("\\\""));
-        assertThat(json.quote("'"), is("\'"));
+        assertThat(json.quote("\""), is("\"\\\"\""));
+        assertThat(json.quote("'"), is("\"\'\""));
+    }
+    
+    @Test
+    public void thatWriterOutputWorks()
+    {
+        StringWriter sw = new StringWriter();
+        json.writeJSONToWriter("abc äöü", sw);
+        
+        assertThat(sw.getBuffer().toString(), is("\"abc \\u00e4\\u00f6\\u00fc\""));
     }
 
     public static class SimpleBean
