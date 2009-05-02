@@ -195,7 +195,7 @@ public class JSONTokenizer
                     break;
                 }
 
-                throw new JSONParseException("Unexpected character '" + c1 + "'");
+                throw new JSONParseException("Unexpected character '" + (char)c1 + "'");
             }
         }
 
