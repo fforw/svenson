@@ -31,10 +31,10 @@ public class JSONTestCase
     @Test
     public void testString()
     {
-        assertThat(json.forValue("Hello äöü"), is("\"Hello \\u00e4\\u00f6\\u00fc\""));
+        assertThat(json.forValue("Hello \u00e4\u00f6\u00fc"), is("\"Hello \\u00e4\\u00f6\\u00fc\""));
         JSON json2 = new JSON();
         json2.setEscapeUnicodeChars(false);
-        assertThat(json2.forValue("Hello äöü"), is("\"Hello äöü\""));
+        assertThat(json2.forValue("Hello \u00e4\u00f6\u00fc"), is("\"Hello \u00e4\u00f6\u00fc\""));
     }
     
     @Test
