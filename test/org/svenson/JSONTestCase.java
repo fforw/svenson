@@ -130,7 +130,7 @@ public class JSONTestCase
     public void thatWriterOutputWorks()
     {
         StringWriter sw = new StringWriter();
-        json.writeJSONToWriter("abc äöü", sw);
+        json.writeJSONToWriter("abc \u00e4\u00f6\u00fc", sw);
         
         assertThat(sw.getBuffer().toString(), is("\"abc \\u00e4\\u00f6\\u00fc\""));
     }
