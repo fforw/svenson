@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/compile/log4j.jar"/>
 	<classpathentry kind="lib" path="lib/compile/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="lib/test/hamcrest-all.jar"/>
@@ -11,6 +10,11 @@
 	<classpathentry kind="lib" path="lib/compile/commons-logging.jar"/>
 	<classpathentry kind="lib" path="lib/test/mersenne-twister-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/compile/commons-io.jar"/>
+	<classpathentry kind="lib" path="lib/compile/spring-core.jar"/>
+	<classpathentry kind="lib" path="lib/compile/spring-context-support.jar"/>
+	<classpathentry kind="lib" path="lib/compile/spring-context.jar"/>
+	<classpathentry kind="lib" path="lib/compile/spring-beans.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_10"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

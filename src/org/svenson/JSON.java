@@ -16,7 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.svenson.converter.TypeConverter;
+import org.svenson.converter.TypeConverterRepository;
 import org.svenson.util.ExceptionWrapper;
+import org.svenson.util.TypeConverterCache;
 
 /**
  * Generates <a href="http://json.org">JSON</a> representations of nested java object
@@ -53,11 +56,18 @@ public class JSON
 
     private boolean escapeUnicodeChars = true;
 
+    private TypeConverterCache typeConverterCache;
+    
     public JSON()
     {
         this('"');
     }
-    
+
+    public JSON(char quoteChar)
+    {
+        setQuoteChar(quoteChar);
+    }
+
     public void setEscapeUnicodeChars(boolean escapeUnicodeChars)
     {
         this.escapeUnicodeChars = escapeUnicodeChars;
@@ -68,11 +78,10 @@ public class JSON
         return escapeUnicodeChars;
     }
 
-    public JSON(char quoteChar)
+    public void setTypeConverterRepository(TypeConverterRepository typeConverterRepository)
     {
-        setQuoteChar(quoteChar);
+        this.typeConverterCache = new TypeConverterCache(typeConverterRepository);
     }
-
     
     public void registerJSONifier(Class c, JSONifier jsonifier)
     {
@@ -324,6 +333,16 @@ public class JSON
                         if (method != null)
                         {
                             Object value = method.invoke(o, (Object[]) null);
+                            
+                            if (typeConverterCache != null)
+                            {
+                                TypeConverter typeConverter = typeConverterCache.getTypeConverter( o, pd.getName());
+                                if (typeConverter != null)
+                                {
+                                    value = typeConverter.toJSON(value);
+                                }
+                            }
+                            
                             String name = pd.getName();
                             boolean ignore = (ignoredProps != null && ignoredProps.contains(name));
                             if (!name.equals("class") && !ignore)

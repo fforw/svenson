@@ -16,11 +16,15 @@ import java.util.concurrent.ConcurrentMap;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
+import org.svenson.converter.JSONConverter;
+import org.svenson.converter.TypeConverter;
+import org.svenson.converter.TypeConverterRepository;
 import org.svenson.tokenize.JSONCharacterSource;
 import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
 import org.svenson.tokenize.TokenType;
 import org.svenson.util.ExceptionWrapper;
+import org.svenson.util.TypeConverterCache;
 import org.svenson.util.ValueHolder;
 
 /**
@@ -56,6 +60,11 @@ public class JSONParser
     
     private boolean allowSingleQuotes;
 
+    private TypeConverterCache typeConverterCache;
+    
+    /**
+     * Default Interface initializer
+     */
     {
         interfaceMappings.put(Collection.class, ArrayList.class);
         interfaceMappings.put(List.class, ArrayList.class);
@@ -148,6 +157,17 @@ public class JSONParser
     public void addTypeHint(String key, Class typeHint)
     {
         this.typeHints.put(key, typeHint);
+    }
+    
+    /**
+     * Sets the type converter repository used by the parser.
+     * 
+     * @see JSONConverter
+     * @param typeConverterRepository
+     */
+    public void setTypeConverterRepository(TypeConverterRepository typeConverterRepository)
+    {
+        this.typeConverterCache = new TypeConverterCache(typeConverterRepository);
     }
 
     public final Object parse( String json)
@@ -436,6 +456,14 @@ public class JSONParser
 
             Method addMethod = getAddMethod(cx.target, jsonName);
 
+            TypeConverter typeConverter = null;
+            
+            if (typeConverterCache != null)
+            {
+                typeConverter = typeConverterCache.getTypeConverter( cx.target, name);
+            }
+
+            
             if (!(isProperty || containerIsMap ||containerIsDynAttrs || addMethod != null))
             {
                 throw new JSONParseException("Cannot set property "+jsonName+" on "+cx.target.getClass());
@@ -478,6 +506,17 @@ public class JSONParser
 
                     if (isProperty || containerIsMap || containerIsDynAttrs)
                     {
+                        if (isProperty)
+                        {
+                            if (typeConverterCache != null)
+                            {
+                                if (typeConverter != null && !List.class.isAssignableFrom(typeHint))
+                                {
+                                    typeHint = List.class;
+                                }
+                            }
+                        }
+                        
                         newTarget = createNewTargetInstance(typeHint, false);
                         Class memberType = getTypeHintFromAnnotation(cx, name);
                         parseArrayInto(cx.push(newTarget,memberType, "."+name), tokenizer);
@@ -516,6 +555,10 @@ public class JSONParser
                 try
                 {
                     Class targetClass = PropertyUtils.getPropertyType(cx.target, name);
+                    if (typeConverter != null)
+                    {
+                        value = typeConverter.fromJSON(value);
+                    }
                     PropertyUtils.setProperty(cx.target, name, convertValueTo(value, targetClass));
                 }
                 catch (IllegalAccessException e)

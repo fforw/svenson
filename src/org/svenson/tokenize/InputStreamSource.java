@@ -13,8 +13,6 @@ import org.svenson.util.ExceptionWrapper;
 public class InputStreamSource
     implements JSONCharacterSource
 {
-    private static Logger log = Logger.getLogger(InputStreamSource.class);
-    
     private Reader reader;
 
     private int index;
@@ -40,13 +38,11 @@ public class InputStreamSource
         this.close = close;
     }
 
-    @Override
     public int getIndex()
     {
         return index;
     }
 
-    @Override
     public int nextChar()
     {
         try
@@ -61,7 +57,6 @@ public class InputStreamSource
         }
     }
 
-    @Override
     public void destroy()
     {
         if (close)

@@ -105,10 +105,11 @@ public class JSONTokenizer
      */
     private void ensureKeywordSuffix(String word)
     {
-        int length = word.length();
+        String suffix = word.substring(1);
+        int length = suffix.length();
         for (int i = 0; i < length ; i++)
         {
-            if (nextChar() != word.charAt(i))
+            if (nextChar() != suffix.charAt(i))
             {
                 throw new JSONParseException("invalid keyword at index "+source.getIndex()+" (should be '" + word + "')");
             }
@@ -170,15 +171,15 @@ public class JSONTokenizer
                 token = Token.getToken(TokenType.COMMA, ",");
                 break;
             case 't':
-                ensureKeywordSuffix("rue");
+                ensureKeywordSuffix("true");
                 token = Token.getToken(TokenType.TRUE, Boolean.TRUE);
                 break;
             case 'f':
-                ensureKeywordSuffix("alse");
+                ensureKeywordSuffix("false");
                 token = Token.getToken(TokenType.FALSE, Boolean.FALSE);
                 break;
             case 'n':
-                ensureKeywordSuffix("ull");
+                ensureKeywordSuffix("null");
                 token = Token.getToken(TokenType.NULL);
                 break;
             default:
@@ -217,7 +218,7 @@ public class JSONTokenizer
     {
         int index = recordedTokens.indexOf(oldToken);
         
-        if (index < -1)
+        if (index < 0)
         {
             throw new IllegalStateException("Can't rollback to non-recorded token " + oldToken);
         }

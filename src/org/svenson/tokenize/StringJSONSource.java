@@ -22,7 +22,6 @@ public class StringJSONSource
         this.length = json.length();
     }
 
-    @Override
     public int nextChar()
     {
         if (index < length)
@@ -35,13 +34,11 @@ public class StringJSONSource
         }
     }
 
-    @Override
     public int getIndex()
     {
         return index;
     }
 
-    @Override
     public void destroy()
     {
         // nothing to do

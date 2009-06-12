@@ -14,7 +14,6 @@ public class WriterSink implements JSONCharacterSink
         this.writer = writer;
     }
 
-    @Override
     public void append(String token)
     {
         try
@@ -27,7 +26,6 @@ public class WriterSink implements JSONCharacterSink
         }
     }
 
-    @Override
     public void append(char c)
     {
         try
@@ -40,7 +38,6 @@ public class WriterSink implements JSONCharacterSink
         }
     }
 
-    @Override
     public void append(Object o)
     {
         append(o.toString());
