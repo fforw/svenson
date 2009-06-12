@@ -1,10 +1,7 @@
 package org.svenson;
 
 import java.util.HashMap;
-
-import org.svenson.tokenize.JSONTokenizer;
-import org.svenson.tokenize.Token;
-import org.svenson.tokenize.TokenType;
+import java.util.Map;
 
 /**
  * Maps parts of an JSON dataset to a set of configured types based on a field
@@ -35,17 +32,9 @@ You can now parse the objects in the rows array into Foo and Bar instances by se
  *
  * @author shelmberger
  */
-public class PropertyValueBasedTypeMapper extends AbstractMapBasedTypeMapper<String>
+public class PropertyValueBasedTypeMapper extends AbstractPropertyValueBasedTypeMapper
 {
-    /**
-     * Field whose value is used to tell one type from the other. (default "type")
-     */
-    String discriminatorField = "type";
-
-    /**
-     * Parse path info the mapping is applied to.
-     */
-    private String parsePathInfo;
+    protected Map<String, Class> typeMap = new HashMap<String, Class>();
 
     /**
      * Mapps the given field value to the given type.
@@ -57,86 +46,31 @@ public class PropertyValueBasedTypeMapper extends AbstractMapBasedTypeMapper<Str
     {
         typeMap.put(value, cls);
     }
-
+    
     /**
-     * Sets the parse path info at which the type discrimination is applied.
-     *
-     * @param parsePathInfo
+     * @param value
+     * @return Class or <code>null</code>
+     * @throws IllegalStateException if there is no class configured for this
+     *             value and {@link #allowUndefined} is false.
      */
-    public void setParsePathInfo(String parsePathInfo)
+    @Override
+    protected Class getTypeHintFromTypeProperty(Object value) throws IllegalStateException
     {
-        this.parsePathInfo = parsePathInfo;
-    }
-
-    /**
-     * Sets the property used to discriminate between the different document
-     * types
-     *
-     * @param discriminatorField
-     */
-    public void setDiscriminatorField(String discriminatorField)
-    {
-        this.discriminatorField = discriminatorField;
-    }
-
-    public Class getTypeHint(JSONTokenizer tokenizer, String parsePathInfo, Class typeHint)
-    {
-        if (this.parsePathInfo == null)
+        Class cls = typeMap.get(value);
+        if (cls == null)
         {
-            throw new IllegalStateException("parse path info not configured.");
-        }
-
-        if (this.parsePathInfo.equals(parsePathInfo))
-        {
-            tokenizer.startRecording();
-            Token first = tokenizer.next();
-
-            if (first.type() == TokenType.END)
+            if (allowUndefined)
             {
-                throw new IllegalStateException("Unexpected end");
+                cls = HashMap.class;
             }
-            try
+            else
             {
-                Token token = first;
-                do
-                {
-                    token.expect(TokenType.STRING);
-                    String propertyName = (String) token.value();
-                    tokenizer.expectNext(TokenType.COLON);
-
-                    Token firstValueToken = tokenizer.next();
-
-                    if (propertyName.equals(discriminatorField))
-                    {
-                        firstValueToken.expect(TokenType.STRING);
-                        String fieldValue = (String) firstValueToken.value();
-                        return getTypeHintFromTypeProperty(fieldValue);
-                    }
-                    else
-                    {
-                        if (firstValueToken.type() == TokenType.BRACE_OPEN)
-                        {
-                            skipObjectValue(tokenizer);
-                        }
-                        else if (firstValueToken.type() == TokenType.BRACKET_OPEN)
-                        {
-                            skipArrayValue(tokenizer);
-                        }
-
-                        Token next = tokenizer.expectNext(TokenType.COMMA, TokenType.BRACE_CLOSE);
-                        if (next.type() == TokenType.BRACE_CLOSE)
-                        {
-                            return HashMap.class;
-                        }
-                    }
-                } while ((token = tokenizer.next()).type() != TokenType.END);
-                return null;
-            }
-            finally
-            {
-                tokenizer.pushBack(first);
+                throw new IllegalStateException("There is no class mapped for the value \"" +
+                    value + "\" of discriminator field " + value +
+                    " and undefined values are not allowed");                        
             }
         }
-        return typeHint;
+        return cls;
     }
+
 }
