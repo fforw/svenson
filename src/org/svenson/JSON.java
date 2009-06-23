@@ -33,8 +33,6 @@ import org.svenson.util.TypeConverterCache;
  * </ul>
  *
  * @author Sven Helmberger ( sven dot helmberger at gmx dot de )
- * @version $Id: $
- * @license BSD revised
  * @see JSONable
  * @see JSONifier
  * @see JSONProperty

@@ -252,9 +252,9 @@ public class JSONParser
 
     /**
      * Parses a JSON String
-     * @param <T> The type to parse the root object into
-     * @param targetType   Runtime class for <T>
-     * @param json  json string
+     * @param <T>           The type to parse the root object into
+     * @param targetType    Runtime class for <T>
+     * @param source        json character source to parse
      * @return the resulting object
      */
     final public <T> T parse(Class<T> targetType, JSONCharacterSource source)
@@ -950,7 +950,6 @@ public class JSONParser
      *
      * @param bean
      * @param pd
-     * @return
      */
     public static String getJSONPropertyNameFromDescriptor(Object bean, PropertyDescriptor pd)
     {

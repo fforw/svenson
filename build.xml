@@ -23,6 +23,20 @@
             couchdb driver offering typed JSON conversion
     </description>
 
+    <path id="compile.path">
+        <fileset dir="${project.libs}/compile">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+
+    <path id="test.path">
+        <fileset dir="${project.libs}/test">
+            <include name="*.jar" />
+        </fileset>
+        <path refid="compile.path" />
+        <path location="${project.classes}" />
+    </path>
+	
     <target name="clean">
         <delete dir="${project.build}" />
     </target>
@@ -30,19 +44,6 @@
     <target name="init">
         <mkdir dir="${project.classes}" />
 
-        <path id="compile.path">
-            <fileset dir="${project.libs}/compile">
-                <include name="*.jar" />
-            </fileset>
-        </path>
-
-        <path id="test.path">
-            <fileset dir="${project.libs}/test">
-                <include name="*.jar" />
-            </fileset>
-            <path refid="compile.path" />
-            <path location="${project.classes}" />
-        </path>
     </target>
 
     <target name="compile" depends="init">

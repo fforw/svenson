@@ -41,7 +41,6 @@ public enum TokenType
      * the requirements of this token type.
      * @param value
      * @throws IllegalArgumentException
-     * @see {@link TokenType#TokenType(Object)}
      */
     public void checkValue(Object value) throws IllegalArgumentException
     {

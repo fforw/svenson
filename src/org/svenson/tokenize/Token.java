@@ -124,8 +124,7 @@ public class Token
     /**
      * Expects the given token to be of one of the given token types
      *
-     * @param tokenizer
-     * @param type
+     * @param types vararg list of possible types  
      * @return
      * @throws JSONParseException if the expectation is not fulfilled
      */

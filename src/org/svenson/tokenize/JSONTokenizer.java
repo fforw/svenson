@@ -56,8 +56,8 @@ public class JSONTokenizer
      * is <code>true</code>, the parser will also allow the JSON to contain quoted string that are
      * quoted with single quotes.
      *
-     * @param json
-     * @param allowSingleQuotes
+     * @param source                character source to use
+     * @param allowSingleQuotes     if <code>true</code>, single quotes ('\'') is allowed as quoting character, too
      */
     public JSONTokenizer(JSONCharacterSource source, boolean allowSingleQuotes)
     {
@@ -212,7 +212,7 @@ public class JSONTokenizer
      * Pushes back the given Token. This will reset the tokenizer to the index before the
      * token was encountered and the next {@link #next()} call will return the same token again.
      *
-     * @param   t
+     * @param  oldToken     token to push back
      */
     public void pushBack(Token oldToken)
     {
@@ -472,8 +472,7 @@ public class JSONTokenizer
     /**
      * Expects the next token to be of one of the given token types
      *
-     * @param tokenizer
-     * @param types
+     * @param types varg list of types to expect
      * @return
      * @throws JSONParseException if the expectation is not fulfilled
      */
