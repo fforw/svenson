@@ -17,6 +17,7 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+import org.svenson.matcher.RegExPathMatcher;
 import org.svenson.test.Bean;
 import org.svenson.test.BeanWithClassProperty;
 import org.svenson.test.BeanWithEnum;
@@ -217,6 +218,26 @@ public class JSONParserTestCase
         assertThat(b.getFoo(), is("bar!"));
     }
 
+    @Test
+    public void thatTypeHintsWorkWithMatchers()
+    {
+        String json = "{\"b1\":{\"foo\":\"bar!\"},\"b2\":{\"foo\":\"qux!\"}}";
+
+        Map containerBean = parser.parse(Map.class, json);
+        assertThat(containerBean, is(notNullValue()));
+        assertThat(containerBean.get("b1"), is(HashMap.class));
+
+        parser.addTypeHint(new RegExPathMatcher("\\.b[0-9]"), DynAttrsBean.class);
+        containerBean = parser.parse(Map.class, json);
+        assertThat(containerBean, is(notNullValue()));
+        DynAttrsBean b = (DynAttrsBean)containerBean.get("b1");
+        assertThat(b,is(notNullValue()));
+        assertThat(b.getFoo(), is("bar!"));
+        b = (DynAttrsBean)containerBean.get("b2");
+        assertThat(b,is(notNullValue()));
+        assertThat(b.getFoo(), is("qux!"));
+    }
+    
     @Test
     public void thatParsingIntoAClassPropertyWorks()
     {

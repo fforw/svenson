@@ -37,4 +37,6 @@ public @interface JSONProperty
      * @return
      */
     boolean ignoreIfNull() default false;
+    
+    boolean readOnly() default false;
 }

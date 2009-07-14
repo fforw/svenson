@@ -2,6 +2,7 @@ package org.svenson;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -50,6 +51,27 @@ public class PropertyValueBasedTypeMapperTestCase
         assertThat(bar.getValue(), is("ccc"));
     }
 
+    @Test
+    public void thatItWorksOnRootLevel() throws IOException
+    {
+        String json = "{'type':'foo','value':'aaa'}".replace('\'', '"');
+
+        log.info(json);
+
+        JSONParser parser = new JSONParser();
+        PropertyValueBasedTypeMapper mapper = new PropertyValueBasedTypeMapper();
+        mapper.setParsePathInfo("");
+        mapper.addFieldValueMapping("foo", Foo.class);
+        parser.setTypeMapper(mapper);
+
+        // this only really makes sense to do with a common base class and a type decision 
+        // based on some property. In this case this cast would be to the common base class.
+        Foo foo = (Foo)parser.parse(json);
+        
+        assertThat(foo,is(notNullValue()));
+        assertThat(foo.getValue(), is(("aaa")));
+    }
+    
     public static class Foo extends AbstractDynamicProperties
     {
         /**

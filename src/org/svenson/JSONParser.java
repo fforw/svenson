@@ -19,6 +19,8 @@ import org.apache.log4j.Logger;
 import org.svenson.converter.JSONConverter;
 import org.svenson.converter.TypeConverter;
 import org.svenson.converter.TypeConverterRepository;
+import org.svenson.matcher.EqualsPathMatcher;
+import org.svenson.matcher.PathMatcher;
 import org.svenson.tokenize.JSONCharacterSource;
 import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
@@ -43,7 +45,7 @@ public class JSONParser
 {
     protected static Logger log = Logger.getLogger(JSONParser.class);
 
-    private Map<String, Class> typeHints = new HashMap<String, Class>();
+    private Map<PathMatcher, Class> typeHints = new HashMap<PathMatcher, Class>();
 
     private TypeMapper typeMapper;
 
@@ -92,7 +94,12 @@ public class JSONParser
      */
     public void setTypeHints(Map<String, Class> typeHints)
     {
-        this.typeHints = typeHints;
+        this.typeHints = new HashMap<PathMatcher, Class>();
+        for (Map.Entry<String,Class> e : typeHints.entrySet())
+        {
+            this.typeHints.put(new EqualsPathMatcher(e.getKey()), e.getValue());
+        }
+        
     }
 
     /**
@@ -135,8 +142,11 @@ public class JSONParser
     
     /**
      * Sets a type hint for a given parsing path location.
-     * Locations matching that type hint use the mapped
-     * class as bean to parse the JSON into.
+     * 
+     * The parse path location is built by appending "[]" whenever
+     * the parser enters an array and ".propertyName" whenever the
+     * parser enters the property value of an object. 
+     * 
      *  <p>
      *  for example: using a type hint
      *  <br><br>
@@ -146,7 +156,7 @@ public class JSONParser
      *
      *  <pre>
      *  {
-     *      "foos" : [ ... ]
+     *      "foos" : [ &hellip; ]
      *  }
      *  </pre>
      *
@@ -156,7 +166,18 @@ public class JSONParser
      */
     public void addTypeHint(String key, Class typeHint)
     {
-        this.typeHints.put(key, typeHint);
+        this.typeHints.put(new EqualsPathMatcher(key), typeHint);
+    }
+
+    /**
+     * Adds a new type hint based on the given path matcher. 
+     * 
+     * @param pathMatcher   path matcher
+     * @param typeHint      type to use when the matcher matches
+     */
+    public void addTypeHint(PathMatcher pathMatcher, Class typeHint)
+    {
+        this.typeHints.put(pathMatcher, typeHint);
     }
     
     /**
@@ -199,13 +220,21 @@ public class JSONParser
     private Object parse(JSONTokenizer tokenizer)
     {
         Token token = tokenizer.peekToken();
-
+        
         if (token.isType(TokenType.BRACKET_OPEN))
         {
             return parse( ArrayList.class, tokenizer);
         }
         else if (token.isType(TokenType.BRACE_OPEN))
         {
+            // regard type hints on root type decision
+            Class typeHint = getTypeHint("", tokenizer);
+
+            if (typeHint != null)
+            {
+                return parse(typeHint, tokenizer);
+            }
+
             return parse( HashMap.class, tokenizer);
         }
         else if (token.isType(TokenType.NULL) || token.isType(TokenType.FALSE) || token.isType(TokenType.TRUE) || token.isType(TokenType.INTEGER) || token.isType(TokenType.DECIMAL) || token.isType(TokenType.STRING))
@@ -452,8 +481,15 @@ public class JSONParser
 
             TokenType valueType = valueToken.type();
 
-            boolean isProperty = name != null && PropertyUtils.isWriteable(cx.target, name);
-
+            boolean isProperty = false;
+            boolean isReadOnlyProperty = false;
+            if (name != null)
+            {
+                boolean writeable = PropertyUtils.isWriteable(cx.target, name);
+                isReadOnlyProperty = !writeable && isReadOnlyProperty(cx.target,name);
+                isProperty = writeable || isReadOnlyProperty; 
+            }
+            
             Method addMethod = getAddMethod(cx.target, jsonName);
 
             TypeConverter typeConverter = null;
@@ -464,7 +500,7 @@ public class JSONParser
             }
 
             
-            if (!(isProperty || containerIsMap ||containerIsDynAttrs || addMethod != null))
+            if (!( isProperty || containerIsMap ||containerIsDynAttrs || addMethod != null))
             {
                 throw new JSONParseException("Cannot set property "+jsonName+" on "+cx.target.getClass());
             }
@@ -552,26 +588,29 @@ public class JSONParser
 
             if (isProperty)
             {
-                try
+                if (!isReadOnlyProperty)
                 {
-                    Class targetClass = PropertyUtils.getPropertyType(cx.target, name);
-                    if (typeConverter != null)
+                    try
                     {
-                        value = typeConverter.fromJSON(value);
+                        Class targetClass = PropertyUtils.getPropertyType(cx.target, name);
+                        if (typeConverter != null)
+                        {
+                            value = typeConverter.fromJSON(value);
+                        }
+                        PropertyUtils.setProperty(cx.target, name, convertValueTo(value, targetClass));
                     }
-                    PropertyUtils.setProperty(cx.target, name, convertValueTo(value, targetClass));
-                }
-                catch (IllegalAccessException e)
-                {
-                    throw ExceptionWrapper.wrap(e);
-                }
-                catch (InvocationTargetException e)
-                {
-                    throw ExceptionWrapper.wrap(e);
-                }
-                catch (NoSuchMethodException e)
-                {
-                    throw ExceptionWrapper.wrap(e);
+                    catch (IllegalAccessException e)
+                    {
+                        throw ExceptionWrapper.wrap(e);
+                    }
+                    catch (InvocationTargetException e)
+                    {
+                        throw ExceptionWrapper.wrap(e);
+                    }
+                    catch (NoSuchMethodException e)
+                    {
+                        throw ExceptionWrapper.wrap(e);
+                    }
                 }
             }
             else if (containerIsMap)
@@ -589,6 +628,17 @@ public class JSONParser
 
             first = false;
         } // end while
+    }
+
+    private boolean isReadOnlyProperty(Object target, String name) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    {
+        if (name != null)
+        {
+            PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(target, name);
+            JSONProperty anno = desc.getReadMethod().getAnnotation(JSONProperty.class);
+            return anno != null && anno.readOnly();
+        }        
+        return false;
     }
 
     private Class getReplacementForKnownInterface(Class type)
@@ -741,7 +791,7 @@ public class JSONParser
             log.debug("typeHint = "+memberType+", name = "+name);
         }
 
-        Class cls = getTypeHint( parsePathInfo,tokenizer,name);
+        Class cls = getTypeHint( parsePathInfo,tokenizer);
 
         if (cls != null)
         {
@@ -787,13 +837,21 @@ public class JSONParser
         return result;
     }
 
-    private Class getTypeHint(String parsePathInfo, JSONTokenizer tokenizer, String name)
+    private Class getTypeHint(String parsePathInfo, JSONTokenizer tokenizer)
     {
-        Class typeHint = typeHints.get(parsePathInfo);
-
-        if (log.isDebugEnabled())
+        Class typeHint = null;
+        for (Map.Entry<PathMatcher, Class> e : typeHints.entrySet())
         {
-            log.debug("info = "+parsePathInfo+ " => "+typeHint);
+            PathMatcher matcher = e.getKey();
+            if (matcher.matches(parsePathInfo))
+            {
+                if (log.isDebugEnabled())
+                {
+                    log.debug("Parse path '" + parsePathInfo + "' matches " + matcher + ": setting type hint to " + typeHint);
+                }
+                typeHint = e.getValue();
+                break;
+            }
         }
 
         if (typeMapper != null)

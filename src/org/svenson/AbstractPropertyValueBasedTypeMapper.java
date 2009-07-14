@@ -1,5 +1,7 @@
 package org.svenson;
 
+import org.svenson.matcher.EqualsPathMatcher;
+import org.svenson.matcher.PathMatcher;
 import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
 import org.svenson.tokenize.TokenType;
@@ -35,7 +37,7 @@ public abstract class AbstractPropertyValueBasedTypeMapper extends AbstractTypeM
     /**
      * Parse path info the mapping is applied to.
      */
-    private String parsePathInfo;
+    private PathMatcher pathMatcher;
 
 
     /**
@@ -45,7 +47,12 @@ public abstract class AbstractPropertyValueBasedTypeMapper extends AbstractTypeM
      */
     public void setParsePathInfo(String parsePathInfo)
     {
-        this.parsePathInfo = parsePathInfo;
+        this.pathMatcher = new EqualsPathMatcher(parsePathInfo);
+    }
+    
+    public void setPathMatcher(PathMatcher pathMatcher)
+    {
+        this.pathMatcher = pathMatcher;
     }
 
     /**
@@ -61,12 +68,12 @@ public abstract class AbstractPropertyValueBasedTypeMapper extends AbstractTypeM
 
     public Class getTypeHint(JSONTokenizer tokenizer, String parsePathInfo, Class typeHint)
     {
-        if (this.parsePathInfo == null)
+        if (this.pathMatcher == null)
         {
-            throw new IllegalStateException("parse path info not configured.");
+            throw new IllegalStateException("path matcher not configured.");
         }
 
-        if (this.parsePathInfo.equals(parsePathInfo))
+        if (pathMatcher.matches(parsePathInfo))
         {
             tokenizer.startRecording();
             Token first = tokenizer.next();
@@ -78,7 +85,13 @@ public abstract class AbstractPropertyValueBasedTypeMapper extends AbstractTypeM
             
             try
             {
-                Object value = getPropertyValueFromTokenStream(tokenizer, discriminatorField, first);
+                Token token = first;
+                if (first.type() == TokenType.BRACE_OPEN)
+                {
+                    token = tokenizer.next();
+                }
+                
+                Object value = getPropertyValueFromTokenStream(tokenizer, discriminatorField, token);
                 return getTypeHintFromTypeProperty(value);
             }
             finally

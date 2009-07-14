@@ -353,7 +353,11 @@ public class JSON
                                 }
                                 if (jsonProperty != null)
                                 {
-                                    name = jsonProperty.value();
+                                    String nameFromAnnotation = jsonProperty.value();
+                                    if (nameFromAnnotation.length() > 0)
+                                    {
+                                        name = jsonProperty.value();
+                                    }
 
                                     ignore = jsonProperty.ignore() ||
                                         (value == null && jsonProperty.ignoreIfNull());

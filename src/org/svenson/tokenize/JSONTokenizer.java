@@ -31,6 +31,8 @@ public class JSONTokenizer
 
     private boolean reachedEndOfJSON;
 
+    private int pushBackIndex;
+
     /**
      * Constructs a new tokenizer instance for the given JSON string. If allowSingleQuotes
      * is <code>true</code>, the parser will also allow the JSON to contain quoted string that are
@@ -125,10 +127,24 @@ public class JSONTokenizer
     {
         if (tokenPushedBack)
         {
-            Token token = recordedTokens.remove(0);
-            if (recordedTokens.size() == 0)
+            Token token;
+            
+            if (recording)
             {
-                tokenPushedBack = false;
+                token = recordedTokens.get(pushBackIndex++);
+                
+                if (recordedTokens.size() == pushBackIndex)
+                {
+                    tokenPushedBack = false;
+                }
+            }
+            else
+            {
+                token = recordedTokens.remove(0);
+                if (recordedTokens.size() == 0)
+                {
+                    tokenPushedBack = false;
+                }
             }
             return token;
         }
@@ -228,6 +244,7 @@ public class JSONTokenizer
         }
         tokenPushedBack = true;
         recording = false;
+        pushBackIndex = 0;
     }
 
     /**
