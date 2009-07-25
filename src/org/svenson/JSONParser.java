@@ -473,24 +473,29 @@ public class JSONParser
             {
                 throw new JSONParseException("Invalid empty property name");
             }
-            String name = getPropertyNameFromAnnotation(cx.target, jsonName);
+            
+            String name = null;
 
             tokenizer.expectNext(TokenType.COLON);
-
             Token valueToken = tokenizer.next();
-
             TokenType valueType = valueToken.type();
 
             boolean isProperty = false;
             boolean isReadOnlyProperty = false;
-            if (name != null)
+            Method addMethod = null;
+            if (!containerIsMap)
             {
-                boolean writeable = PropertyUtils.isWriteable(cx.target, name);
-                isReadOnlyProperty = !writeable && isReadOnlyProperty(cx.target,name);
-                isProperty = writeable || isReadOnlyProperty; 
+                name = getPropertyNameFromAnnotation(cx.target, jsonName);
+                isProperty = false;
+                isReadOnlyProperty = false;
+                if (name != null)
+                {
+                    boolean writeable = PropertyUtils.isWriteable(cx.target, name);
+                    isReadOnlyProperty = !writeable && isReadOnlyProperty(cx.target, name);
+                    isProperty = writeable || isReadOnlyProperty;
+                }
+                addMethod = getAddMethod(cx.target, jsonName);
             }
-            
-            Method addMethod = getAddMethod(cx.target, jsonName);
 
             TypeConverter typeConverter = null;
             
@@ -498,13 +503,13 @@ public class JSONParser
             {
                 typeConverter = typeConverterCache.getTypeConverter( cx.target, name);
             }
-
             
             if (!( isProperty || containerIsMap ||containerIsDynAttrs || addMethod != null))
             {
                 throw new JSONParseException("Cannot set property "+jsonName+" on "+cx.target.getClass());
             }
 
+            
             if (name == null)
             {
                 name = jsonName;
