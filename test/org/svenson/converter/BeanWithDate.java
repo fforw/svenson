@@ -16,6 +16,4 @@ public class BeanWithDate
     {
         this.date = date;
     }
-    
-    
 }

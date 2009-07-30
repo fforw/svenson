@@ -83,7 +83,7 @@ public class JSONTestCase
         final String jsonifierOutput = "{foo:1}";
         expect(jsonifierMock.toJSON(isA(JSONifiedBean.class))).andReturn(jsonifierOutput);
 
-        json.registerJSONifier(JSONifiedBean.class, jsonifierMock);
+        json.registerJSONifier(JSONifiedInterface.class, jsonifierMock);
 
         replay(jsonifierMock);
         String jsonDataset = json.forValue(new JSONifiedBean());
@@ -156,7 +156,12 @@ public class JSONTestCase
         }
     }
 
-    public static class JSONifiedBean
+    public static interface JSONifiedInterface
+    {
+        
+    }
+    
+    public static class JSONifiedBean implements JSONifiedInterface
     {
     }
 

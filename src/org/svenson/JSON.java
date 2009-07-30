@@ -289,7 +289,7 @@ public class JSON
                 }
                 out.append('}');
             }
-            else if ((jsonifier = jsonifiers.get(oClass)) != null)
+            else if ((jsonifier = getJSONifierForClass(oClass)) != null)
             {
                 out.append(jsonifier.toJSON(o));
             }
@@ -411,6 +411,18 @@ public class JSON
         {
             out.append(separator);
         }
+    }
+
+    private JSONifier getJSONifierForClass(Class oClass)
+    {
+        for (Map.Entry<Class, JSONifier> e : jsonifiers.entrySet())
+        {
+            if (e.getKey().isAssignableFrom(oClass))
+            {
+                return e.getValue();
+            }
+        }
+        return null;
     }
 
     /**
