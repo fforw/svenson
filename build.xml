@@ -57,7 +57,7 @@
         </copy>
     </target>
 
-    <target name="dist" depends="compile" description="Create distribution files">
+    <target name="dist" depends="compile, javadoc" description="Create distribution files">
         <jar destfile="${project.build}/${ant.project.name}-${project.version}.jar">
             <fileset dir="${project.classes}" includes="**/*" excludes="log4j.properties,**/*.jar" />
         </jar>
@@ -65,6 +65,8 @@
             <zipfileset prefix="${ant.project.name}-${project.version}/" dir="${basedir}">
                 <include name="**/*"/>
                 <exclude name="bin/**/*"/>
+                <exclude name="target/**/*"/>
+                <exclude name="synch*.sh"/>
             </zipfileset>
         </zip>
     </target>
@@ -87,4 +89,25 @@
             </batchtest>
         </junit>
     </target>
+
+	<target name="javadoc">
+		<delete dir="${basedir}/api-docs" includes="**/*" />
+		<javadoc
+		           destdir="api-docs"
+		           author="true"
+		           version="true"
+		  		   access="public"
+		           use="true"
+		           windowtitle="svenson ${project.version} API"
+				   packagenames="org.svenson"
+				   classpathref="compile.path">
+
+			<packageset dir="src" defaultexcludes="yes">
+				<include name="**/*"/>
+			</packageset>
+
+			<doctitle><![CDATA[<h1>svenson ${project.version} API</h1>]]></doctitle>
+			<bottom><![CDATA[&copy; 2009 Sven "fforw" Helmberger, BSD licensed]]></bottom>
+		</javadoc>
+	</target>
 </project>

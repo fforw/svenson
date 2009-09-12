@@ -2,16 +2,16 @@ package org.svenson.test;
 
 public class BeanWithEnum
 {
-    private TestEnum testEnum;
+    private SomeEnum someEnum;
 
-    public TestEnum getTestEnum()
+    public SomeEnum getSomeEnum()
     {
-        return testEnum;
+        return someEnum;
     }
 
-    public void setTestEnum(TestEnum testEnum)
+    public void setSomeEnum(SomeEnum someEnum)
     {
-        this.testEnum = testEnum;
+        this.someEnum = someEnum;
     }
 
 }

@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.svenson.matcher.RegExPathMatcher;
@@ -25,11 +26,11 @@ import org.svenson.test.ContainerBean;
 import org.svenson.test.DynAttrsBean;
 import org.svenson.test.FooBean;
 import org.svenson.test.MediaEntry;
-import org.svenson.test.TestEnum;
+import org.svenson.test.SomeEnum;
 
 public class JSONParserTestCase
 {
-    protected static Logger log = Logger.getLogger(JSONParserTestCase.class);
+    protected static Logger log = LoggerFactory.getLogger(JSONParserTestCase.class);
 
     private JSONParser parser;
 
@@ -244,7 +245,7 @@ public class JSONParserTestCase
         BeanWithClassProperty bean = parser.parse(BeanWithClassProperty.class, "{\"classProperty\":\"java.lang.String\"}");
 
         assertThat(bean, is(notNullValue()));
-        assertThat(bean.getClassProperty(), equalTo(String.class));
+        assertThat(bean.getClassProperty().equals(String.class), is(true));
     }
 
     @Test
@@ -263,25 +264,25 @@ public class JSONParserTestCase
     @Test
     public void thatEnumParsingWorks()
     {
-        TestEnum e = parser.parse(TestEnum.class, "\"VAL1\"");
-        assertThat(e, is (TestEnum.VAL1));
+        SomeEnum e = parser.parse(SomeEnum.class, "\"VAL1\"");
+        assertThat(e, is (SomeEnum.VAL1));
     }
 
     @Test
     public void thatBeanWithEnumParsingWorks()
     {
-        BeanWithEnum bean = parser.parse(BeanWithEnum.class, "{\"testEnum\":\"VAL2\"}");
+        BeanWithEnum bean = parser.parse(BeanWithEnum.class, "{\"someEnum\":\"VAL2\"}");
 
-        assertThat(bean.getTestEnum(),is(TestEnum.VAL2));
+        assertThat(bean.getSomeEnum(),is(SomeEnum.VAL2));
     };
 
     @Test
     public void thatTypeMappingWithEnumParsingWorks()
     {
-        parser.addTypeHint(".qerw", TestEnum.class);
+        parser.addTypeHint(".qerw", SomeEnum.class);
         Map bean = parser.parse(Map.class, "{\"qerw\":\"VAL2\"}");
 
-        assertThat((TestEnum)bean.get("qerw"),is(TestEnum.VAL2));
+        assertThat((SomeEnum)bean.get("qerw"),is(SomeEnum.VAL2));
     };
 
     @Test

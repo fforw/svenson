@@ -8,11 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import net.goui.util.MTRandom;
-
 public class RandomJSON
 {
-    private static Random random = new MTRandom(0l);
+    private static Random random = new Random(0l);
 
     private String memberName(int i)
     {

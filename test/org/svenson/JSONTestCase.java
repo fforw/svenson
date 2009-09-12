@@ -15,7 +15,7 @@ import org.svenson.JSON;
 import org.svenson.JSONable;
 import org.svenson.JSONifier;
 import org.svenson.test.IgnoredPropertyBean;
-import org.svenson.test.TestEnum;
+import org.svenson.test.SomeEnum;
 
 
 public class JSONTestCase
@@ -106,7 +106,7 @@ public class JSONTestCase
     public void thatEnumGeneratioWorks()
     {
         Map m = new HashMap();
-        m.put("test", TestEnum.VAL1);
+        m.put("test", SomeEnum.VAL1);
 
         assertThat(json.forValue(m), is("{\"test\":\"VAL1\"}"));
     }

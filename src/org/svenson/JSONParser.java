@@ -15,7 +15,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.svenson.converter.JSONConverter;
 import org.svenson.converter.TypeConverter;
 import org.svenson.converter.TypeConverterRepository;
@@ -43,7 +44,7 @@ import org.svenson.util.ValueHolder;
  */
 public class JSONParser
 {
-    protected static Logger log = Logger.getLogger(JSONParser.class);
+    protected static Logger log = LoggerFactory.getLogger(JSONParser.class);
 
     private Map<PathMatcher, Class> typeHints = new HashMap<PathMatcher, Class>();
 

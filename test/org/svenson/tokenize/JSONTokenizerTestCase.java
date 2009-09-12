@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.svenson.JSONParseException;
@@ -63,7 +64,7 @@ public class JSONTokenizerTestCase
     }
     
     
-    protected static Logger log = Logger.getLogger(JSONTokenizerTestCase.class);
+    protected static Logger log = LoggerFactory.getLogger(JSONTokenizerTestCase.class);
 
     private List<Token> tokenize(String json)
     {

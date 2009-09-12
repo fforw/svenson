@@ -1,6 +1,7 @@
 package org.svenson;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.svenson.TypeMapper;
 import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
@@ -14,7 +15,7 @@ import org.svenson.tokenize.Token;
 public class TokenLogger
     implements TypeMapper
 {
-    protected static Logger log = Logger.getLogger(TokenLogger.class);
+    protected static Logger log = LoggerFactory.getLogger(TokenLogger.class);
     public Class getTypeHint(JSONTokenizer tokenizer, String parsePathInfo, Class typeHint)
     {
         if (log.isDebugEnabled())
