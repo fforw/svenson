@@ -69,6 +69,16 @@
                 <exclude name="synch*.sh"/>
             </zipfileset>
         </zip>
+
+        <zip destfile="${project.build}/${ant.project.name}-${project.version}-src-nodep.zip">
+            <zipfileset prefix="${ant.project.name}-${project.version}/" dir="${basedir}">
+                <include name="**/*"/>
+                <exclude name="bin/**/*"/>
+                <exclude name="target/**/*"/>
+                <exclude name="synch*.sh"/>
+            	<exclude name="lib/**/*"/>
+            </zipfileset>
+        </zip>
     </target>
     
     <target name="test" depends="clean,compile" description="run unit tests">
