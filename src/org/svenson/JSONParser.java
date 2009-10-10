@@ -521,11 +521,6 @@ public class JSONParser
             if (valueType.isPrimitive())
             {
                 value = valueToken.value();
-
-                if(typeHint != null)
-                {
-                    value = convertValueTo(value, typeHint);
-                }
             }
             else
             {
@@ -548,18 +543,20 @@ public class JSONParser
 
                     if (isProperty || containerIsMap || containerIsDynAttrs)
                     {
+                        
+                        Class arrayTypeHint = typeHint;
                         if (isProperty)
                         {
                             if (typeConverterCache != null)
                             {
-                                if (typeConverter != null && !List.class.isAssignableFrom(typeHint))
+                                if (typeConverter != null && !List.class.isAssignableFrom(arrayTypeHint))
                                 {
-                                    typeHint = List.class;
+                                    arrayTypeHint = List.class;
                                 }
                             }
                         }
                         
-                        newTarget = createNewTargetInstance(typeHint, false);
+                        newTarget = createNewTargetInstance(arrayTypeHint, false);
                         Class memberType = getTypeHintFromAnnotation(cx, name);
                         parseArrayInto(cx.push(newTarget,memberType, "."+name), tokenizer);
                     }
@@ -592,6 +589,16 @@ public class JSONParser
                 value = newTarget;
             }
 
+            if (typeConverter != null)
+            {
+                value = typeConverter.fromJSON(value);
+            }
+            
+            if(typeHint != null)
+            {
+                value = convertValueTo(value, typeHint);
+            }
+            
             if (isProperty)
             {
                 if (!isReadOnlyProperty)
@@ -599,11 +606,11 @@ public class JSONParser
                     try
                     {
                         Class targetClass = PropertyUtils.getPropertyType(cx.target, name);
-                        if (typeConverter != null)
-                        {
-                            value = typeConverter.fromJSON(value);
-                        }
-                        PropertyUtils.setProperty(cx.target, name, convertValueTo(value, targetClass));
+//                        if (typeConverter != null)
+//                        {
+//                            value = typeConverter.fromJSON(value);
+//                        }
+                        PropertyUtils.setProperty(cx.target, name, value);
                     }
                     catch (IllegalAccessException e)
                     {

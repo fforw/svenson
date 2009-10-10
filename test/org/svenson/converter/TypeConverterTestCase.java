@@ -24,7 +24,7 @@ public class TypeConverterTestCase
     
     
     @Test
-    public void thatJSONParsingWorks()
+    public void thatJSONParsingWorks() 
     {
         String json = "{\"date\":\"1970-01-01T00:00:00\"}";
 

@@ -74,7 +74,7 @@ public class DateConverter
         }
         else
         {
-            throw new IllegalArgumentException("Parameter must be a String, was a " + in);
+            throw new IllegalArgumentException("Parameter must be a String, was a " + in + " ( " + in.getClass() + ")");
         }
     }
 
