@@ -15,11 +15,11 @@ public class OrMatcher implements PathMatcher
         this.matchers = matchers;
     }
 
-    public boolean matches(String parsePath)
+    public boolean matches(String parsePath, Class typeHint)
     {
         for (PathMatcher matcher : matchers)
         {
-            if (matcher.matches(parsePath))
+            if (matcher.matches(parsePath, typeHint))
             {
                 return true;
             }

@@ -856,7 +856,7 @@ public class JSONParser
         for (Map.Entry<PathMatcher, Class> e : typeHints.entrySet())
         {
             PathMatcher matcher = e.getKey();
-            if (matcher.matches(parsePathInfo))
+            if (matcher.matches(parsePathInfo, Object.class))
             {
                 if (log.isDebugEnabled())
                 {

@@ -15,12 +15,12 @@ public class AndMatcher implements PathMatcher
         this.matchers = matchers;
     }
 
-    public boolean matches(String parsePath)
+    public boolean matches(String parsePath, Class typeHint)
     {
         boolean matches = true;
         for (PathMatcher matcher : matchers)
         {
-            if (!matcher.matches(parsePath))
+            if (!matcher.matches(parsePath, typeHint))
             {
                 matches = false;
                 break;

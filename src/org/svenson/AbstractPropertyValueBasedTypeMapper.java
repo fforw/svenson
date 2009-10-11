@@ -73,7 +73,7 @@ public abstract class AbstractPropertyValueBasedTypeMapper extends AbstractTypeM
             throw new IllegalStateException("path matcher not configured.");
         }
 
-        if (pathMatcher.matches(parsePathInfo))
+        if (pathMatcher.matches(parsePathInfo, typeHint))
         {
             tokenizer.startRecording();
             Token first = tokenizer.next();

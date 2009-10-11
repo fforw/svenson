@@ -23,7 +23,7 @@ public class RegExPathMatcher
         this.pattern = Pattern.compile(regex, flags);
     }
     
-    public boolean matches(String parsePath)
+    public boolean matches(String parsePath, Class typeHint)
     {
         return this.pattern.matcher(parsePath).matches();
     }

@@ -9,9 +9,9 @@ public class NotMatcher implements PathMatcher
         this.matcher = matcher;
     }
 
-    public boolean matches(String parsePath)
+    public boolean matches(String parsePath, Class typeHint)
     {
-        return !matcher.matches(parsePath);
+        return !matcher.matches(parsePath,typeHint);
     }
     
     @Override

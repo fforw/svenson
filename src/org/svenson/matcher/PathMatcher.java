@@ -8,5 +8,5 @@ package org.svenson.matcher;
  */
 public interface PathMatcher
 {
-    boolean matches(String parsePath);
+    boolean matches(String parsePath, Class typeHint);
 }

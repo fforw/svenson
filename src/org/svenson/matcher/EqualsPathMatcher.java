@@ -16,7 +16,7 @@ public class EqualsPathMatcher
         this.parsePath = parsePath;
     }
     
-    public boolean matches(String parsePath)
+    public boolean matches(String parsePath, Class typeHint)
     {
         return this.parsePath.equals(parsePath);
     }
