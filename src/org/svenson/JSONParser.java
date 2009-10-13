@@ -710,7 +710,7 @@ public class JSONParser
         return addMethods.get(name);            
     }
 
-    private <T> T convertValueTo(Object value, Class<T> targetClass)
+    private Object convertValueTo(Object value, Class targetClass)
     {
         if (targetClass == null)
         {
@@ -719,6 +719,10 @@ public class JSONParser
         if (value == null)
         {
             return null;
+        }
+        if (targetClass.equals(Object.class))
+        {
+            return value;
         }
 
         if (value instanceof String && Enum.class.isAssignableFrom(targetClass))
@@ -729,7 +733,7 @@ public class JSONParser
         {
             value = ConvertUtils.convert(value.toString(), targetClass);
         }
-        return (T)value;
+        return value;
     }
 
 
