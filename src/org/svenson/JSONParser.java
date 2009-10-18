@@ -46,16 +46,15 @@ public class JSONParser
 {
     protected static Logger log = LoggerFactory.getLogger(JSONParser.class);
 
+    private static ConcurrentMap<Class, ValueHolder<Map<String,Method>>> classToAddMethods = new ConcurrentHashMap<Class, ValueHolder<Map<String,Method>>>();
+
+    private static ConcurrentMap<Class,ValueHolder<Map<String,Class>>> classToTypeHintFromAnnotation = new ConcurrentHashMap<Class, ValueHolder<Map<String,Class>>>();
+    
+    private final static JSONParser defaultJSONParser = new JSONParser();
+
     private Map<PathMatcher, Class> typeHints = new HashMap<PathMatcher, Class>();
 
     private TypeMapper typeMapper;
-
-    private final static JSONParser defaultJSONParser = new JSONParser();
-
-    public static JSONParser defaultJSONParser()
-    {
-        return defaultJSONParser;
-    }
 
     private Map<Class,Class> interfaceMappings = new HashMap<Class, Class>();
 
@@ -65,15 +64,43 @@ public class JSONParser
 
     private TypeConverterCache typeConverterCache;
     
-    /**
-     * Default Interface initializer
-     */
+    
+    public JSONParser()
     {
         interfaceMappings.put(Collection.class, ArrayList.class);
         interfaceMappings.put(List.class, ArrayList.class);
         interfaceMappings.put(Map.class, HashMap.class);
     }
+    
+    /**
+     * Copy constructor
+     * @param src
+     */
+    public JSONParser(JSONParser src)
+    {
+        this();
+     
+        if (src != null)
+        {
+            typeHints = new HashMap<PathMatcher, Class>(src.typeHints);
+    
+            this.typeMapper = src.typeMapper;
+    
+            this.interfaceMappings = new HashMap<Class, Class>(src.interfaceMappings);
+    
+            this.objectFactories = new ArrayList<ObjectFactory>(src.objectFactories);
+            
+            this.allowSingleQuotes = src.allowSingleQuotes;
+    
+            this.typeConverterCache = src.typeConverterCache;
+        }
+    }
 
+    public static JSONParser defaultJSONParser()
+    {
+        return defaultJSONParser;
+    }
+    
     /**
      * Sets a {@link TypeMapper} to use on the token streams parsed
      * by this parser.
@@ -671,7 +698,6 @@ public class JSONParser
         return null;
     }
 
-    private static ConcurrentMap<Class, ValueHolder<Map<String,Method>>> classToAddMethods = new ConcurrentHashMap<Class, ValueHolder<Map<String,Method>>>();
     
     private Method getAddMethod(Object bean, String name)
     {
@@ -877,6 +903,11 @@ public class JSONParser
 
             if (typeHintFromTypeMapper != null)
             {
+//                if (typeHint != null && !typeHint.isAssignableFrom(typeHintFromTypeMapper))
+//                {
+//                    throw new JSONParseException("Cannot refined existing type " + typeHint + " to type mapper hint decision" + typeHintFromTypeMapper);
+//                }
+                
                 typeHint = typeHintFromTypeMapper;
             }
         }
@@ -884,7 +915,6 @@ public class JSONParser
         return typeHint;
     }
 
-    private static ConcurrentMap<Class,ValueHolder<Map<String,Class>>> classToTypeHintFromAnnotation = new ConcurrentHashMap<Class, ValueHolder<Map<String,Class>>>();
         
     private Class getTypeHintFromAnnotation(ParseContext cx, String name)
     {
