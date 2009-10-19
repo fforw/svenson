@@ -1,6 +1,9 @@
 svenson json library change log:
 ================================
 
+Changes from 1.3.3 to 1.3.4:
+ * Add a copy constructor to JSONParser that creates a copy of the JSONParser with the same config. Fixes serious bug in jcouchdb and other use cases.
+
 Changes from 1.3.2 to 1.3.3:
  * added JSONConfig to represent both a parser and a generator config.
  * enable path matching based on previous type hint, add sub type matcher
