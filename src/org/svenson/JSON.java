@@ -8,12 +8,14 @@ import java.io.Writer;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.svenson.converter.TypeConverter;
@@ -55,6 +57,8 @@ public class JSON
     private boolean escapeUnicodeChars = true;
 
     private TypeConverterCache typeConverterCache;
+
+    private Collection<String> ignoredProperties;
     
     public JSON()
     {
@@ -65,7 +69,7 @@ public class JSON
     {
         setQuoteChar(quoteChar);
     }
-
+    
     public void setEscapeUnicodeChars(boolean escapeUnicodeChars)
     {
         this.escapeUnicodeChars = escapeUnicodeChars;
@@ -91,6 +95,26 @@ public class JSON
         jsonifiers.clear();
     }
 
+    /**
+     * Sets the properties this JSON generator ignores. Most effective when 
+     * called with a set.
+     * 
+     * @param ignoredProperties 
+     */
+    public void setIgnoredProperties(Collection<String> ignoredProperties)
+    {
+        this.ignoredProperties = ignoredProperties;
+    }
+    
+    /**
+     * Returns the properties this JSON generator ignores.
+     * 
+     * @return
+     */
+    public Collection<String> getIgnoredProperties()
+    {
+        return ignoredProperties;
+    }
        
     /**
      * Dumps the given object as formatted JSON representation. The method dumps
@@ -202,22 +226,19 @@ public class JSON
      */
     public void dumpObject(JSONCharacterSink out, Object o)
     {
-        dumpObject(out, o, '\0', null);
+        dumpObject(out, o, '\0', ignoredProperties);
     }
 
     /**
      * Dumps the given object as JSON representation into the given
      * StreamBuilder
      *
-     * @param out
-     *          StreamBuilder
+     * @param out           character sink
      * @param o
-     *          objct
-     * @param ignoredProps
-     *          List containing the properties to be ignored.
+     * @param ignoredProps  collection of property names to ignore. Overrides the ignored properties set on the JSON generator
      */
     public void dumpObject(JSONCharacterSink out, Object o,
-            List<String> ignoredProps)
+            Collection<String> ignoredProps)
     {
         dumpObject(out, o, '\0', ignoredProps);
     }
@@ -231,7 +252,7 @@ public class JSON
      * @param separator separator character to append after the object or
      *            <code>'\0'</code> to append no separator.
      */
-    private void dumpObject(JSONCharacterSink out, Object o, char separator, List<String> ignoredProps)
+    private void dumpObject(JSONCharacterSink out, Object o, char separator, Collection<String> ignoredProps)
     {
         if (o == null)
         {
@@ -291,7 +312,14 @@ public class JSON
             }
             else if ((jsonifier = getJSONifierForClass(oClass)) != null)
             {
-                out.append(jsonifier.toJSON(o));
+                if (jsonifier instanceof SinkAwareJSONifier)
+                {
+                    ((SinkAwareJSONifier)jsonifier).writeToSink(out, o);
+                }
+                else
+                {
+                    out.append(jsonifier.toJSON(o));
+                }
             }
             else if (o instanceof JSONable)
             {
@@ -447,10 +475,10 @@ public class JSON
      * Returns a JSON representation of the given object as String.
      *
      * @param o
-     * @param ignoredProps
+     * @param ignoredProps  collection of property names to ignore. Overrides the ignored properties set on the JSON generator
      * @return
      */
-    public String forValue(Object o, List<String> ignoredProps)
+    public String forValue(Object o, Collection<String> ignoredProps)
     {
         StringBuilderSink tmp = new StringBuilderSink();
         dumpObject(tmp, o, ignoredProps);

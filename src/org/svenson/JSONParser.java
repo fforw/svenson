@@ -34,6 +34,16 @@ import org.svenson.util.ValueHolder;
  * Converts JSON strings into graphs of java objects. It offers
  * features to support the full spectrum of totally dynamic parsing
  * to parsing into concrete java types, including a mix in between.
+ * <p>
+ * A parser instance can be used from different threads at the same time. Keep
+ * in mind though that the type hint, type mapper etc configuration of a JSONParser
+ * is its state, meaning that you have to be careful to not reconfigure JSONParsers
+ * while they might be used elsewhere.
+ * <p>
+ * To ease this, use the {@link #JSONParser(JSONParser)} copy constructor to create
+ * local copies of global JSON parsers with the same config. A copied JSONParser config
+ * gets its own copy of all config so that changing it will not affect the original 
+ * JSONParser.
  *
  * @author shelmberger
  *
@@ -74,7 +84,7 @@ public class JSONParser
     
     /**
      * Copy constructor
-     * @param src
+     * @param src   JSONParser to be copied or <code>null</code> to create a default parser.
      */
     public JSONParser(JSONParser src)
     {
