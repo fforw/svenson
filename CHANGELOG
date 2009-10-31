@@ -1,6 +1,13 @@
 svenson json library change log:
 ================================
 
+Changes from 1.3.4 to 1.3.5:
+
+ * add support for non-annotation based TypeConversion. See org.svenson.JSON.registerTypeConversion(Class<?>, TypeConverter) and org.svenson.JSONParser.registerTypeConversion(Class, TypeConverter)
+ * add SinkAwareJSONifier for sink based JSONifying
+ * add default ignore properties. See org.svenson.JSON.setIgnoredProperties(Collection<String>)
+ * change List<String> ignoredProps to Collection<String> ignoredProps to enable using Set<String> but keep source compatibility. 
+
 Changes from 1.3.3 to 1.3.4:
  * Add a copy constructor to JSONParser that creates a copy of the JSONParser with the same config. Fixes serious bug in jcouchdb and other use cases.
 

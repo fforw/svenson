@@ -127,7 +127,13 @@ public class JSONParser
     {
         this.typeMapper = typeMapper;
     }
-    
+
+    /**
+     * Registers a type converter to provide conversion for bean properties.
+     *  
+     * @param cls           target bean property type
+     * @param converter     converter
+     */
     public void registerTypeConversion(Class cls, TypeConverter converter)
     {
         if (typeConvertersByClass == null)

@@ -97,6 +97,13 @@ public class JSON
         jsonifiers.clear();
     }
 
+    /**
+     * Registers a type converter to provide custom JSON output for types. Alternative
+     * to defining a custom JSONifier.
+     *  
+     * @param cls           target bean property type
+     * @param converter     converter
+     */
     public void registerTypeConversion(Class<?> cls, TypeConverter converter)
     {
         if (typeConvertersByClass == null)
