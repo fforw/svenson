@@ -73,6 +73,8 @@ public class JSONParser
     private boolean allowSingleQuotes;
 
     private TypeConverterCache typeConverterCache;
+
+    private Map<Class,TypeConverter> typeConvertersByClass;
     
     
     public JSONParser()
@@ -103,6 +105,11 @@ public class JSONParser
             this.allowSingleQuotes = src.allowSingleQuotes;
     
             this.typeConverterCache = src.typeConverterCache;
+            
+            if (src.typeConvertersByClass != null)
+            {
+                this.typeConvertersByClass = new HashMap<Class, TypeConverter>(src.typeConvertersByClass);
+            }
         }
     }
 
@@ -119,6 +126,15 @@ public class JSONParser
     public void setTypeMapper(TypeMapper typeMapper)
     {
         this.typeMapper = typeMapper;
+    }
+    
+    public void registerTypeConversion(Class cls, TypeConverter converter)
+    {
+        if (typeConvertersByClass == null)
+        {
+            typeConvertersByClass = new HashMap<Class, TypeConverter>();
+        }
+        typeConvertersByClass.put(cls, converter);
     }
 
     /**
@@ -767,7 +783,20 @@ public class JSONParser
         }
         else if (!targetClass.isAssignableFrom(value.getClass()))
         {
-            value = ConvertUtils.convert(value.toString(), targetClass);
+            TypeConverter typeConverter = null;
+            if (typeConvertersByClass != null)
+            {
+                typeConverter = typeConvertersByClass.get(targetClass);
+            }
+            
+            if (typeConverter != null)
+            {
+                value = typeConverter.fromJSON(value);
+            }
+            else
+            {
+                value = ConvertUtils.convert(value.toString(), targetClass);
+            }
         }
         return value;
     }

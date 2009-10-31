@@ -59,6 +59,8 @@ public class JSON
     private TypeConverterCache typeConverterCache;
 
     private Collection<String> ignoredProperties;
+
+    private Map<Class,TypeConverter> typeConvertersByClass;
     
     public JSON()
     {
@@ -95,6 +97,15 @@ public class JSON
         jsonifiers.clear();
     }
 
+    public void registerTypeConversion(Class<?> cls, TypeConverter converter)
+    {
+        if (typeConvertersByClass == null)
+        {
+            typeConvertersByClass = new HashMap<Class, TypeConverter>();
+        }
+        typeConvertersByClass.put(cls, converter);
+    }
+    
     /**
      * Sets the properties this JSON generator ignores. Most effective when 
      * called with a set.
@@ -264,6 +275,8 @@ public class JSON
 
             JSONifier jsonifier;
 
+            TypeConverter typeConverterFromClass = null;
+            
             if (oClass.isPrimitive())
             {
                 out.append(o);
@@ -333,6 +346,12 @@ public class JSON
             {
                 quote(out, ((Enum)o).name());
             }
+            else if (typeConvertersByClass != null && 
+                (typeConverterFromClass = typeConvertersByClass.get(o.getClass())) != null)
+            {
+                Object value = typeConverterFromClass.toJSON(o);
+                dumpObject(out, value, '\0', ignoredProps);
+            }            
             else
             {
                 BeanInfo info;
