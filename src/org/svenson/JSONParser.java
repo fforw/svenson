@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -792,6 +794,8 @@ public class JSONParser
         }
         else if (!targetClass.isAssignableFrom(value.getClass()))
         {
+            boolean isList = List.class.isInstance(value);
+            
             TypeConverter typeConverter = null;
             if (typeConvertersByClass != null)
             {
@@ -802,9 +806,17 @@ public class JSONParser
             {
                 value = typeConverter.fromJSON(value);
             }
-            else if (Set.class.isAssignableFrom(targetClass) && List.class.isInstance(value))
+            else if (isList && targetClass.isAssignableFrom(HashSet.class))
             {
                 value = new HashSet((List)value);
+            }
+            else if (isList && targetClass.isAssignableFrom(LinkedHashSet.class))
+            {
+                value = new LinkedHashSet((List)value);
+            }
+            else if (isList && targetClass.isAssignableFrom(TreeSet.class))
+            {
+                value = new TreeSet((List)value);
             }
             else
             {
