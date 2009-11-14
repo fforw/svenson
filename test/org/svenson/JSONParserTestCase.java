@@ -25,6 +25,7 @@ import org.svenson.test.BeanWithEnum;
 import org.svenson.test.ContainerBean;
 import org.svenson.test.DynAttrsBean;
 import org.svenson.test.FooBean;
+import org.svenson.test.InnerBean;
 import org.svenson.test.MediaEntry;
 import org.svenson.test.SomeEnum;
 
@@ -99,14 +100,30 @@ public class JSONParserTestCase
     public void nestedBeanParsing()
     {
         Bean b = parser.parse(Bean.class, "{\"inner\":[{\"bar\":42}]}");
-
+        
         assertThat(b, is(notNullValue()));
         assertThat(b.getInner().get(0).getBar(), is(42));
-
+        
         b = parser.parse(Bean.class, "{\"inner2\":{\"foo\":{\"bar\":42}}}");
-
+        
         assertThat(b, is(notNullValue()));
         assertThat(b.getInner2().get("foo").getBar(), is(42));
+    }
+
+    @Test
+    public void nestedBeanParsingWithSetAndCollection()
+    {
+        Bean b = parser.parse(Bean.class, "{\"inner3\":[{\"bar\":42}]}");
+
+        assertThat(b, is(notNullValue()));
+        InnerBean innerBean = b.getInner3().iterator().next();
+        assertThat(innerBean.getBar(), is(42));
+
+        b = parser.parse(Bean.class, "{\"inner4\":[{\"bar\":42}]}");
+
+        assertThat(b, is(notNullValue()));
+        innerBean = b.getInner4().iterator().next();
+        assertThat(innerBean.getBar(), is(42));
     }
 
     @Test

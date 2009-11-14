@@ -1,20 +1,26 @@
 package org.svenson;
 
-import static org.easymock.EasyMock.*;
+import static junit.framework.Assert.assertEquals;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static junit.framework.TestCase.*;
+import static org.hamcrest.Matchers.not;
 
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.junit.Test;
-import org.svenson.JSON;
-import org.svenson.JSONable;
-import org.svenson.JSONifier;
+import org.svenson.test.Bean;
 import org.svenson.test.IgnoredPropertyBean;
+import org.svenson.test.InnerBean;
 import org.svenson.test.SomeEnum;
 
 
@@ -133,6 +139,42 @@ public class JSONTestCase
         json.writeJSONToWriter("abc \u00e4\u00f6\u00fc", sw);
         
         assertThat(sw.getBuffer().toString(), is("\"abc \\u00e4\\u00f6\\u00fc\""));
+    }
+    
+    @Test
+    public void generatingSetsAndCollectionsOfInnerBeans()
+    {
+        Bean b = new Bean();
+        b.setFoo("xxx");
+        b.setNotBar(2345);
+        
+        HashSet<InnerBean> set = new HashSet<InnerBean>();
+        InnerBean innerBean = new InnerBean();
+        innerBean.setBar(1234);
+        set.add(innerBean);
+        b.setInner3(set);
+        
+        String json = JSON.defaultJSON().forValue(b);
+        assertThat(json, containsString("\"foo\":\"xxx\""));
+        assertThat(json, containsString("\"bar\":2345"));
+        assertThat(json, not(containsString("\"inner2\"")));
+        assertThat(json, not(containsString("\"inner\"")));
+        assertThat(json, not(containsString("\"inner4\"")));
+        assertThat(json, containsString("\"inner3\":[{\"bar\":1234}]"));
+
+        innerBean.setBar(1234);
+        set.add(innerBean);
+        b.setInner3(null);
+        b.setInner4(set);
+        
+        json = JSON.defaultJSON().forValue(b);
+        assertThat(json, containsString("\"foo\":\"xxx\""));
+        assertThat(json, containsString("\"bar\":2345"));
+        assertThat(json, not(containsString("\"inner2\"")));
+        assertThat(json, not(containsString("\"inner\"")));
+        assertThat(json, not(containsString("\"inner3\"")));
+        assertThat(json, containsString("\"inner4\":[{\"bar\":1234}]"));
+        
     }
 
     public static class SimpleBean

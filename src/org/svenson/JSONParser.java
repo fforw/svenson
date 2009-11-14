@@ -8,8 +8,10 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -80,6 +82,7 @@ public class JSONParser
     public JSONParser()
     {
         interfaceMappings.put(Collection.class, ArrayList.class);
+        interfaceMappings.put(Set.class, HashSet.class);
         interfaceMappings.put(List.class, ArrayList.class);
         interfaceMappings.put(Map.class, HashMap.class);
     }
@@ -798,6 +801,10 @@ public class JSONParser
             if (typeConverter != null)
             {
                 value = typeConverter.fromJSON(value);
+            }
+            else if (Set.class.isAssignableFrom(targetClass) && List.class.isInstance(value))
+            {
+                value = new HashSet((List)value);
             }
             else
             {
