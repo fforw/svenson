@@ -1,7 +1,6 @@
 package org.svenson;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -12,12 +11,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.svenson.matcher.RegExPathMatcher;
 import org.svenson.test.Bean;
 import org.svenson.test.BeanWithClassProperty;
@@ -312,6 +312,12 @@ public class JSONParserTestCase
     }
 
     @Test
-    public void testParse() {
+    public void testParsingIntoSets()
+    {
+        Set<String> s = JSONParser.defaultJSONParser().parse(Set.class, "[\"abc\",\"def\"]");
+        assertThat(s,is(notNullValue()));
+        assertThat(s.size(),is(2));
+        assertThat(s.contains("abc"),is(true));
+        assertThat(s.contains("def"),is(true));
     }
 }
