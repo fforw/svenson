@@ -2,6 +2,7 @@ package org.svenson;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -70,7 +71,7 @@ public class JSONParser
 
     private TypeMapper typeMapper;
 
-    private Map<Class,Class> interfaceMappings = new HashMap<Class, Class>();
+    private Map<Class,Class> interfaceMappings;
 
     private List<ObjectFactory> objectFactories = new ArrayList<ObjectFactory>();
     
@@ -83,6 +84,7 @@ public class JSONParser
     
     public JSONParser()
     {
+        interfaceMappings = new HashMap<Class, Class>();
         interfaceMappings.put(Collection.class, ArrayList.class);
         interfaceMappings.put(Set.class, HashSet.class);
         interfaceMappings.put(List.class, ArrayList.class);
@@ -788,14 +790,18 @@ public class JSONParser
             return value;
         }
 
-        if (value instanceof String && Enum.class.isAssignableFrom(targetClass))
+        Object convertedValue = null;
+
+        if (targetClass.isAssignableFrom(value.getClass()))
         {
-            value = Enum.valueOf((Class<Enum>)targetClass, (String)value);
+            convertedValue = value;
         }
-        else if (!targetClass.isAssignableFrom(value.getClass()))
+        else if (value instanceof String && Enum.class.isAssignableFrom(targetClass))
         {
-            boolean isList = List.class.isInstance(value);
-            
+            convertedValue = Enum.valueOf((Class<Enum>)targetClass, (String)value);
+        }
+        else 
+        {
             TypeConverter typeConverter = null;
             if (typeConvertersByClass != null)
             {
@@ -804,26 +810,40 @@ public class JSONParser
             
             if (typeConverter != null)
             {
-                value = typeConverter.fromJSON(value);
+                convertedValue = typeConverter.fromJSON(value);
             }
-            else if (isList && targetClass.isAssignableFrom(HashSet.class))
+            else if (List.class.isInstance(value))
             {
-                value = new HashSet((List)value);
+                List list = (List)value;
+                
+                if (targetClass.isArray())
+                {
+                    convertedValue = Array.newInstance(targetClass.getComponentType(), list.size());
+                    int idx=0;
+                    for (Object o : list)
+                    {
+                        Array.set(convertedValue, idx++, o);
+                    }
+                }
+                else if (targetClass.isAssignableFrom(HashSet.class))
+                {
+                    convertedValue = new HashSet(list);
+                }
+                else if (targetClass.isAssignableFrom(LinkedHashSet.class))
+                {
+                    convertedValue = new LinkedHashSet(list);
+                }
+                else if (targetClass.isAssignableFrom(TreeSet.class))
+                {
+                    convertedValue = new TreeSet(list);
+                }
             }
-            else if (isList && targetClass.isAssignableFrom(LinkedHashSet.class))
+            if (convertedValue == null)
             {
-                value = new LinkedHashSet((List)value);
-            }
-            else if (isList && targetClass.isAssignableFrom(TreeSet.class))
-            {
-                value = new TreeSet((List)value);
-            }
-            else
-            {
-                value = ConvertUtils.convert(value.toString(), targetClass);
+                convertedValue = ConvertUtils.convert(value.toString(), targetClass);
             }
         }
-        return value;
+        return convertedValue;
     }
 
 
@@ -868,7 +888,15 @@ public class JSONParser
                     return factory.create(typeHint);
                 }
             }
-            return typeHint.newInstance();
+            
+            if (typeHint.isArray())
+            {
+                return new ArrayList();
+            }
+            else
+            {
+                return typeHint.newInstance();
+            }
         }
         catch (InstantiationException e)
         {
