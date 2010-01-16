@@ -2,7 +2,7 @@ package org.svenson.test;
 
 public class BeanWithArray
 {
-    public String[] foo;
+    private String[] foo;
 
     public String[] getFoo()
     {

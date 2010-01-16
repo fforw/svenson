@@ -1031,15 +1031,21 @@ public class JSONParser
 
                     for (Method m : cls.getMethods())
                     {
-                        JSONTypeHint typeHintAnnotation = m.getAnnotation(JSONTypeHint.class);
-                        if (typeHintAnnotation != null)
+                        String propertyName = getPropertyNameFromMethod(m);
+                        if (propertyName != null)
                         {
-                            String propertyName = getPropertyNameFromMethod(m);
-                            if (propertyName != null)
+                            JSONTypeHint typeHintAnnotation = m.getAnnotation(JSONTypeHint.class);
+                            if (typeHintAnnotation != null)
                             {
                                 typeHintsFromAnnotation.put(propertyName, typeHintAnnotation.value());
                             }
-                        }
+                            
+                            Class<?>[] parameterTypes = m.getParameterTypes();
+                            if (parameterTypes.length == 1 && parameterTypes[0].isArray())
+                            {
+                                typeHintsFromAnnotation.put(propertyName, parameterTypes[0].getComponentType());
+                            }
+                        }                        
                     }
                     holder.setValue( typeHintsFromAnnotation);
                 }

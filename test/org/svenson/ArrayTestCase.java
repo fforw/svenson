@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.svenson.test.BeanWithArray;
+import org.svenson.test.BeanWithBeanArray;
+import org.svenson.test.InnerBean;
 
 public class ArrayTestCase
 {
@@ -38,5 +40,21 @@ public class ArrayTestCase
         assertThat(bean.getFoo()[1], is("two"));
         assertThat(bean.getFoo().length, is(2));
     }
-
+    
+    @Test
+    public void thatGeneratingNestedBeansWorks()
+    {
+        BeanWithBeanArray bean = new BeanWithBeanArray();
+        InnerBean innerBean = new InnerBean();
+        innerBean.setBar(438575);
+        bean.setInner(new InnerBean[]{ innerBean });
+        
+        assertThat(JSON.defaultJSON().forValue(bean), is("{\"inner\":[{\"bar\":438575}]}"));
+    }
+    @Test
+    public void thatParsingNestedBeansWorks()
+    {
+        BeanWithBeanArray bean = JSONParser.defaultJSONParser().parse(BeanWithBeanArray.class, "{\"inner\":[{\"bar\":438575}]}");
+        assertThat(bean.getInner()[0].getBar(),is(438575));
+    }
 }
