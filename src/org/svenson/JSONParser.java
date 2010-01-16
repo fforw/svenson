@@ -724,7 +724,7 @@ public class JSONParser
         {
             for (Map.Entry<Class, Class> e : interfaceMappings.entrySet())
             {
-                if (e.getKey().isAssignableFrom(type))
+                if (type.isAssignableFrom(e.getKey()))
                 {
                     return e.getValue();
                 }
