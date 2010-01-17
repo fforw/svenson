@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -724,20 +725,63 @@ public class JSONParser
     {
         if (type != null && type.isInterface())
         {
+            int leastTypeDistance = Integer.MAX_VALUE;
+            Class best = null;
             for (Map.Entry<Class, Class> e : interfaceMappings.entrySet())
             {
-                if (type.isAssignableFrom(e.getKey()))
+                Class curInterface = e.getKey();
+                if (type.isAssignableFrom(curInterface))
                 {
-                    return e.getValue();
+                    if (type.getName().equals(curInterface.getName()))
+                    {
+                        // we already found the minimum
+                        return e.getValue();
+                    }
+                    // .. searching for best match
+                    int distance = getTypeDistance(type, curInterface, 1);
+                    if (distance < leastTypeDistance)
+                    {
+                        leastTypeDistance = distance;
+                        best = curInterface;
+                    }
                 }
             }
 
-            throw new IllegalArgumentException("No Mapping found for "+type+". cannot instantiate interfaces ");
+            if (best == null)
+            {
+                throw new IllegalArgumentException("No Mapping found for "+type+". cannot instantiate interfaces ");
+            }
+            
+            return best;
         }
         return null;
     }
 
-    
+    /**
+     * Finds the declaration distance between the two non-equal interfaces
+     * @param type          target interface
+     * @param ifaceClass    interface that is assignable from target, but not equal to it
+     * @param dist          current checking distance
+     * @return distance between interfaces or <code>null</code> if the target was not found 
+     */
+    static Integer getTypeDistance(Class type, Class ifaceClass, int dist)
+    {
+        for (Class cls : ifaceClass.getInterfaces())
+        {
+            if (type.getName().equals(cls.getName()))
+            {
+                return dist;
+            }
+            
+            Integer d2 = getTypeDistance(type, cls, dist + 1 );
+            if (d2 != null)
+            {
+                return d2;
+            }
+        }
+        return null;
+    }
+
     private Method getAddMethod(Object bean, String name)
     {
         ValueHolder<Map<String,Method>> holder = new ValueHolder<Map<String,Method>>();

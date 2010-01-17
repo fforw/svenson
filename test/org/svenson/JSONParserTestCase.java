@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeMap;
 
 import org.junit.Before;
@@ -166,7 +167,7 @@ public class JSONParserTestCase
         // the returned object is actually a HashSet. it boils down to the iteration over the array
         // being different (on my new multi core CPU?).
         // Since the result is actually not an error, Collection is a 
-        // assertThat("Class is " + c.getClass(), c.getClass().equals(ArrayList.class),is(true));
+        assertThat("Class is " + c.getClass(), c.getClass().equals(ArrayList.class),is(true));
 
         Map m = parser.parse(Map.class, "{\"foo\":\"foo!\"}");
         assertThat((String)m.get("foo"),is("foo!"));
@@ -323,5 +324,14 @@ public class JSONParserTestCase
         assertThat(s.size(),is(2));
         assertThat(s.contains("abc"),is(true));
         assertThat(s.contains("def"),is(true));
+    }
+    
+    @Test
+    public void testTypeDistance()
+    {
+        assertThat(JSONParser.getTypeDistance(Collection.class, Collection.class, 1), is(nullValue()));
+        assertThat(JSONParser.getTypeDistance(Collection.class, List.class,1), is(1));
+        assertThat(JSONParser.getTypeDistance(Collection.class, Set.class,1), is(1));
+        assertThat(JSONParser.getTypeDistance(Collection.class, SortedSet.class,1), is(2));
     }
 }
