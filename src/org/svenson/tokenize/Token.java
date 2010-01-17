@@ -69,7 +69,7 @@ public class Token
             throw new IllegalArgumentException("type must be given");
         }
 
-        type.checkValue(value);
+        //type.checkValue(value);
 
         this.type = type;
         this.value = value;
