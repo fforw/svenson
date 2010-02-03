@@ -7,7 +7,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -296,7 +295,7 @@ public class JSONParser
         else if (token.isType(TokenType.BRACE_OPEN))
         {
             // regard type hints on root type decision
-            Class typeHint = getTypeHint("", tokenizer);
+            Class typeHint = getTypeHint("", tokenizer, null);
 
             if (typeHint != null)
             {
@@ -387,11 +386,18 @@ public class JSONParser
             TokenType type = token.type();
             if (type == TokenType.BRACE_OPEN)
             {
+                Class typeHint = getTypeHint("", tokenizer, targetType);
+                if (typeHint != null)
+                {
+                    targetType = typeHint;
+                }
+
                 t = (T) createNewTargetInstance(targetType, true);
                 parseObjectInto(new ParseContext(t,null), tokenizer);
             }
             else if (type == TokenType.BRACKET_OPEN)
             {
+                
                 t = (T) createNewTargetInstance(targetType, false);
                 parseArrayInto(new ParseContext(t,null), tokenizer);
             }
@@ -970,7 +976,7 @@ public class JSONParser
             log.debug("typeHint = "+memberType+", name = "+name);
         }
 
-        Class cls = getTypeHint( parsePathInfo,tokenizer);
+        Class cls = getTypeHint( parsePathInfo,tokenizer, memberType);
 
         if (cls != null)
         {
@@ -1016,9 +1022,8 @@ public class JSONParser
         return result;
     }
 
-    private Class getTypeHint(String parsePathInfo, JSONTokenizer tokenizer)
+    private Class getTypeHint(String parsePathInfo, JSONTokenizer tokenizer, Class typeHint)
     {
-        Class typeHint = null;
         for (Map.Entry<PathMatcher, Class> e : typeHints.entrySet())
         {
             PathMatcher matcher = e.getKey();

@@ -2,10 +2,12 @@ package org.svenson;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.List;
 
 import org.junit.Test;
+import org.svenson.matcher.SubtypeMatcher;
 
 
 public class ClassNameBasedTypeMapperTestCase
@@ -38,6 +40,20 @@ public class ClassNameBasedTypeMapperTestCase
         assertThat(foos.size(), is(2));
         assertThat(foos.get(0), is(Foo.class));
         assertThat(foos.get(1), is(Bar.class));
+    }
+    
+    @Test
+    public void testSubTypeMatching()
+    {
+        JSONParser parser = new JSONParser();
+        ClassNameBasedTypeMapper mapper = new ClassNameBasedTypeMapper();
+        mapper.setBasePackage("org.svenson");
+        mapper.setPathMatcher(new SubtypeMatcher(Foo.class));
+        parser.setTypeMapper(mapper);
+        
+        Foo foo = parser.parse(Foo.class, "{\"type\":\"ClassNameBasedTypeMapperTestCase$Bar\"}");
+        assertThat(foo,is(Bar.class));
+        
     }
     
     public static class Foo
