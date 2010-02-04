@@ -378,22 +378,11 @@ public class JSON
 
                     try
                     {
-
                         PropertyDescriptor pd = pds[cp];
                         Method method = pd.getReadMethod();
                         Method writeMethod = pd.getWriteMethod();
                         if (method != null)
                         {
-                            Object value = method.invoke(o, (Object[]) null);
-                            
-                            if (typeConverterCache != null)
-                            {
-                                TypeConverter typeConverter = typeConverterCache.getTypeConverter( o, pd.getName());
-                                if (typeConverter != null)
-                                {
-                                    value = typeConverter.toJSON(value);
-                                }
-                            }
                             
                             String name = pd.getName();
                             boolean ignore = (ignoredProps != null && ignoredProps.contains(name));
@@ -413,12 +402,31 @@ public class JSON
                                         name = jsonProperty.value();
                                     }
 
-                                    ignore = jsonProperty.ignore() ||
-                                        (value == null && jsonProperty.ignoreIfNull());
+                                    ignore = jsonProperty.ignore();
+                                }
+                                
+                                Object value = null;
+                                if (!ignore)
+                                {
+                                    value = method.invoke(o, (Object[]) null);
+                                }
+
+                                if (value == null && jsonProperty.ignoreIfNull())
+                                {
+                                    ignore = true;
                                 }
 
                                 if (!ignore)
                                 {
+                                    if (typeConverterCache != null)
+                                    {
+                                        TypeConverter typeConverter = typeConverterCache.getTypeConverter( o, pd.getName());
+                                        if (typeConverter != null)
+                                        {
+                                            value = typeConverter.toJSON(value);
+                                        }
+                                    }
+
                                     if (!first)
                                     {
                                         out.append(',');
