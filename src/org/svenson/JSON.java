@@ -411,7 +411,7 @@ public class JSON
                                     value = method.invoke(o, (Object[]) null);
                                 }
 
-                                if (value == null && jsonProperty.ignoreIfNull())
+                                if (value == null && jsonProperty != null && jsonProperty.ignoreIfNull())
                                 {
                                     ignore = true;
                                 }
