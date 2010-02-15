@@ -1,6 +1,15 @@
 svenson json library change log:
 ================================
 
+Changes from 1.3.5 to 1.3.6:
+
+ * Support Set and Collection for JSONTypeHint. Intermediary list in JSON parser gets converted to HashSet. added Set => HashSet as known interface impl.
+ * Support all standard JDK set implementation for @JSONTypeHint
+ * Find best replacement interface, instead of taking the first possible. Fixes broken replacement interface behaviour
+ * Add Array support
+ * Properly regard initial type mapping to enable SubType-Matched parsing from JSON root
+ * Svenson no longer reads ignored properties. 
+
 Changes from 1.3.4 to 1.3.5:
 
  * add support for non-annotation based TypeConversion. See org.svenson.JSON.registerTypeConversion(Class<?>, TypeConverter) and org.svenson.JSONParser.registerTypeConversion(Class, TypeConverter)
