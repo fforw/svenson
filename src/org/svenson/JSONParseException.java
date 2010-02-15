@@ -4,7 +4,7 @@ package org.svenson;
 /**
  * Is thrown when an error happens during JSON parsing.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class JSONParseException

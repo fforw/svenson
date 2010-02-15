@@ -11,7 +11,7 @@ import org.svenson.SvensonRuntimeException;
  * Wraps checked exceptions in unchecked {@link SvensonRuntimeException}. Allows to customizes
  * the handling of checked exceptions in the library for each specific type.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class ExceptionWrapper

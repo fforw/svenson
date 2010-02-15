@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Abstract base class for bean that want to use dynamic properties.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  */
 public abstract class AbstractDynamicProperties implements DynamicProperties
 {

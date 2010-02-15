@@ -34,7 +34,7 @@ import org.svenson.util.TypeConverterCache;
  * <li>Maps</li>
  * </ul>
  *
- * @author Sven Helmberger ( sven dot helmberger at gmx dot de )
+ * @author fforw at gmx dot de
  * @see JSONable
  * @see JSONifier
  * @see JSONProperty

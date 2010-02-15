@@ -5,7 +5,7 @@ import org.svenson.tokenize.JSONTokenizer;
 /**
  * Inspects the current position of a tokenizer and decides what type to use at that position.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  */
 public interface TypeMapper
 {

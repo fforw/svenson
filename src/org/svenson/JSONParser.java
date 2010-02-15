@@ -50,7 +50,7 @@ import org.svenson.util.ValueHolder;
  * gets its own copy of all config so that changing it will not affect the original 
  * JSONParser.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  * @see JSONProperty
  * @see DynamicProperties

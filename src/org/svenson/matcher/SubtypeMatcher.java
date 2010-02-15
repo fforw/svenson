@@ -2,7 +2,7 @@ package org.svenson.matcher;
 
 /**
  * Matches if the preexisting type hint is assignable to a given type.
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class SubtypeMatcher implements PathMatcher

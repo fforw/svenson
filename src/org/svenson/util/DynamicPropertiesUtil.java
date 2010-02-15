@@ -14,7 +14,7 @@ import org.svenson.JSONParser;
 /**
  * Renamed to {@link JSONBeanUtil}.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  * @deprecated
  *
  */

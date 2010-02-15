@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * Interface that allows classes to also have dynamic properties
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public interface DynamicProperties

@@ -12,7 +12,7 @@ import java.lang.annotation.Retention;
  * Annotates property methods as having another JSON name or as being either generally ignored or being ignored
  * when containing a <code>null</code> value.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

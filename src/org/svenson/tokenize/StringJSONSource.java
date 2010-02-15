@@ -5,7 +5,7 @@ package org.svenson.tokenize;
  * String implementation for the {@link JSONCharacterSource} interface for full in-memory
  * JSON parsing.
  * 
- * @author shelmberger
+ * @author fforw at gmx dot de
  */
 public class StringJSONSource
     implements JSONCharacterSource

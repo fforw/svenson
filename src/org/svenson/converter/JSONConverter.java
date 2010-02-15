@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * Annotation that marks a Bean setter or getter method as being subject to conversion when generating or parsing JSON.
  * 
  * @see TypeConverter
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 @Retention(RetentionPolicy.RUNTIME)

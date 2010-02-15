@@ -9,7 +9,7 @@ import org.svenson.tokenize.Token;
 /**
  * TypeMapper that just logs the calls
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class TokenLogger

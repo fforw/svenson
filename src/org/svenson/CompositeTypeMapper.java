@@ -6,7 +6,7 @@ import org.svenson.tokenize.JSONTokenizer;
 
 /**
  * Delegates the type mapping decision to a list of type mappers.
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class CompositeTypeMapper implements TypeMapper

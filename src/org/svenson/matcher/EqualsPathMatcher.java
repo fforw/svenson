@@ -3,7 +3,7 @@ package org.svenson.matcher;
 /**
  * Matches the parse path if it's equals to a special string. 
  * 
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class EqualsPathMatcher

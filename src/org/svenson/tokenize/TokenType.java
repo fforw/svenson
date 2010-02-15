@@ -2,7 +2,7 @@ package org.svenson.tokenize;
 
 /**
  * Defines all possible token types and the possible content for each.
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public enum TokenType

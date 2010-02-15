@@ -5,7 +5,7 @@ package org.svenson.converter;
  * 
  * @see DefaultTypeConverterRepository
  * 
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public interface TypeConverterRepository

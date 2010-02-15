@@ -10,7 +10,7 @@ import org.svenson.tokenize.TokenType;
 /**
  * Abstract base class for type mappers based on a map with a generic key type.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public abstract class AbstractPropertyValueBasedTypeMapper extends AbstractTypeMapper 

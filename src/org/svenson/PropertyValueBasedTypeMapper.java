@@ -30,7 +30,7 @@ You can now parse the objects in the rows array into Foo and Bar instances by se
  *
  * There is also a test case for this class that does implement this example.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  */
 public class PropertyValueBasedTypeMapper extends AbstractPropertyValueBasedTypeMapper
 {

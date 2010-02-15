@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * Annotates a map or collection getter/setter with the type expected within the collection.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited

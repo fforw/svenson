@@ -7,7 +7,7 @@ import java.util.Map;
  * Default repository for svenson type converters. Allows registering converters
  * with or without id and resolving them by id or by type.
  * 
- * @author shelmberger
+ * @author fforw at gmx dot de
  */
 public class DefaultTypeConverterRepository implements TypeConverterRepository
 {

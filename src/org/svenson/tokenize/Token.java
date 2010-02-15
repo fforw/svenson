@@ -8,7 +8,7 @@ import org.svenson.util.Util;
 /**
  * A JSON parsing token that wraps the token type and the value of this type.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class Token

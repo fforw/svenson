@@ -3,7 +3,7 @@ package org.svenson.matcher;
 /**
  * Matches if all of its child matchers match.
  * 
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class AndMatcher implements PathMatcher

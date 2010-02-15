@@ -2,7 +2,7 @@ package org.svenson.util;
 
 /**
  * Contains utility methods.
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class Util

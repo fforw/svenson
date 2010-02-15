@@ -2,7 +2,7 @@ package org.svenson.converter;
 
 /**
  * Interface for all JSON type converters
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public interface TypeConverter

@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 /**
  * Matches the parse path based on a regular expression.
  * 
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class RegExPathMatcher

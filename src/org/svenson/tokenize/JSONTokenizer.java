@@ -12,7 +12,7 @@ import org.svenson.JSONParseException;
  * pushed back into the Tokenizer for resetting the token stream to a previous
  * position. The Tokenizer is stateful and not thread-safe.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class JSONTokenizer

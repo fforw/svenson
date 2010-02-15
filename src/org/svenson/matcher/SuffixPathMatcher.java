@@ -3,7 +3,7 @@ package org.svenson.matcher;
 /**
  * Matches the parse path based on a Suffix.
  * 
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class SuffixPathMatcher

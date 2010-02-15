@@ -14,7 +14,7 @@ import org.svenson.JSONParser;
 /**
  * Contains some util methods to handle bean properties dynamically.
  *
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class JSONBeanUtil

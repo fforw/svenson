@@ -6,7 +6,7 @@ import java.io.IOException;
  * Low-level interface to provide character data to the JSON tokenizer. It was introduced
  * to allow for both stream JSON parsing and efficient in-memory parsing.
  *  
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public interface JSONCharacterSource
