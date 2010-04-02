@@ -2,13 +2,13 @@ package org.svenson.test;
 
 import java.util.List;
 
-import org.svenson.Linked;
+import org.svenson.JSONReference;
 
 public class LinkedListBase
 {
     private List<LinkedChildBean> children;
     
-    @Linked
+    @JSONReference
     public void setChildren(List<LinkedChildBean> children)
     {
         this.children = children;

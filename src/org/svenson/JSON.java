@@ -432,15 +432,15 @@ public class JSON
                                         }
                                     }
                                     
-                                    Linked linked = method.getAnnotation(Linked.class);
-                                    if (linked == null && writeMethod != null)
+                                    JSONReference jSONReference = method.getAnnotation(JSONReference.class);
+                                    if (jSONReference == null && writeMethod != null)
                                     {
-                                        linked = writeMethod.getAnnotation(Linked.class);
+                                        jSONReference = writeMethod.getAnnotation(JSONReference.class);
                                     }
                                     
-                                    if (linked != null)
+                                    if (jSONReference != null)
                                     {
-                                        String idProperty = linked.idProperty();
+                                        String idProperty = jSONReference.idProperty();
                                         if (value instanceof Collection)
                                         {
                                             List newList = new ArrayList();

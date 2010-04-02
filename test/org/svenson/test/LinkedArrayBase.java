@@ -1,12 +1,12 @@
 package org.svenson.test;
 
-import org.svenson.Linked;
+import org.svenson.JSONReference;
 
 public class LinkedArrayBase
 {
     private LinkedChildBean[] children;
     
-    @Linked
+    @JSONReference
     public LinkedChildBean[] getChildren()
     {
         return children;

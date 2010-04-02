@@ -720,13 +720,13 @@ public class JSONParser
     {
         PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(target, name);
         
-        Linked linkedAnno = desc.getReadMethod().getAnnotation(Linked.class);
+        JSONReference jSONReferenceAnno = desc.getReadMethod().getAnnotation(JSONReference.class);
         Method writeMethod = desc.getWriteMethod();
-        if (linkedAnno == null && writeMethod != null)
+        if (jSONReferenceAnno == null && writeMethod != null)
         {
-            linkedAnno = writeMethod.getAnnotation(Linked.class);
+            jSONReferenceAnno = writeMethod.getAnnotation(JSONReference.class);
         }
-        return linkedAnno != null;
+        return jSONReferenceAnno != null;
     }
 
     private boolean isReadOnlyProperty(Object target, String name) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException

@@ -2,13 +2,13 @@ package org.svenson.test;
 
 import java.util.Map;
 
-import org.svenson.Linked;
+import org.svenson.JSONReference;
 
 public class LinkedMapBase
 {
     private Map<String,LinkedChildBean> children;
     
-    @Linked
+    @JSONReference
     public void setChildren(Map<String, LinkedChildBean> children)
     {
         this.children = children;
