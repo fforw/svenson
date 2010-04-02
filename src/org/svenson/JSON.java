@@ -8,12 +8,14 @@ import java.io.Writer;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -21,6 +23,7 @@ import java.util.StringTokenizer;
 import org.svenson.converter.TypeConverter;
 import org.svenson.converter.TypeConverterRepository;
 import org.svenson.util.ExceptionWrapper;
+import org.svenson.util.JSONBeanUtil;
 import org.svenson.util.TypeConverterCache;
 
 /**
@@ -383,13 +386,15 @@ public class JSON
                         Method writeMethod = pd.getWriteMethod();
                         if (method != null)
                         {
-                            
+
                             String name = pd.getName();
                             boolean ignore = (ignoredProps != null && ignoredProps.contains(name));
                             if (!name.equals("class") && !ignore)
                             {
+
+
                                 JSONProperty jsonProperty = method
-                                    .getAnnotation(JSONProperty.class);
+                                .getAnnotation(JSONProperty.class);
                                 if (jsonProperty == null && writeMethod != null)
                                 {
                                     jsonProperty = writeMethod.getAnnotation(JSONProperty.class);
@@ -404,7 +409,7 @@ public class JSON
 
                                     ignore = jsonProperty.ignore();
                                 }
-                                
+
                                 Object value = null;
                                 if (!ignore)
                                 {
@@ -426,7 +431,50 @@ public class JSON
                                             value = typeConverter.toJSON(value);
                                         }
                                     }
-
+                                    
+                                    Linked linked = method.getAnnotation(Linked.class);
+                                    if (linked == null && writeMethod != null)
+                                    {
+                                        linked = writeMethod.getAnnotation(Linked.class);
+                                    }
+                                    
+                                    if (linked != null)
+                                    {
+                                        String idProperty = linked.idProperty();
+                                        if (value instanceof Collection)
+                                        {
+                                            List newList = new ArrayList();
+                                            for (Object childObject : ((Collection)value) )
+                                            {
+                                                newList.add(JSONBeanUtil.getProperty(childObject, idProperty));
+                                            }
+                                            value = newList;                                            
+                                        }
+                                        else if (value.getClass().isArray())
+                                        {
+                                            List newList = new ArrayList();
+                                            int len = Array.getLength(value);
+                                            for (int i = 0; i < len; i++)
+                                            {
+                                                newList.add(JSONBeanUtil.getProperty(Array.get(value, i), idProperty));
+                                            }
+                                            value = newList;
+                                        }
+                                        else if (value instanceof Map)
+                                        {
+                                            Map newMap = new HashMap();
+                                            for (Map.Entry<Object,Object> e : ((Map<Object,Object>)value).entrySet())
+                                            {
+                                                newMap.put(e.getKey(), JSONBeanUtil.getProperty(e.getValue(), idProperty));
+                                            }
+                                            value = newMap;
+                                        }
+                                        else
+                                        {
+                                            value = JSONBeanUtil.getProperty(value, idProperty);
+                                        }
+                                    }
+                                    
                                     if (!first)
                                     {
                                         out.append(',');

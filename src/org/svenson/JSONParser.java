@@ -555,18 +555,18 @@ public class JSONParser
             TokenType valueType = valueToken.type();
 
             boolean isProperty = false;
-            boolean isReadOnlyProperty = false;
+            boolean isIgnoredOnParse = false;
             Method addMethod = null;
             if (!containerIsMap)
             {
                 name = getPropertyNameFromAnnotation(cx.target, jsonName);
                 isProperty = false;
-                isReadOnlyProperty = false;
+                isIgnoredOnParse = false;
                 if (name != null)
                 {
                     boolean writeable = PropertyUtils.isWriteable(cx.target, name);
-                    isReadOnlyProperty = !writeable && isReadOnlyProperty(cx.target, name);
-                    isProperty = writeable || isReadOnlyProperty;
+                    isIgnoredOnParse = (!writeable && isReadOnlyProperty(cx.target, name) || isLinkedProperty(cx.target, name));
+                    isProperty = writeable || isIgnoredOnParse;
                 }
                 addMethod = getAddMethod(cx.target, jsonName);
             }
@@ -662,19 +662,19 @@ public class JSONParser
                 value = newTarget;
             }
 
-            if (typeConverter != null)
+            if (typeConverter != null && !isIgnoredOnParse)
             {
                 value = typeConverter.fromJSON(value);
             }
             
-            if(typeHint != null)
+            if(typeHint != null && !isIgnoredOnParse)
             {
                 value = convertValueTo(value, typeHint);
             }
             
             if (isProperty)
             {
-                if (!isReadOnlyProperty)
+                if (!isIgnoredOnParse)
                 {
                     try
                     {
@@ -716,15 +716,24 @@ public class JSONParser
         } // end while
     }
 
+    private boolean isLinkedProperty(Object target, String name) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    {
+        PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(target, name);
+        
+        Linked linkedAnno = desc.getReadMethod().getAnnotation(Linked.class);
+        Method writeMethod = desc.getWriteMethod();
+        if (linkedAnno == null && writeMethod != null)
+        {
+            linkedAnno = writeMethod.getAnnotation(Linked.class);
+        }
+        return linkedAnno != null;
+    }
+
     private boolean isReadOnlyProperty(Object target, String name) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
     {
-        if (name != null)
-        {
-            PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(target, name);
-            JSONProperty anno = desc.getReadMethod().getAnnotation(JSONProperty.class);
-            return anno != null && anno.readOnly();
-        }        
-        return false;
+        PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(target, name);
+        JSONProperty anno = desc.getReadMethod().getAnnotation(JSONProperty.class);
+        return anno != null && anno.readOnly();
     }
 
     private Class getReplacementForKnownInterface(Class type)
