@@ -3,6 +3,7 @@ package org.svenson;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -80,7 +81,18 @@ public class JSONParser
     private TypeConverterCache typeConverterCache;
 
     private Map<Class,TypeConverter> typeConvertersByClass;
-    
+
+    /**
+       ParseContext impl chosen at runtime based on whether
+       ScalaParseContext.runningWithScala() returns true.
+    */
+    private Class<? extends ParseContext> cxClass;
+
+    /**
+       The non-default constructor that will be used to instantiate
+       whatever implementation of ParseContext is chosen.
+    */
+    private Constructor<? extends ParseContext> cxConst;
     
     public JSONParser()
     {
@@ -89,6 +101,45 @@ public class JSONParser
         interfaceMappings.put(Set.class, HashSet.class);
         interfaceMappings.put(List.class, ArrayList.class);
         interfaceMappings.put(Map.class, HashMap.class);
+
+        /*
+          If Scala is present in the JVM, choose to use the
+          Scala-aware ParseContext impl.
+         */
+        if (ScalaParseContext.runningWithScala())
+            cxClass = ScalaParseContext.class;
+        else
+            cxClass = JavaParseContext.class;
+
+        try {
+            /*
+              Remember the appropriate constructor for whenever a
+              ParseContext instance is needed (to be used by
+              #getParseContext()).
+             */
+            cxConst = cxClass.getConstructor(new Class<?>[] { JSONParser.class, Object.class, Class.class });
+        }
+        catch (NoSuchMethodException nsme) {
+            throw new RuntimeException("no proper constructor in parse context " + cxClass, nsme);
+        }
+        
+    }
+
+    /**
+       @param t target type
+       @param mt class of target type
+       @return an instance of either JavaParseContext or
+       ScalaParseContext, depending on whether
+       ScalaParseContext.runningWithScala() returns true or false,
+       respectively
+     */
+    public ParseContext getParseContext(Object t, Class mt) {
+        try {
+            return cxConst.newInstance(new Object[] { this, t, mt });
+        }
+        catch (Throwable th) {
+            throw new RuntimeException("failed to instantiate parse context " + cxClass, th);
+        }
     }
     
     /**
@@ -393,13 +444,13 @@ public class JSONParser
                 }
 
                 t = (T) createNewTargetInstance(targetType, true);
-                parseObjectInto(new ParseContext(t,null), tokenizer);
+                parseObjectInto(getParseContext(t,null), tokenizer);
             }
             else if (type == TokenType.BRACKET_OPEN)
             {
                 
                 t = (T) createNewTargetInstance(targetType, false);
-                parseArrayInto(new ParseContext(t,null), tokenizer);
+                parseArrayInto(getParseContext(t,null), tokenizer);
             }
             else if (type == TokenType.STRING && Enum.class.isAssignableFrom(targetType) )
             {
@@ -449,9 +500,9 @@ public class JSONParser
      * @throws InvocationTargetException
      * @throws NoSuchMethodException
      */
-    private void parseArrayInto(ParseContext cx, JSONTokenizer tokenizer) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    protected void parseArrayInto(ParseContext cx, JSONTokenizer tokenizer) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
     {
-        boolean containerIsCollection = Collection.class.isAssignableFrom(cx.target.getClass());
+        boolean containerIsCollection = cx.isCollection();
 
         boolean first = true;
         while(true)
@@ -503,21 +554,21 @@ public class JSONParser
 
             if (containerIsCollection)
             {
-                ((Collection)cx.target).add(value);
+                cx.doAdd(value);
             }
             else
             {
-                throw new JSONParseException("Cannot add value "+value+" to "+cx.target+" ( "+cx.target.getClass()+" )");
+                throw new JSONParseException("Cannot add value "+value+" to "+cx.getTarget()+" ( "+cx.getTarget().getClass()+" )");
             }
 
             first = false;
         }
     }
 
-    private void parseObjectInto(ParseContext cx, JSONTokenizer tokenizer) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    protected void parseObjectInto(ParseContext cx, JSONTokenizer tokenizer) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
     {
-        boolean containerIsMap = Map.class.isAssignableFrom(cx.target.getClass());
-        boolean containerIsDynAttrs = cx.target instanceof DynamicProperties;
+        boolean containerIsMap = cx.isMap();
+        boolean containerIsDynAttrs = cx.getTarget() instanceof DynamicProperties;
 
         boolean first = true;
         while (true)
@@ -559,28 +610,28 @@ public class JSONParser
             Method addMethod = null;
             if (!containerIsMap)
             {
-                name = getPropertyNameFromAnnotation(cx.target, jsonName);
+                name = getPropertyNameFromAnnotation(cx.getTarget(), jsonName);
                 isProperty = false;
                 isIgnoredOnParse = false;
                 if (name != null)
                 {
-                    boolean writeable = PropertyUtils.isWriteable(cx.target, name);
-                    isIgnoredOnParse = (!writeable && isReadOnlyProperty(cx.target, name) || isLinkedProperty(cx.target, name));
+                    boolean writeable = PropertyUtils.isWriteable(cx.getTarget(), name);
+                    isIgnoredOnParse = (!writeable && isReadOnlyProperty(cx.getTarget(), name) || isLinkedProperty(cx.getTarget(), name));
                     isProperty = writeable || isIgnoredOnParse;
                 }
-                addMethod = getAddMethod(cx.target, jsonName);
+                addMethod = getAddMethod(cx.getTarget(), jsonName);
             }
 
             TypeConverter typeConverter = null;
             
             if (typeConverterCache != null)
             {
-                typeConverter = typeConverterCache.getTypeConverter( cx.target, name);
+                typeConverter = typeConverterCache.getTypeConverter( cx.getTarget(), name);
             }
             
             if (!( isProperty || containerIsMap ||containerIsDynAttrs || addMethod != null))
             {
-                throw new JSONParseException("Cannot set property "+jsonName+" on "+cx.target.getClass());
+                throw new JSONParseException("Cannot set property "+jsonName+" on "+cx.getTarget().getClass());
             }
 
             
@@ -644,13 +695,13 @@ public class JSONParser
 
                             for (Object o : temp)
                             {
-                                addMethod.invoke(cx.target, o);
+                                addMethod.invoke(cx.getTarget(), o);
                             }
                             continue;
                         }
                         else
                         {
-                            throw new JSONParseException("Cannot set array to property "+name+" on "+cx.target);
+                            throw new JSONParseException("Cannot set array to property "+name+" on "+cx.getTarget());
                         }
                     }
                 }
@@ -678,12 +729,12 @@ public class JSONParser
                 {
                     try
                     {
-                        Class targetClass = PropertyUtils.getPropertyType(cx.target, name);
+                        Class targetClass = PropertyUtils.getPropertyType(cx.getTarget(), name);
 //                        if (typeConverter != null)
 //                        {
 //                            value = typeConverter.fromJSON(value);
 //                        }
-                        PropertyUtils.setProperty(cx.target, name, value);
+                        PropertyUtils.setProperty(cx.getTarget(), name, value);
                     }
                     catch (IllegalAccessException e)
                     {
@@ -701,15 +752,15 @@ public class JSONParser
             }
             else if (containerIsMap)
             {
-                ((Map)cx.target).put( name, value);
+                cx.doPut(name, value);
             }
             else if (containerIsDynAttrs)
             {
-                ((DynamicProperties)cx.target).setProperty(name, value);
+                ((DynamicProperties)cx.getTarget()).setProperty(name, value);
             }
             else
             {
-                throw new JSONParseException("Cannot set property "+name+" on "+cx.target);
+                throw new JSONParseException("Cannot set property "+name+" on "+cx.getTarget());
             }
 
             first = false;
@@ -1001,7 +1052,7 @@ public class JSONParser
     private Class getTypeOfProperty(ParseContext cx, String name)
     {
         Class result = null;
-        Object target = cx.target;
+        Object target = cx.getTarget();
         PropertyDescriptor pd;
         try
         {
@@ -1068,7 +1119,7 @@ public class JSONParser
         
     private Class getTypeHintFromAnnotation(ParseContext cx, String name)
     {
-        Class cls = cx.target.getClass();
+        Class cls = cx.getTarget().getClass();
 
         ValueHolder<Map<String,Class>> holder = new ValueHolder<Map<String,Class>>();
         ValueHolder<Map<String,Class>> existing = classToTypeHintFromAnnotation.putIfAbsent(cls, holder);
@@ -1123,64 +1174,6 @@ public class JSONParser
             return Introspector.decapitalize(methodName.substring(isIsser ? 2 : 3));
         }
         return null;
-    }
-
-    private class ParseContext
-    {
-        private Object target;
-        private ParseContext parent;
-        private Class memberType;
-        private String info="";
-
-        public ParseContext(Object target, Class memberType)
-        {
-            this(target,memberType,null);
-        }
-
-        private ParseContext(Object target, Class memberType, ParseContext parent)
-        {
-            this.target = target;
-            this.parent = parent;
-            this.memberType = memberType;
-        }
-
-        public Class getMemberType()
-        {
-            return memberType;
-        }
-
-        public ParseContext push(Object target, Class memberType, String info)
-        {
-            ParseContext child = new ParseContext(target, memberType, this);
-            child.info = this.info + info;
-            return child;
-
-        }
-
-        public ParseContext pop()
-        {
-            return parent;
-        }
-
-        public String getParsePathInfo(String name)
-        {
-            String parsePathInfo;
-            if (name.equals("[]"))
-            {
-                parsePathInfo = info+name;
-            }
-            else
-            {
-                parsePathInfo = info+"."+name;
-            }
-            return parsePathInfo;
-        }
-
-        @Override
-        public String toString()
-        {
-            return super.toString()+", target = "+target+", memberType = "+memberType+", info = "+info;
-        }
     }
 
     /**
