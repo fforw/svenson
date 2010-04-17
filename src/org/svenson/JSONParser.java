@@ -107,22 +107,28 @@ public class JSONParser
           Scala-aware ParseContext impl.
          */
         if (ScalaParseContext.runningWithScala())
+        {
             cxClass = ScalaParseContext.class;
+        }
         else
+        {
             cxClass = JavaParseContext.class;
+        }
 
-        try {
+        try
+        {
             /*
-              Remember the appropriate constructor for whenever a
-              ParseContext instance is needed (to be used by
-              #getParseContext()).
+             * Remember the appropriate constructor for whenever a ParseContext
+             * instance is needed (to be used by #getParseContext()).
              */
-            cxConst = cxClass.getConstructor(new Class<?>[] { JSONParser.class, Object.class, Class.class });
+            cxConst = cxClass.getConstructor(new Class<?>[] { JSONParser.class, Object.class,
+                Class.class });
         }
-        catch (NoSuchMethodException nsme) {
-            throw new RuntimeException("no proper constructor in parse context " + cxClass, nsme);
+        catch (NoSuchMethodException nsme)
+        {
+            throw new SvensonRuntimeException("no proper constructor in parse context " + cxClass,
+                nsme);
         }
-        
     }
 
     /**
