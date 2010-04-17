@@ -144,7 +144,7 @@ public class JSONParserTestCase
         FooBean foo = parser.parse(FooBean.class, "{\"bar\":[{},{}]}");
 
         assertThat(foo, is(notNullValue()));
-        assertThat(foo.bars().size(), is(2));
+        assertThat(foo.getBars().size(), is(2));
 
     }
 

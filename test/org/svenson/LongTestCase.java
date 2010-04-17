@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
 
-public class NumbersTestCase
+public class LongTestCase
 {
     @Test
     public void thatMinAndMaxWork()

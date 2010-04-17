@@ -53,7 +53,7 @@ public class ClassNameBasedTypeMapper extends AbstractPropertyValueBasedTypeMapp
         }
         catch (ClassNotFoundException e)
         {
-            throw new IllegalStateException("Invalid class name in JSON property", e);
+            throw new IllegalStateException("No class found for property '" + value + "'", e);
         }
     }
 }

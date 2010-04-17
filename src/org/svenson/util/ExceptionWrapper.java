@@ -55,4 +55,15 @@ public class ExceptionWrapper
     {
         return new SvensonRuntimeException(e);
     }
+
+    public static SvensonRuntimeException wrap(NumberFormatException e)
+    {
+        return new SvensonRuntimeException(e);
+    }
+
+    public static SvensonRuntimeException wrap(ArrayIndexOutOfBoundsException e)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

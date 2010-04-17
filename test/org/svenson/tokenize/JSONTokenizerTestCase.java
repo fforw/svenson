@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -102,9 +103,9 @@ public class JSONTokenizerTestCase
         assertThat(tokenize(" \n107"), is( Arrays.asList( createToken(TokenType.INTEGER, Long.valueOf(107)))));
         assertThat(tokenize("  -19 \r"), is( Arrays.asList( createToken(TokenType.INTEGER, Long.valueOf(-19)))));
 
-        assertThat(tokenize("3.1415"), is( Arrays.asList( createToken(TokenType.DECIMAL, Double.valueOf(3.1415)))));
-        assertThat(tokenize("10e5"), is( Arrays.asList( createToken(TokenType.DECIMAL, Double.valueOf(10e5)))));
-        assertThat(tokenize("92233720368547758070"), is( Arrays.asList( createToken(TokenType.DECIMAL, Double.valueOf("92233720368547758070")))));
+        assertThat(tokenize("3.1415"), is( Arrays.asList( createToken(TokenType.DECIMAL, new BigDecimal("3.1415")))));
+        assertThat(tokenize("10e5"), is( Arrays.asList( createToken(TokenType.DECIMAL, new BigDecimal("10e5")))));
+        assertThat(tokenize("92233720368547758070"), is( Arrays.asList( createToken(TokenType.DECIMAL, new BigDecimal("92233720368547758070")))));
 
     }
 
@@ -147,7 +148,7 @@ public class JSONTokenizerTestCase
             createToken(TokenType.BRACKET_OPEN),
             createToken(TokenType.STRING, "foo"),
             createToken(TokenType.COMMA),
-            createToken(TokenType.DECIMAL, 1.2),
+            createToken(TokenType.DECIMAL, new BigDecimal("1.2")),
             createToken(TokenType.COMMA),
             createToken(TokenType.INTEGER, 1l),
             createToken(TokenType.COMMA),
@@ -243,7 +244,7 @@ public class JSONTokenizerTestCase
         assertThat((String)parser.parse("\"abc\u0020äöüÄÖÜß\""), is("abc äöüÄÖÜß"));
         assertThat((String)parser.parse("\"アカエラミノウミウシ\""), is("アカエラミノウミウシ"));
         assertThat((Long)parser.parse("123"), is(123L));
-        assertThat((Double)parser.parse("123.4"), is(123.4));
+        assertThat((BigDecimal) parser.parse("123.4"), is(new BigDecimal("123.4")));
         assertThat(parser.parse("null"), is(nullValue()));
         assertThat((Boolean)parser.parse("true"), is(true));
         assertThat((Boolean)parser.parse("false"), is(false));

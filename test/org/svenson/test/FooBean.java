@@ -15,8 +15,14 @@ public class FooBean
         bars.add(bar);
     }
 
-    public List<Bar> bars()
+    public List<Bar> getBars()
     {
         return bars;
     }
+    
+    public void setBars(List<Bar> bars)
+    {
+        this.bars = bars;
+    }
+    
 }

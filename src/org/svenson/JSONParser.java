@@ -295,7 +295,7 @@ public class JSONParser
         else if (token.isType(TokenType.BRACE_OPEN))
         {
             // regard type hints on root type decision
-            Class typeHint = getTypeHint("", tokenizer, null);
+            Class typeHint = getTypeHint("", tokenizer, null, true);
 
             if (typeHint != null)
             {
@@ -386,7 +386,7 @@ public class JSONParser
             TokenType type = token.type();
             if (type == TokenType.BRACE_OPEN)
             {
-                Class typeHint = getTypeHint("", tokenizer, targetType);
+                Class typeHint = getTypeHint("", tokenizer, targetType, true);
                 if (typeHint != null)
                 {
                     targetType = typeHint;
@@ -471,7 +471,7 @@ public class JSONParser
             }
 
             Object value;
-            Class typeHint = getTypeHint(cx, cx.getParsePathInfo("[]"), tokenizer, "[]", false);
+            Class typeHint = getTypeHint(cx, cx.getParsePathInfo("[]"), tokenizer, "[]", false, valueType.isPrimitive());
             if (valueType.isPrimitive())
             {
                 value = valueToken.value();
@@ -589,7 +589,7 @@ public class JSONParser
                 name = jsonName;
             }
 
-            Class typeHint = getTypeHint( cx, cx.getParsePathInfo(jsonName), tokenizer, name, isProperty);
+            Class typeHint = getTypeHint( cx, cx.getParsePathInfo(jsonName), tokenizer, name, isProperty, valueType.isPrimitive());
             Object value;
             if (valueType.isPrimitive())
             {
@@ -967,7 +967,7 @@ public class JSONParser
         }
     }
 
-    private Class getTypeHint(ParseContext cx, String parsePathInfo, JSONTokenizer tokenizer, String name, boolean isProperty)
+    private Class getTypeHint(ParseContext cx, String parsePathInfo, JSONTokenizer tokenizer, String name, boolean isProperty, boolean primitive)
     {
         Class memberType = cx.getMemberType();
         
@@ -985,7 +985,7 @@ public class JSONParser
             log.debug("typeHint = "+memberType+", name = "+name);
         }
 
-        Class cls = getTypeHint( parsePathInfo,tokenizer, memberType);
+        Class cls = getTypeHint( parsePathInfo,tokenizer, memberType, !primitive);
 
         if (cls != null)
         {
@@ -1031,7 +1031,7 @@ public class JSONParser
         return result;
     }
 
-    private Class getTypeHint(String parsePathInfo, JSONTokenizer tokenizer, Class typeHint)
+    private Class getTypeHint(String parsePathInfo, JSONTokenizer tokenizer, Class typeHint, boolean consultTypeMapper)
     {
         for (Map.Entry<PathMatcher, Class> e : typeHints.entrySet())
         {
@@ -1047,7 +1047,7 @@ public class JSONParser
             }
         }
 
-        if (typeMapper != null)
+        if (typeMapper != null && consultTypeMapper)
         {
             Class typeHintFromTypeMapper = typeMapper.getTypeHint(tokenizer, parsePathInfo, typeHint);
 

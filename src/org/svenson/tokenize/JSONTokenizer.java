@@ -1,5 +1,6 @@
 package org.svenson.tokenize;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -329,7 +330,7 @@ public class JSONTokenizer
     {
         try
         {
-            double d = Double.parseDouble(number);
+            BigDecimal d =  new BigDecimal(number);
             return Token.getToken(TokenType.DECIMAL, d);
         }
         catch(NumberFormatException nfe)
@@ -411,7 +412,7 @@ public class JSONTokenizer
     
     private final static int HEX_LETTER_OFFSET = 'A' - '9' - 1;
     
-    static int hexValue(char c)
+    public static int hexValue(char c)
     {
         int n = c;
         if (n >= 'a')

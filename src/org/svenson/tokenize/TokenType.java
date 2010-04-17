@@ -1,5 +1,7 @@
 package org.svenson.tokenize;
 
+import java.math.BigDecimal;
+
 /**
  * Defines all possible token types and the possible content for each.
  * @author fforw at gmx dot de
@@ -15,7 +17,7 @@ public enum TokenType
     COMMA(","),
     STRING(String.class),
     INTEGER(Long.class),
-    DECIMAL(Double.class),
+    DECIMAL(BigDecimal.class),
     TRUE(Boolean.TRUE),
     FALSE(Boolean.FALSE),
     NULL(null),
@@ -104,6 +106,17 @@ public enum TokenType
      */
     public boolean isPrimitive()
     {
-        return this == STRING || this == TRUE || this == FALSE || this == NULL || this == INTEGER || this == DECIMAL;
+        switch(this)
+        {
+            case STRING:
+            case TRUE:
+            case FALSE:
+            case NULL:
+            case INTEGER:
+            case DECIMAL:
+                return true;
+            default:
+                return false;
+        }
     }
 }
