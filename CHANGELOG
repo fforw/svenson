@@ -1,6 +1,12 @@
 svenson json library change log:
 ================================
 
+Changes from 1.3.6 to 1.3.7:
+ 
+ * use BigDecimal for larger than long or fractional numbers
+ * @JSONReference mechanism to dump only a replacement value for linked values.
+ * Support for JavaScript-like property-path access to java object graphs ( org.svenson.util.JSONPathUtil )  
+
 Changes from 1.3.5 to 1.3.6:
 
  * Support Set and Collection for JSONTypeHint. Intermediary list in JSON parser gets converted to HashSet. added Set => HashSet as known interface impl.

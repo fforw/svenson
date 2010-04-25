@@ -18,6 +18,13 @@ import org.svenson.JSONParser;
 import org.svenson.JSONTypeHint;
 import org.svenson.ObjectFactory;
 
+/**
+ * Utility class that provides support for writing and reading java object graphs
+ * based on JavaScript-like path expressions (e.g. "array[5]") or "post.user["email-address"]")
+ * 
+ * @author shelmberger
+ *
+ */
 public class JSONPathUtil
 {
     private final static Object GET_VALUE = new Object();
@@ -29,8 +36,8 @@ public class JSONPathUtil
     
     /**
      * Sets whether growing on path expressions is allowed, that is the implementation will try
-     * to fix missing objects or invalid indizes by creating new objects and increasing the size
-     * of arrays.  
+     * to fix missing objects or invalid indexes by creating new objects and increasing the size
+     * of lists.  
      * 
      * @param grow
      */
@@ -49,12 +56,26 @@ public class JSONPathUtil
         this.objectFactories = objectFactories;
     }
     
-    
-    public void setPropertyPath(Object doc, String path, Object value)
+    /**
+     * Sets the given property path on the given bean with the given value.
+     * 
+     * @param bean      root bean of a Java object graph that can consist of java beans, collections and {@link DynamicProperties} objects.
+     * @param path      JavaScript-like property path ( e.g. "array[5]") or "post.user["email-address"]")
+     * @param value     value to set.
+     */
+    public void setPropertyPath(Object bean, String path, Object value)
     {
-        getOrSetPropertyPath(doc,path,value);
+        getOrSetPropertyPath(bean,path,value);
     }
     
+    /**
+     * Returns the value of the given property path read from the given object graph.
+     * @param bean      root bean of a Java object graph that can consist of java beans, collections and {@link DynamicProperties} objects.
+     * @param path      JavaScript-like property path e.g. ("array[5]") or "post.user["email-address"]")
+     * @return  the value read.
+     * @throws InvalidPropertyPathException if the property path was found to be syntactically incorrect.
+     * @throws PropertyPathAccessException  if there's a <code>null</code> value or not sufficiently sized list during evaluation of the property path and {@link #grow} is set to <code>false</code> 
+     */
     public Object getPropertyPath(Object bean, String path)
     {
         return getOrSetPropertyPath(bean, path, GET_VALUE);
@@ -70,8 +91,10 @@ public class JSONPathUtil
      * @param path      JavaScript like property path expression.
      * @param value     value to set or special value {@link #GET_VALUE} to get instead of set.
      * @return  property path value if value is {@link #GET_VALUE}, <code>null</code> otherwise.
+     * @throws InvalidPropertyPathException if the property path was found to be syntactically incorrect.
+     * @throws PropertyPathAccessException  if there's a <code>null</code> value or not sufficiently sized list during evaluation of the property path and {@link #grow} is set to <code>false</code> 
      */
-    private Object getOrSetPropertyPath(Object bean, String path, Object value)
+    private Object getOrSetPropertyPath(Object bean, String path, Object value) throws InvalidPropertyPathException, PropertyPathAccessException
     {
         if (bean == null)
         {
@@ -83,7 +106,7 @@ public class JSONPathUtil
         
         try
         {
-            String[] parts = PATH_PATTERN.split(path.replace("]", ""));
+            String[] parts = parsePropertyPath(path);
             Object lastDoc = null;
             PropertyDescriptor lastPD = null;
             
@@ -387,21 +410,6 @@ public class JSONPathUtil
         return null;
     }
 
-    private void writeBackArray(Object rootBean, String[] parts, int curPart, Object newArray)
-    {
-        // XXX: use inefficient recursive call.. fuck arrays.. 
-        StringBuilder writeBackPathBuf = new StringBuilder();
-        for (int i = 0 ; i < curPart; i++ )
-        {
-            if (i > 0)
-            {
-                writeBackPathBuf.append(".");
-            }
-            writeBackPathBuf.append(parts[i]);
-        }
-        setPropertyPath(rootBean, writeBackPathBuf.toString(), newArray);
-    }
-
     private static Object setIndexInList(Object bean, int idx, Object child)
     {
         if (bean instanceof List)
@@ -644,6 +652,27 @@ public class JSONPathUtil
         {
             return string.charAt(pos++);
         }
+    }
+
+    private String[] parsePropertyPath(String path)
+    {
+        // XXX: very simple, regexp based parsing. might need improvement
+        return PATH_PATTERN.split(path.replace("]", ""));
+    }
+
+    private void writeBackArray(Object rootBean, String[] parts, int curPart, Object newArray)
+    {
+        // XXX: use inefficient recursive call.. fuck arrays.. 
+        StringBuilder writeBackPathBuf = new StringBuilder();
+        for (int i = 0 ; i < curPart; i++ )
+        {
+            if (i > 0)
+            {
+                writeBackPathBuf.append(".");
+            }
+            writeBackPathBuf.append(parts[i]);
+        }
+        setPropertyPath(rootBean, writeBackPathBuf.toString(), newArray);
     }
 
 }
