@@ -565,7 +565,13 @@ public class JSONParser
                 if (name != null)
                 {
                     boolean writeable = PropertyUtils.isWriteable(cx.target, name);
-                    isIgnoredOnParse = (!writeable && isReadOnlyProperty(cx.target, name) || isLinkedProperty(cx.target, name));
+                    isIgnoredOnParse = (!writeable && isReadOnlyProperty(cx.target, name)); 
+                    
+                    if (isLinkedProperty(cx.target, name))
+                    {
+                        // XXX: make target/name combination and the ignored value available to the caller? how?
+                        isIgnoredOnParse = true;
+                    }
                     isProperty = writeable || isIgnoredOnParse;
                 }
                 addMethod = getAddMethod(cx.target, jsonName);
