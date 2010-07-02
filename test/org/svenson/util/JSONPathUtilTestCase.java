@@ -4,11 +4,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.svenson.ObjectFactory;
 import org.svenson.test.Bean;
 import org.svenson.test.BeanWithArray;
 import org.svenson.test.BeanWrapper;
@@ -110,5 +113,38 @@ public class JSONPathUtilTestCase
         assertThat(bean.getFoo(), is(value));
         pathUtil.setPropertyPath(m, "xxx._bar", value);
         assertThat((String)bean.getProperty("_bar"), is(value));
+    }
+    
+    @Test
+    public void testObjectFactory()
+    {
+        List<Map<String,String>> l = new ArrayList<Map<String,String>>();
+        
+        JSONPathUtil pathUtil = new JSONPathUtil();
+        
+        List<ObjectFactory<?>> factories = new ArrayList<ObjectFactory<?>>();
+        factories.add(new ObjectFactory()
+        {
+
+            @SuppressWarnings("unchecked")
+            public Object create(Class typeHint)
+            {
+                return new LinkedHashMap();
+            }
+
+            public boolean supports(Class cls)
+            {
+                return Map.class.isAssignableFrom(cls);
+            }
+        });
+        pathUtil.setObjectFactories(factories);
+        
+        final String value = "208397aaq";
+        pathUtil.setPropertyPath(l, "0.xxx", value);        
+        Map<String, String> map = l.get(0);
+        assertThat(map.get("xxx"), is(value));
+        assertThat(map, is(LinkedHashMap.class));
+        
+        
     }
 }
