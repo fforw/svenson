@@ -38,5 +38,11 @@ public @interface JSONProperty
      */
     boolean ignoreIfNull() default false;
     
+    /**
+     * Marks a property as read-only which means the JSON generator will generate a property for 
+     * such a method but the JSON parser should ignore it.
+     *  
+     * @return
+     */
     boolean readOnly() default false;
 }
