@@ -9,7 +9,9 @@ import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 
 /**
- * Annotates property methods as having another JSON name or as being either generally ignored or being ignored
+ * Annotates property methods to influence how they're converted to and from JSON.
+ * 
+ * You can mark properties as having another JSON name or as being either generally ignored or being ignored
  * when containing a <code>null</code> value.
  *
  * @author fforw at gmx dot de
