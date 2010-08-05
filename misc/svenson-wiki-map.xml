@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Svenson Wiki Map" height="489" scaling="false" />
+  <Content type="html">
+  <![CDATA[ 
+    <div style="text-align:center; width:778px; margin-left:auto; margin-right:auto;">
+    <img id="Image-Maps_8201008050538478" src="http://svenson.googlecode.com/svn/trunk/misc/svenson-cycle.png" usemap="#Image-Maps_8201008050538478" border="0" width="778" height="489" alt="" />
+    <map id="_Image-Maps_8201008050538478" name="Image-Maps_8201008050538478">
+    <area shape="rect" coords="6,248,230,334" href="http://code.google.com/p/svenson/wiki/FilterMapIn" alt="Filter / Map from Java to JSON" title="Filter / Map from Java to JSON"    />
+    <area shape="rect" coords="9,150,233,236" href="http://code.google.com/p/svenson/wiki/TypeConvertIn" alt="TypeConverter from Java to JSON" title="TypeConverter from Java to JSON"    />
+    <area shape="rect" coords="538,86,762,168" href="http://code.google.com/p/svenson/wiki/FilterMapOut" alt="Filter / Map from JSON to Java" title="Filter / Map from JSON to Java"    />
+    <area shape="rect" coords="537,168,761,239" href="http://code.google.com/p/svenson/wiki/TypeSelection" alt="Select an appropriate Java type" title="Select an appropriate Java type"    />
+    <area shape="rect" coords="537,240,761,309" href="http://code.google.com/p/svenson/wiki/ObjectCreation" alt="Create Java Objects" title="Create Java Objects"    />
+    <area shape="rect" coords="536,311,760,386" href="http://code.google.com/p/svenson/wiki/TypeConverterOut" alt="Type Converter from JSON to Java" title="Type Converter from JSON to Java"    />
+    </map>
+    </div>
+  ]]> 
+  </Content>
+</Module>
