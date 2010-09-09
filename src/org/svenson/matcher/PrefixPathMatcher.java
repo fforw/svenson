@@ -9,21 +9,21 @@ package org.svenson.matcher;
 public class PrefixPathMatcher
     implements PathMatcher
 {
-    private String parsePath;
+    private String pathPrefix;
     
     public PrefixPathMatcher(String parsePath)
     {
-        this.parsePath = parsePath;
+        this.pathPrefix = parsePath;
     }
     
     public boolean matches(String parsePath, Class typeHint)
     {
-        return this.parsePath.startsWith(parsePath);
+        return parsePath.startsWith(pathPrefix);
     }
 
     @Override
     public String toString()
     {
-        return "path starts with '" + parsePath + "'";
+        return "path starts with '" + pathPrefix + "'";
     }
 }

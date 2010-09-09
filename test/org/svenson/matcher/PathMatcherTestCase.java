@@ -46,15 +46,15 @@ public class PathMatcherTestCase
     @Test
     public void testPrefix()
     {
-        assertThat( new PrefixPathMatcher(".aaa[]").matches(".aaa", Object.class), is(true));
-        assertThat( new PrefixPathMatcher(".bbb[]").matches(".aaa", Object.class), is(false));
+        assertThat( new PrefixPathMatcher(".aaa").matches(".aaa[]", Object.class), is(true));
+        assertThat( new PrefixPathMatcher(".aaa").matches(".bbb[]", Object.class), is(false));
     }
     
     @Test
     public void testSuffix()
     {
-        assertThat( new SuffixPathMatcher(".aaa[].test").matches(".test", Object.class), is(true));
-        assertThat( new SuffixPathMatcher(".bbb[]").matches(".test", Object.class), is(false));
+        assertThat( new SuffixPathMatcher(".test").matches(".aaa[].test", Object.class), is(true));
+        assertThat( new SuffixPathMatcher(".test").matches(".bbb[]", Object.class), is(false));
     }
 
     @Test

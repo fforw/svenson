@@ -9,21 +9,21 @@ package org.svenson.matcher;
 public class SuffixPathMatcher
     implements PathMatcher
 {
-    private String parsePath;
+    private String pathSuffix;
     
-    public SuffixPathMatcher(String parsePath)
+    public SuffixPathMatcher(String pathSuffix)
     {
-        this.parsePath = parsePath;
+        this.pathSuffix = pathSuffix;
     }
     
     public boolean matches(String parsePath, Class typeHint)
     {
-        return this.parsePath.endsWith(parsePath);
+        return parsePath.endsWith(pathSuffix);
     }
 
     @Override
     public String toString()
     {
-        return "path ends with '" + parsePath + "'";
+        return "path ends with '" + pathSuffix + "'";
     }
 }
