@@ -66,7 +66,7 @@
                 <include name="**/*"/>
                 <exclude name="bin/**/*"/>
                 <exclude name="target/**/*"/>
-                <exclude name="synch*.sh"/>
+                <exclude name="*.sh"/>
             </zipfileset>
         </zip>
 <!--
