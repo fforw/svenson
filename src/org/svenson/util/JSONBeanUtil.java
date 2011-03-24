@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.svenson.DynamicProperties;
+import org.svenson.info.JSONClassInfo;
+import org.svenson.info.JSONPropertyInfo;
 
 /**
  * Contains some util methods to handle bean properties dynamically.
@@ -45,7 +47,7 @@ public class JSONBeanUtil
      */
     public static Set<String> getBeanPropertyNames(Object bean)
     {
-        return ClassInfo.forClass(bean.getClass()).getPropertyNames();
+        return JSONClassInfo.forClass(bean.getClass()).getPropertyNames();
     }
 
     /**
@@ -65,12 +67,12 @@ public class JSONBeanUtil
     public static Object getProperty(Object bean, String name)
         throws IllegalArgumentException
     {
-        PropertyInfo propertyInfo;
+        JSONPropertyInfo propertyInfo;
         if (bean instanceof Map)
         {
             return ((Map)bean).get(name);
         }
-        else if ((propertyInfo = ClassInfo.forClass(bean.getClass()).getPropertyInfo(name)) != null && propertyInfo.isReadable())
+        else if ((propertyInfo = JSONClassInfo.forClass(bean.getClass()).getPropertyInfo(name)) != null && propertyInfo.isReadable())
         {
                 return propertyInfo.getProperty(bean);
         }
@@ -104,12 +106,12 @@ public class JSONBeanUtil
     public static void setProperty(Object bean, String name, Object value)
         throws IllegalArgumentException
     {
-        PropertyInfo propertyInfo;
+        JSONPropertyInfo propertyInfo;
         if (bean instanceof Map)
         {
             ((Map)bean).put(name, value);
         }
-        else if ((propertyInfo = ClassInfo.forClass(bean.getClass()).getPropertyInfo(name)) != null && propertyInfo.isWriteable())
+        else if ((propertyInfo = JSONClassInfo.forClass(bean.getClass()).getPropertyInfo(name)) != null && propertyInfo.isWriteable())
         {
             propertyInfo.setProperty(bean, value);
         }

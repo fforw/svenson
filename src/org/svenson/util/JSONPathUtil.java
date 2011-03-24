@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 import org.svenson.DynamicProperties;
 import org.svenson.JSONParseException;
 import org.svenson.ObjectFactory;
+import org.svenson.info.JSONClassInfo;
+import org.svenson.info.JSONPropertyInfo;
 
 /**
  * Utility class that provides support for writing and reading java object graphs
@@ -104,7 +106,7 @@ public class JSONPathUtil
         {
             String[] parts = parsePropertyPath(path);
             Object lastDoc = null;
-            PropertyInfo lastPD = null;
+            JSONPropertyInfo lastPD = null;
             
             if (parts.length > 1)
             {
@@ -185,7 +187,7 @@ public class JSONPathUtil
                         part = unquotePart(part);   
                         Object child = null;
                         
-                        PropertyInfo propertyInfo = null;
+                        JSONPropertyInfo propertyInfo = null;
                         if (bean instanceof Map)
                         {
                             child = ((Map)bean).get(part);
@@ -219,7 +221,7 @@ public class JSONPathUtil
                             }
                             lastPD = null;
                         }
-                        else if ((propertyInfo = ClassInfo.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isReadable())
+                        else if ((propertyInfo = JSONClassInfo.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isReadable())
                         {
                             String propertyName = propertyInfo.getJavaPropertyName();
                             if (propertyName == null)
@@ -338,12 +340,12 @@ public class JSONPathUtil
             else
             {
                 part = unquotePart(part);
-                PropertyInfo propertyInfo;
+                JSONPropertyInfo propertyInfo;
                 if ( bean instanceof Map)
                 {
                     ((Map)bean).put(part, value);
                 }
-                else if ((propertyInfo = ClassInfo.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isWriteable())
+                else if ((propertyInfo = JSONClassInfo.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isWriteable())
                 {
                     Method setterMethod = propertyInfo.getSetterMethod();
                     if (setterMethod != null)

@@ -1,28 +1,21 @@
 package org.svenson;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.io.Writer;
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.svenson.converter.TypeConverter;
 import org.svenson.converter.TypeConverterRepository;
-import org.svenson.util.ExceptionWrapper;
+import org.svenson.info.JSONClassInfo;
+import org.svenson.info.JSONPropertyInfo;
 import org.svenson.util.JSONBeanUtil;
 import org.svenson.util.TypeConverterCache;
 
@@ -286,7 +279,7 @@ public class JSON
             JSONifier jsonifier;
 
             TypeConverter typeConverterFromClass = null;
-            
+
             if (oClass.isPrimitive())
             {
                 out.append(o);
@@ -364,137 +357,79 @@ public class JSON
             }            
             else
             {
-                BeanInfo info;
-                try
-                {
-                    info = Introspector.getBeanInfo(o.getClass());
-                }
-                catch (IntrospectionException e)
-                {
-                    throw ExceptionWrapper.wrap(e);
-                }
                 out.append('{');
                 boolean first = true;
-                PropertyDescriptor[] pds = info.getPropertyDescriptors();
-                for (int cp = 0; cp < pds.length; cp++)
-                {
 
-                    try
+                JSONClassInfo classInfo = JSONClassInfo.forClass(o.getClass());
+
+                for (JSONPropertyInfo propertyInfo : classInfo.getPropertyInfos())
+                {
+                    Method method = propertyInfo.getGetterMethod();
+                    if (method != null)
                     {
-                        PropertyDescriptor pd = pds[cp];
-                        Method method = pd.getReadMethod();
-                        Method writeMethod = pd.getWriteMethod();
-                        if (method != null)
+                        if (!propertyInfo.isIgnore() && (ignoredProps == null || !ignoredProps.contains(propertyInfo.getJsonName())))
                         {
 
-                            String name = pd.getName();
-                            boolean ignore = (ignoredProps != null && ignoredProps.contains(name));
-                            if (!name.equals("class") && !ignore)
+                            Object value = propertyInfo.getProperty(o);
+
+                            if (value != null || !propertyInfo.isIgnoreIfNull())
                             {
-
-
-                                JSONProperty jsonProperty = method
-                                .getAnnotation(JSONProperty.class);
-                                if (jsonProperty == null && writeMethod != null)
+                                if (typeConverterCache != null)
                                 {
-                                    jsonProperty = writeMethod.getAnnotation(JSONProperty.class);
-                                }
-                                if (jsonProperty != null)
-                                {
-                                    String nameFromAnnotation = jsonProperty.value();
-                                    if (nameFromAnnotation.length() > 0)
+                                    TypeConverter typeConverter = typeConverterCache.getTypeConverter( o, propertyInfo.getJavaPropertyName());
+                                    if (typeConverter != null)
                                     {
-                                        name = jsonProperty.value();
+                                        value = typeConverter.toJSON(value);
                                     }
-
-                                    ignore = jsonProperty.ignore();
                                 }
 
-                                Object value = null;
-                                if (!ignore)
+                                String idProperty = propertyInfo.getLinkIdProperty();
+                                if (idProperty != null)
                                 {
-                                    value = method.invoke(o, (Object[]) null);
+                                    if (value instanceof Collection)
+                                    {
+                                        List newList = new ArrayList();
+                                        for (Object childObject : ((Collection)value) )
+                                        {
+                                            newList.add(JSONBeanUtil.getProperty(childObject, idProperty));
+                                        }
+                                        value = newList;                                            
+                                    }
+                                    else if (value.getClass().isArray())
+                                    {
+                                        List newList = new ArrayList();
+                                        int len = Array.getLength(value);
+                                        for (int i = 0; i < len; i++)
+                                        {
+                                            newList.add(JSONBeanUtil.getProperty(Array.get(value, i), idProperty));
+                                        }
+                                        value = newList;
+                                    }
+                                    else if (value instanceof Map)
+                                    {
+                                        Map newMap = new HashMap();
+                                        for (Map.Entry<Object,Object> e : ((Map<Object,Object>)value).entrySet())
+                                        {
+                                            newMap.put(e.getKey(), JSONBeanUtil.getProperty(e.getValue(), idProperty));
+                                        }
+                                        value = newMap;
+                                    }
+                                    else
+                                    {
+                                        value = JSONBeanUtil.getProperty(value, idProperty);
+                                    }
                                 }
 
-                                if (value == null && jsonProperty != null && jsonProperty.ignoreIfNull())
+                                if (!first)
                                 {
-                                    ignore = true;
+                                    out.append(',');
                                 }
-
-                                if (!ignore)
-                                {
-                                    if (typeConverterCache != null)
-                                    {
-                                        TypeConverter typeConverter = typeConverterCache.getTypeConverter( o, pd.getName());
-                                        if (typeConverter != null)
-                                        {
-                                            value = typeConverter.toJSON(value);
-                                        }
-                                    }
-                                    
-                                    JSONReference jSONReference = method.getAnnotation(JSONReference.class);
-                                    if (jSONReference == null && writeMethod != null)
-                                    {
-                                        jSONReference = writeMethod.getAnnotation(JSONReference.class);
-                                    }
-                                    
-                                    if (jSONReference != null)
-                                    {
-                                        String idProperty = jSONReference.idProperty();
-                                        if (value instanceof Collection)
-                                        {
-                                            List newList = new ArrayList();
-                                            for (Object childObject : ((Collection)value) )
-                                            {
-                                                newList.add(JSONBeanUtil.getProperty(childObject, idProperty));
-                                            }
-                                            value = newList;                                            
-                                        }
-                                        else if (value.getClass().isArray())
-                                        {
-                                            List newList = new ArrayList();
-                                            int len = Array.getLength(value);
-                                            for (int i = 0; i < len; i++)
-                                            {
-                                                newList.add(JSONBeanUtil.getProperty(Array.get(value, i), idProperty));
-                                            }
-                                            value = newList;
-                                        }
-                                        else if (value instanceof Map)
-                                        {
-                                            Map newMap = new HashMap();
-                                            for (Map.Entry<Object,Object> e : ((Map<Object,Object>)value).entrySet())
-                                            {
-                                                newMap.put(e.getKey(), JSONBeanUtil.getProperty(e.getValue(), idProperty));
-                                            }
-                                            value = newMap;
-                                        }
-                                        else
-                                        {
-                                            value = JSONBeanUtil.getProperty(value, idProperty);
-                                        }
-                                    }
-                                    
-                                    if (!first)
-                                    {
-                                        out.append(',');
-                                    }
-                                    quote(out, name);
-                                    out.append(':');
-                                    dumpObject(out, value, '\0', ignoredProps);
-                                    first = false;
-                                }
+                                quote(out, propertyInfo.getJsonName());
+                                out.append(':');
+                                dumpObject(out, value, '\0', ignoredProps);
+                                first = false;
                             }
                         }
-
-                    }
-                    catch (IllegalAccessException e)
-                    {
-                        throw ExceptionWrapper.wrap(e);
-                    }
-                    catch (InvocationTargetException e)
-                    {
-                        throw ExceptionWrapper.wrap(e);
                     }
 
                 }

@@ -64,7 +64,9 @@ public class JSONTestCase
     {
         String jsonDataset=json.forValue(new SimpleBean(new int[]{1,2},"baz"));
         //assertEquals("{bar:\"baz\",_class:\""+JSONTestCase.class.getName()+"$SimpleBean\",foo:[1,2]}",json);
-        assertEquals("{\"bar\":\"baz\",\"foo\":[1,2]}",jsonDataset);
+        
+        assertThat(jsonDataset, containsString("\"bar\":\"baz\""));
+        assertThat(jsonDataset, containsString("\"foo\":[1,2]"));
     }
 
     @Test

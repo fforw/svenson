@@ -1,11 +1,8 @@
 package org.svenson;
 
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.slf4j.Logger;
@@ -24,17 +19,16 @@ import org.slf4j.LoggerFactory;
 import org.svenson.converter.JSONConverter;
 import org.svenson.converter.TypeConverter;
 import org.svenson.converter.TypeConverterRepository;
+import org.svenson.info.JSONClassInfo;
+import org.svenson.info.JSONPropertyInfo;
 import org.svenson.matcher.EqualsPathMatcher;
 import org.svenson.matcher.PathMatcher;
 import org.svenson.tokenize.JSONCharacterSource;
 import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
 import org.svenson.tokenize.TokenType;
-import org.svenson.util.ClassInfo;
 import org.svenson.util.ExceptionWrapper;
-import org.svenson.util.PropertyInfo;
 import org.svenson.util.TypeConverterCache;
-import org.svenson.util.ValueHolder;
 
 /**
  * Converts JSON strings into graphs of java objects. It offers
@@ -62,10 +56,6 @@ public class JSONParser
 {
     protected static Logger log = LoggerFactory.getLogger(JSONParser.class);
 
-    private static ConcurrentMap<Class, ValueHolder<Map<String,Method>>> classToAddMethods = new ConcurrentHashMap<Class, ValueHolder<Map<String,Method>>>();
-
-    private static ConcurrentMap<Class,ValueHolder<Map<String,Class>>> classToTypeHintFromAnnotation = new ConcurrentHashMap<Class, ValueHolder<Map<String,Class>>>();
-    
     private final static JSONParser defaultJSONParser = new JSONParser();
 
     private Map<PathMatcher, Class> typeHints = new HashMap<PathMatcher, Class>();
@@ -558,11 +548,11 @@ public class JSONParser
             boolean isProperty = false;
             boolean isIgnoredOnParse = false;
             Method addMethod = null;
-            ClassInfo classInfo = null;
-            PropertyInfo propertyInfo = null;
+            JSONClassInfo classInfo = null;
+            JSONPropertyInfo propertyInfo = null;
             if (!containerIsMap)
             {
-                classInfo = ClassInfo.forClass(cx.target.getClass());
+                classInfo = JSONClassInfo.forClass(cx.target.getClass());
                 propertyInfo = classInfo.getPropertyInfo(jsonName);
                 if (propertyInfo != null)
                 {
@@ -582,7 +572,11 @@ public class JSONParser
                     }
                     isProperty = writeable || isIgnoredOnParse;
                 }
-                addMethod = getAddMethod(cx.target, jsonName);
+                
+                if (propertyInfo != null)
+                {
+                    addMethod = propertyInfo.getAdderMethod();
+                }
             }
 
             TypeConverter typeConverter = null;
@@ -618,7 +612,11 @@ public class JSONParser
 
                     if (isProperty)
                     {
-                        memberType = getTypeHintFromAnnotation(cx, name);
+                        JSONPropertyInfo propertyInfo2 = JSONClassInfo.forClass(cx.target.getClass()).getPropertyInfo(name);
+                        if (propertyInfo2 != null)
+                        {
+                            memberType = propertyInfo2.getTypeHint();
+                        }
                     }
 
                     newTarget = createNewTargetInstance(typeHint, true);
@@ -644,7 +642,13 @@ public class JSONParser
                         }
                         
                         newTarget = createNewTargetInstance(arrayTypeHint, false);
-                        Class memberType = getTypeHintFromAnnotation(cx, name);
+                        
+                        JSONPropertyInfo propertyInfo2 = JSONClassInfo.forClass(cx.target.getClass()).getPropertyInfo(name);
+                        Class memberType = null;
+                        if (propertyInfo2 != null)
+                        {
+                            memberType = propertyInfo2.getTypeHint();
+                        }
                         parseArrayInto(cx.push(newTarget,memberType, "."+name), tokenizer);
                     }
                     else
@@ -716,25 +720,6 @@ public class JSONParser
         } // end while
     }
 
-//    private boolean isLinkedProperty(Object target, String name) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
-//    {
-//        PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(target, name);
-//        
-//        JSONReference jSONReferenceAnno = desc.getReadMethod().getAnnotation(JSONReference.class);
-//        Method writeMethod = desc.getWriteMethod();
-//        if (jSONReferenceAnno == null && writeMethod != null)
-//        {
-//            jSONReferenceAnno = writeMethod.getAnnotation(JSONReference.class);
-//        }
-//        return jSONReferenceAnno != null;
-//    }
-//
-//    private boolean isReadOnlyProperty(Object target, String name) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
-//    {
-//        PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(target, name);
-//        JSONProperty anno = desc.getReadMethod().getAnnotation(JSONProperty.class);
-//        return anno != null && anno.readOnly();
-//    }
 
     private Class getReplacementForKnownInterface(Class type)
     {
@@ -795,43 +780,6 @@ public class JSONParser
             }
         }
         return null;
-    }
-
-    private Method getAddMethod(Object bean, String name)
-    {
-        ValueHolder<Map<String,Method>> holder = new ValueHolder<Map<String,Method>>();
-        
-        Class cls = bean.getClass();
-        ValueHolder<Map<String,Method>> existing = classToAddMethods.putIfAbsent(cls, holder);
-        if (existing != null)
-        {
-            holder = existing;
-        }
-        
-        Map<String,Method> addMethods = holder.getValue();
-        if (addMethods == null)
-        {
-            synchronized (holder)
-            {
-                addMethods = holder.getValue();
-                if (addMethods == null)
-                {
-                    addMethods = new HashMap<String, Method>();
-                    for (Method m : cls.getMethods())
-                    {
-                        String methodName = m.getName();
-                        if (methodName.startsWith("add") && (m.getModifiers() & Modifier.PUBLIC) != 0 && m.getParameterTypes().length == 1 )
-                        {
-                            String propertyName = Introspector.decapitalize(methodName.substring(3));
-                            addMethods.put(propertyName, m);
-                        }
-                    }
-    
-                    holder.setValue(addMethods);
-                }
-            }
-        }
-        return addMethods.get(name);            
     }
 
     private Object convertValueTo(Object value, Class targetClass)
@@ -973,7 +921,7 @@ public class JSONParser
         
         if (memberType == null && isProperty)
         {
-            PropertyInfo propertyInfo = ClassInfo.forClass(cx.target.getClass()).getPropertyInfo(name);
+            JSONPropertyInfo propertyInfo = JSONClassInfo.forClass(cx.target.getClass()).getPropertyInfo(name);
             if (propertyInfo != null)
             {
                 Class typeOfProperty = propertyInfo.getTypeOfProperty();
@@ -1036,66 +984,6 @@ public class JSONParser
         }
 
         return typeHint;
-    }
-
-        
-    private Class getTypeHintFromAnnotation(ParseContext cx, String name)
-    {
-        Class cls = cx.target.getClass();
-
-        ValueHolder<Map<String,Class>> holder = new ValueHolder<Map<String,Class>>();
-        ValueHolder<Map<String,Class>> existing = classToTypeHintFromAnnotation.putIfAbsent(cls, holder);
-        if (existing != null)
-        {
-            holder = existing;
-        }
-
-        Map<String,Class> typeHintsFromAnnotation = holder.getValue();
-        if (typeHintsFromAnnotation == null)
-        {
-            synchronized (holder)
-            {
-                typeHintsFromAnnotation = holder.getValue();
-                if (typeHintsFromAnnotation == null)
-                {
-                    typeHintsFromAnnotation = new HashMap<String, Class>();
-
-                    for (Method m : cls.getMethods())
-                    {
-                        String propertyName = getPropertyNameFromMethod(m);
-                        if (propertyName != null)
-                        {
-                            JSONTypeHint typeHintAnnotation = m.getAnnotation(JSONTypeHint.class);
-                            if (typeHintAnnotation != null)
-                            {
-                                typeHintsFromAnnotation.put(propertyName, typeHintAnnotation.value());
-                            }
-                            
-                            Class<?>[] parameterTypes = m.getParameterTypes();
-                            if (parameterTypes.length == 1 && parameterTypes[0].isArray())
-                            {
-                                typeHintsFromAnnotation.put(propertyName, parameterTypes[0].getComponentType());
-                            }
-                        }                        
-                    }
-                    holder.setValue( typeHintsFromAnnotation);
-                }
-            }
-        }
-        return typeHintsFromAnnotation.get(name);
-    }
-
-    private String getPropertyNameFromMethod(Method m)
-    {
-        String methodName = m.getName();
-        boolean isIsser = methodName.startsWith("is");
-        boolean isGetter = isIsser || methodName.startsWith("get");
-        boolean isSetter = methodName.startsWith("set");
-        if (isGetter || isSetter)
-        {
-            return Introspector.decapitalize(methodName.substring(isIsser ? 2 : 3));
-        }
-        return null;
     }
 
     private class ParseContext
