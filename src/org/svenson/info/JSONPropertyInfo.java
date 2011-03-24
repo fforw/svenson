@@ -6,6 +6,13 @@ import java.lang.reflect.Method;
 import org.svenson.JSONParseException;
 import org.svenson.util.ExceptionWrapper;
 
+/**
+ * Encapsulates svenson's knowledge about one property inside a class. An instance
+ * of this is created for every readable or writeable property and for add* Methods. 
+ * 
+ * @author fforw at gmx dot de
+ *
+ */
 public class JSONPropertyInfo
 {
     private Method getterMethod;
@@ -18,7 +25,7 @@ public class JSONPropertyInfo
     
     private String javaPropertyName;
 
-    private Class typeHint;
+    private Class<?> typeHint;
 
     private String jsonName;
     
@@ -121,7 +128,7 @@ public class JSONPropertyInfo
     }
 
 
-    public Class getTypeOfProperty()
+    public Class<?> getTypeOfProperty()
     {
         if (setterMethod != null)
         {
@@ -143,13 +150,13 @@ public class JSONPropertyInfo
     }
     
     
-    public Class getTypeHint()
+    public Class<?> getTypeHint()
     {
         return typeHint;
     }
 
 
-    public void setTypeHint(Class typeHint)
+    public void setTypeHint(Class<?> typeHint)
     {
         this.typeHint = typeHint;
     }
@@ -225,7 +232,13 @@ public class JSONPropertyInfo
         }
     }
 
-    
-    
-    
+
+    @Override
+    public String toString()
+    {
+        return super.toString() + " adderMethod=" + adderMethod + ", getterMethod=" + getterMethod +
+            ", ignore=" + ignore + ", ignoreIfNull=" + ignoreIfNull + ", javaPropertyName=" +
+            javaPropertyName + ", jsonName=" + jsonName + ", linkIdProperty=" + linkIdProperty +
+            ", readOnly=" + readOnly + ", setterMethod=" + setterMethod + ", typeHint=" + typeHint ;
+    }
 }

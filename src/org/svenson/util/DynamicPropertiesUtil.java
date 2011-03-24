@@ -1,14 +1,8 @@
 package org.svenson.util;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.svenson.DynamicProperties;
-import org.svenson.JSONParser;
 
 /**
  * Renamed to {@link JSONBeanUtil}.

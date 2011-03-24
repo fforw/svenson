@@ -2,7 +2,6 @@ package org.svenson.info;
 
 import java.beans.Introspector;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
@@ -12,11 +11,18 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.svenson.JSONParseException;
 import org.svenson.JSONProperty;
 import org.svenson.JSONReference;
 import org.svenson.JSONTypeHint;
 
+import com.sun.xml.internal.bind.v2.model.core.ClassInfo;
+
+/**
+ * Encapsulates svensons knowledge about a class. Provides a constructor method. 
+ * 
+ * @author fforw at gmx dot de
+ *
+ */
 public class JSONClassInfo
 {
 
@@ -28,28 +34,24 @@ public class JSONClassInfo
 
     private static final String ISSER_PREFIX = "is";
 
-    private static ConcurrentMap<Class<?>, JSONClassInfo> holders;
+    protected static ConcurrentMap<Class<?>, JSONClassInfo> holders;
     static
     {
         clear();
     }
-    
+
     private Class cls;
 
-    private Map<String, JSONPropertyInfo> propertyInfos;
+    protected Map<String, JSONPropertyInfo> propertyInfos;
 
-    public JSONClassInfo(Class cls)
+
+    protected JSONClassInfo(Class cls)
     {
         this.cls = cls;
     }
-
-    public synchronized void init()
+    
+    private synchronized void init()
     {
-        if (this.propertyInfos != null)
-        {
-            return;
-        }
-        
         Map<String, JSONPropertyInfo> propertyInfos = new HashMap<String, JSONPropertyInfo>();
 
         for (Method m : cls.getMethods())
@@ -74,14 +76,15 @@ public class JSONClassInfo
                     pair = new JSONPropertyInfo(javaPropertyName, null, m);
                     propertyInfos.put(javaPropertyName, pair);
                 }
-                
+
                 Class<?>[] parameterTypes;
                 Class<?> paramType;
-                if ((parameterTypes = m.getParameterTypes()).length == 1 && ( paramType = parameterTypes[0]).isArray())
+                if ((parameterTypes = m.getParameterTypes()).length == 1 &&
+                    (paramType = parameterTypes[0]).isArray())
                 {
                     pair.setTypeHint(paramType.getComponentType());
                 }
-                
+
             }
             else if (m.getParameterTypes().length == 0 && !m.getReturnType().equals(void.class))
             {
@@ -95,7 +98,8 @@ public class JSONClassInfo
                     }
                     else
                     {
-                        propertyInfos.put(javaPropertyName, new JSONPropertyInfo(javaPropertyName, m, null));
+                        propertyInfos.put(javaPropertyName, new JSONPropertyInfo(javaPropertyName,
+                            m, null));
                     }
                 }
                 else if (name.startsWith(ISSER_PREFIX))
@@ -108,11 +112,12 @@ public class JSONClassInfo
                     }
                     else
                     {
-                        propertyInfos.put(javaPropertyName, new JSONPropertyInfo(javaPropertyName, m, null));
+                        propertyInfos.put(javaPropertyName, new JSONPropertyInfo(javaPropertyName,
+                            m, null));
                     }
                 }
             }
-            else if (name.startsWith(ADDER_PREFIX) && m.getParameterTypes().length == 1 )
+            else if (name.startsWith(ADDER_PREFIX) && m.getParameterTypes().length == 1)
             {
                 String javaPropertyName = propertyName(name, ADDER_PREFIX.length());
                 JSONPropertyInfo pair = propertyInfos.get(javaPropertyName);
@@ -154,22 +159,22 @@ public class JSONClassInfo
             }
             propertyInfo.setJsonName(jsonPropertyName);
 
-            JSONReference refAnno = getAnnotation(JSONReference.class, getterMethod,
-                setterMethod);
-            
+            JSONReference refAnno = getAnnotation(JSONReference.class, getterMethod, setterMethod);
+
             if (refAnno != null)
             {
                 propertyInfo.setLinkIdProperty(refAnno.idProperty());
             }
-            
-            JSONTypeHint typeHintAnno = getAnnotation(JSONTypeHint.class, getterMethod, setterMethod);
+
+            JSONTypeHint typeHintAnno = getAnnotation(JSONTypeHint.class, getterMethod,
+                setterMethod);
             Class<?>[] parameterTypes;
             Class paramType;
             if (typeHintAnno != null)
             {
                 propertyInfo.setTypeHint(typeHintAnno.value());
             }
-            
+
             this.propertyInfos.put(jsonPropertyName, propertyInfo);
         }
     }
@@ -197,7 +202,6 @@ public class JSONClassInfo
     }
 
 
-        
     public JSONPropertyInfo getPropertyInfo(String jsonPropertyName)
     {
         return propertyInfos.get(jsonPropertyName);
@@ -208,32 +212,49 @@ public class JSONClassInfo
     {
         return propertyInfos.keySet();
     }
-    
+
+
     public Collection<JSONPropertyInfo> getPropertyInfos()
     {
         return propertyInfos.values();
     }
 
+
+    /**
+     * Returns the {@link ClassInfo} for the given class.
+     * 
+     * @param cls   class
+     * @return
+     */
     public static JSONClassInfo forClass(Class cls)
     {
         JSONClassInfo holder = new JSONClassInfo(cls);
         JSONClassInfo existing = holders.putIfAbsent(cls, holder);
         if (existing != null)
         {
-            holder = existing;
+            return existing;
         }
-        
-        holder.init();
-        return holder;
+        else
+        {
+            holder.init();
+            return holder;
+        }
     }
-    
+
+
     /**
-     * Release all class infos.
-     * 
+     * Releases/clears all class infos.
      */
     public static void clear()
     {
         holders = new ConcurrentHashMap<Class<?>, JSONClassInfo>();
     }
+
+    @Override
+    public String toString()
+    {
+        return super.toString() + " cls = " + cls + ", propertyInfos = " + propertyInfos;
+    }
+
     
 }

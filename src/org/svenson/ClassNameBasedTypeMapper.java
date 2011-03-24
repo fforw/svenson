@@ -1,5 +1,12 @@
 package org.svenson;
 
+/**
+ * Typemapper that maps simple class name strings to classes, with configurable base package
+ * and optional base type enforcement.
+ * 
+ * @author fforw at gmx dot de
+ *
+ */
 public class ClassNameBasedTypeMapper extends AbstractPropertyValueBasedTypeMapper
 {
     private String basePackage;

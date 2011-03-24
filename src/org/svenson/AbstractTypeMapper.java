@@ -4,6 +4,12 @@ import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
 import org.svenson.tokenize.TokenType;
 
+/**
+ * Abstract base class for Typemappers offering some helper methods.
+ * 
+ * @author fforw at gmx dot de
+ *
+ */
 public abstract class AbstractTypeMapper implements TypeMapper
 {
     /**
