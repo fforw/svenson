@@ -63,7 +63,11 @@ public class ExceptionWrapper
 
     public static SvensonRuntimeException wrap(ArrayIndexOutOfBoundsException e)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new SvensonRuntimeException(e);
+    }
+
+    public static SvensonRuntimeException wrap(IllegalArgumentException e)
+    {
+        return new SvensonRuntimeException(e);
     }
 }

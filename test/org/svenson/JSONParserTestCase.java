@@ -83,7 +83,7 @@ public class JSONParserTestCase
     @Test
     public void simpleBeanParsing()
     {
-        Bean b = parser.parse(Bean.class, "{\"foo\":12}");
+        Bean b = parser.parse(Bean.class, "{\"foo\":\"12\"}");
 
         assertThat(b, is(notNullValue()));
         assertThat(b.getFoo(), is("12"));

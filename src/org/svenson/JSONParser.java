@@ -19,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.svenson.converter.JSONConverter;
@@ -31,7 +30,9 @@ import org.svenson.tokenize.JSONCharacterSource;
 import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
 import org.svenson.tokenize.TokenType;
+import org.svenson.util.ClassInfo;
 import org.svenson.util.ExceptionWrapper;
+import org.svenson.util.PropertyInfo;
 import org.svenson.util.TypeConverterCache;
 import org.svenson.util.ValueHolder;
 
@@ -557,17 +558,24 @@ public class JSONParser
             boolean isProperty = false;
             boolean isIgnoredOnParse = false;
             Method addMethod = null;
+            ClassInfo classInfo = null;
+            PropertyInfo propertyInfo = null;
             if (!containerIsMap)
             {
-                name = getPropertyNameFromAnnotation(cx.target, jsonName);
+                classInfo = ClassInfo.forClass(cx.target.getClass());
+                propertyInfo = classInfo.getPropertyInfo(jsonName);
+                if (propertyInfo != null)
+                {
+                    name = propertyInfo.getJavaPropertyName();
+                }
                 isProperty = false;
                 isIgnoredOnParse = false;
                 if (name != null)
                 {
-                    boolean writeable = PropertyUtils.isWriteable(cx.target, name);
-                    isIgnoredOnParse = (!writeable && isReadOnlyProperty(cx.target, name)); 
+                    boolean writeable = propertyInfo.isWriteable();
+                    isIgnoredOnParse = (!writeable && propertyInfo.isReadOnly()); 
                     
-                    if (isLinkedProperty(cx.target, name))
+                    if (propertyInfo.isLinkedProperty())
                     {
                         // XXX: make target/name combination and the ignored value available to the caller? how?
                         isIgnoredOnParse = true;
@@ -673,6 +681,12 @@ public class JSONParser
                 value = typeConverter.fromJSON(value);
             }
             
+            if (typeHint == null && propertyInfo != null)
+            {
+                typeHint = propertyInfo.getTypeOfProperty();
+            }
+            
+            
             if(typeHint != null && !isIgnoredOnParse)
             {
                 value = convertValueTo(value, typeHint);
@@ -682,27 +696,7 @@ public class JSONParser
             {
                 if (!isIgnoredOnParse)
                 {
-                    try
-                    {
-                        Class targetClass = PropertyUtils.getPropertyType(cx.target, name);
-//                        if (typeConverter != null)
-//                        {
-//                            value = typeConverter.fromJSON(value);
-//                        }
-                        PropertyUtils.setProperty(cx.target, name, value);
-                    }
-                    catch (IllegalAccessException e)
-                    {
-                        throw ExceptionWrapper.wrap(e);
-                    }
-                    catch (InvocationTargetException e)
-                    {
-                        throw ExceptionWrapper.wrap(e);
-                    }
-                    catch (NoSuchMethodException e)
-                    {
-                        throw ExceptionWrapper.wrap(e);
-                    }
+                    propertyInfo.setProperty(cx.target,value);
                 }
             }
             else if (containerIsMap)
@@ -722,25 +716,25 @@ public class JSONParser
         } // end while
     }
 
-    private boolean isLinkedProperty(Object target, String name) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
-    {
-        PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(target, name);
-        
-        JSONReference jSONReferenceAnno = desc.getReadMethod().getAnnotation(JSONReference.class);
-        Method writeMethod = desc.getWriteMethod();
-        if (jSONReferenceAnno == null && writeMethod != null)
-        {
-            jSONReferenceAnno = writeMethod.getAnnotation(JSONReference.class);
-        }
-        return jSONReferenceAnno != null;
-    }
-
-    private boolean isReadOnlyProperty(Object target, String name) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
-    {
-        PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(target, name);
-        JSONProperty anno = desc.getReadMethod().getAnnotation(JSONProperty.class);
-        return anno != null && anno.readOnly();
-    }
+//    private boolean isLinkedProperty(Object target, String name) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
+//    {
+//        PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(target, name);
+//        
+//        JSONReference jSONReferenceAnno = desc.getReadMethod().getAnnotation(JSONReference.class);
+//        Method writeMethod = desc.getWriteMethod();
+//        if (jSONReferenceAnno == null && writeMethod != null)
+//        {
+//            jSONReferenceAnno = writeMethod.getAnnotation(JSONReference.class);
+//        }
+//        return jSONReferenceAnno != null;
+//    }
+//
+//    private boolean isReadOnlyProperty(Object target, String name) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
+//    {
+//        PropertyDescriptor desc = PropertyUtils.getPropertyDescriptor(target, name);
+//        JSONProperty anno = desc.getReadMethod().getAnnotation(JSONProperty.class);
+//        return anno != null && anno.readOnly();
+//    }
 
     private Class getReplacementForKnownInterface(Class type)
     {
@@ -979,11 +973,16 @@ public class JSONParser
         
         if (memberType == null && isProperty)
         {
-            Class typeOfProperty = getTypeOfProperty(cx, name);
-            if (typeOfProperty != null)
+            PropertyInfo propertyInfo = ClassInfo.forClass(cx.target.getClass()).getPropertyInfo(name);
+            if (propertyInfo != null)
             {
-                memberType = typeOfProperty;
+                Class typeOfProperty = propertyInfo.getTypeOfProperty();
+                if (typeOfProperty != null)
+                {
+                    memberType = typeOfProperty;
+                }
             }
+            
         }
         
         if (log.isDebugEnabled())
@@ -1004,38 +1003,6 @@ public class JSONParser
         return memberType;
     }
 
-    private Class getTypeOfProperty(ParseContext cx, String name)
-    {
-        Class result = null;
-        Object target = cx.target;
-        PropertyDescriptor pd;
-        try
-        {
-            pd = PropertyUtils.getPropertyDescriptor(target, name);
-
-            if (pd != null)
-            {
-                Method m = pd.getWriteMethod();
-                if (m != null)
-                {
-                    result = m.getParameterTypes()[0];
-                }
-            }
-        }
-        catch (IllegalAccessException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (InvocationTargetException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (NoSuchMethodException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-        return result;
-    }
 
     private Class getTypeHint(String parsePathInfo, JSONTokenizer tokenizer, Class typeHint, boolean consultTypeMapper)
     {
@@ -1189,57 +1156,4 @@ public class JSONParser
         }
     }
 
-    /**
-     * Returns the java bean property name for the given json property name.
-     *
-     * @param target    bean
-     * @param value     json property name
-     * @return java bean name, not guaranteed to actually exist.
-     *
-     */
-    public static String getPropertyNameFromAnnotation(Object target, String value)
-    {
-        for (PropertyDescriptor pd : PropertyUtils.getPropertyDescriptors(target.getClass()))
-        {
-            String jsonPropertyName = getJSONPropertyNameFromDescriptor(target, pd);
-
-            if (jsonPropertyName.equals(value))
-            {
-                return pd.getName();
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns the JSON property name for the given property descriptor
-     *
-     * @param bean
-     * @param pd
-     */
-    public static String getJSONPropertyNameFromDescriptor(Object bean, PropertyDescriptor pd)
-    {
-        Method readMethod = pd.getReadMethod();
-        Method writeMethod = pd.getWriteMethod();
-
-        JSONProperty jsonProperty = null;
-        if (readMethod != null)
-        {
-            jsonProperty = readMethod.getAnnotation(JSONProperty.class);
-        }
-        if (jsonProperty == null && writeMethod != null)
-        {
-            jsonProperty = writeMethod.getAnnotation(JSONProperty.class);
-        }
-
-        if (jsonProperty != null && !jsonProperty.value().equals("") )
-        {
-            return jsonProperty.value();
-        }
-        else
-        {
-            return pd.getName();
-        }
-    }
 }

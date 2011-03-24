@@ -1,24 +1,11 @@
 package org.svenson.util;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.svenson.DynamicProperties;
-import org.svenson.JSONParseException;
-import org.svenson.JSONParser;
-import org.svenson.JSONTypeHint;
-import org.svenson.ObjectFactory;
 
 /**
  * Contains some util methods to handle bean properties dynamically.
@@ -58,19 +45,7 @@ public class JSONBeanUtil
      */
     public static Set<String> getBeanPropertyNames(Object bean)
     {
-        PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(bean.getClass());
-        Set<String> names  = new HashSet<String>();
-        for (PropertyDescriptor pd : pds)
-        {
-            Method readMethod = pd.getReadMethod();
-            Method writeMethod = pd.getWriteMethod();
-            if (readMethod != null && writeMethod != null)
-            {
-               String name = JSONParser.getJSONPropertyNameFromDescriptor(bean, pd);
-               names.add(name);
-            }
-        }
-        return names;
+        return ClassInfo.forClass(bean.getClass()).getPropertyNames();
     }
 
     /**
@@ -90,39 +65,24 @@ public class JSONBeanUtil
     public static Object getProperty(Object bean, String name)
         throws IllegalArgumentException
     {
-        try
+        PropertyInfo propertyInfo;
+        if (bean instanceof Map)
         {
-            String propertyName = JSONParser.getPropertyNameFromAnnotation(bean, name);
-            if (propertyName != null && PropertyUtils.isReadable(bean, propertyName))
-            {
-                return PropertyUtils.getProperty(bean, propertyName);
-            }
-            else if (bean instanceof DynamicProperties)
-            {
-                return ((DynamicProperties) bean).getProperty(name);
-            }
-            else if (bean instanceof Map)
-            {
-                return ((Map)bean).get(name);
-            }
-            else
-            {
-                throw new IllegalArgumentException(bean +
-                    " has no JSON property with the name '" + name +
-                    "' and does not implements DynamicProperties");
-            }
+            return ((Map)bean).get(name);
         }
-        catch (IllegalAccessException e)
+        else if ((propertyInfo = ClassInfo.forClass(bean.getClass()).getPropertyInfo(name)) != null && propertyInfo.isReadable())
         {
-            throw ExceptionWrapper.wrap(e);
+                return propertyInfo.getProperty(bean);
         }
-        catch (InvocationTargetException e)
+        else if (bean instanceof DynamicProperties)
         {
-            throw ExceptionWrapper.wrap(e);
+            return ((DynamicProperties) bean).getProperty(name);
         }
-        catch (NoSuchMethodException e)
+        else
         {
-            throw ExceptionWrapper.wrap(e);
+            throw new IllegalArgumentException(bean +
+                " has no JSON property with the name '" + name +
+                "' and does not implements DynamicProperties");
         }
     }
 
@@ -144,39 +104,24 @@ public class JSONBeanUtil
     public static void setProperty(Object bean, String name, Object value)
         throws IllegalArgumentException
     {
-        try
+        PropertyInfo propertyInfo;
+        if (bean instanceof Map)
         {
-            String propertyName = JSONParser.getPropertyNameFromAnnotation(bean, name);
-            if (propertyName != null && PropertyUtils.isWriteable(bean, propertyName))
-            {
-                PropertyUtils.setProperty(bean, propertyName, value);
-            }
-            else if (bean instanceof DynamicProperties)
-            {
-                ((DynamicProperties) bean).setProperty(name, value);
-            }
-            else if (bean instanceof Map)
-            {
-                ((Map)bean).put(name, value);
-            }
-            else
-            {
-                throw new IllegalArgumentException(bean +
-                    " has no JSON property with the name '" + name +
-                    "' and does not implements DynamicProperties");
-            }
+            ((Map)bean).put(name, value);
         }
-        catch (IllegalAccessException e)
+        else if ((propertyInfo = ClassInfo.forClass(bean.getClass()).getPropertyInfo(name)) != null && propertyInfo.isWriteable())
         {
-            throw ExceptionWrapper.wrap(e);
+            propertyInfo.setProperty(bean, value);
         }
-        catch (InvocationTargetException e)
+        else if (bean instanceof DynamicProperties)
         {
-            throw ExceptionWrapper.wrap(e);
+            ((DynamicProperties) bean).setProperty(name, value);
         }
-        catch (NoSuchMethodException e)
+        else
         {
-            throw ExceptionWrapper.wrap(e);
+            throw new IllegalArgumentException(bean +
+                " has no JSON property with the name '" + name +
+                "' and does not implements DynamicProperties");
         }
     }
 }

@@ -1,6 +1,5 @@
 package org.svenson.util;
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,11 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.svenson.DynamicProperties;
 import org.svenson.JSONParseException;
-import org.svenson.JSONParser;
-import org.svenson.JSONTypeHint;
 import org.svenson.ObjectFactory;
 
 /**
@@ -108,7 +104,7 @@ public class JSONPathUtil
         {
             String[] parts = parsePropertyPath(path);
             Object lastDoc = null;
-            PropertyDescriptor lastPD = null;
+            PropertyInfo lastPD = null;
             
             if (parts.length > 1)
             {
@@ -151,7 +147,7 @@ public class JSONPathUtil
                                 Class type = null;
                                 if (lastPD != null)
                                 {
-                                    type = getTypeHintFromAnnotation(lastPD);
+                                    type = lastPD.getTypeHint();
                                 }
                                 if (type == null)
                                 {
@@ -189,7 +185,7 @@ public class JSONPathUtil
                         part = unquotePart(part);   
                         Object child = null;
                         
-                        PropertyDescriptor pd = null;
+                        PropertyInfo propertyInfo = null;
                         if (bean instanceof Map)
                         {
                             child = ((Map)bean).get(part);
@@ -203,8 +199,8 @@ public class JSONPathUtil
                                 Class type = null;
                                 if (lastPD != null)
                                 {
-                                    Method wm = lastPD.getWriteMethod();
-                                    type = getTypeHintFromAnnotation(lastPD);
+                                    Method wm = lastPD.getSetterMethod();
+                                    type = lastPD.getTypeHint();
                                 }
                                 else
                                 {
@@ -223,67 +219,64 @@ public class JSONPathUtil
                             }
                             lastPD = null;
                         }
-                        else 
+                        else if ((propertyInfo = ClassInfo.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isReadable())
                         {
-                            String propertyName = JSONParser.getPropertyNameFromAnnotation(bean, part);
+                            String propertyName = propertyInfo.getJavaPropertyName();
                             if (propertyName == null)
                             {
                                 propertyName = part;
                             }
-                            pd = PropertyUtils.getPropertyDescriptor(bean, propertyName);
-                            if (pd != null && pd.getReadMethod() != null)
-                            {
-                                Method rm = pd.getReadMethod();
-                                child = rm.invoke(bean, (Object[])null);
 
-                                if (child == null)
-                                {
-                                    if (!canGrow)
-                                    {
-                                        throw new PropertyPathAccessException(path, bean,  bean + " has no value for property '" + part + "'");
-                                    }
-                                    Method wm = pd.getWriteMethod();
-                                    if (wm == null)
-                                    {
-                                        throw new InvalidPropertyPathException(path, "No write method for null value");
-                                    }
-                                    child = createNewObjectOfType(rm.getReturnType(), objectFactories);
-                                    wm.invoke(bean, child);
-                                }
-                            }
-                            else if (bean instanceof DynamicProperties)
+                            Method getterMethod = propertyInfo.getGetterMethod();
+                            child = getterMethod.invoke(bean, (Object[])null);
+
+                            if (child == null)
                             {
-                                child = ((DynamicProperties)bean).getProperty(part);
-                                if (child == null)
+                                if (!canGrow)
                                 {
-                                    if (!canGrow)
-                                    {
-                                        throw new PropertyPathAccessException(path, bean,  bean + " has no value for dynamic property '" + part + "'");
-                                    }
-                                    Class type;
-                                    if (isNumeric(parts[curPart+1]))
-                                    {
-                                        type = ArrayList.class; 
-                                    }
-                                    else
-                                    {
-                                        type = HashMap.class; 
-                                    }
-                                    child = createNewObjectOfType(type, objectFactories);
-                                    
-                                    ((DynamicProperties)bean).setProperty(part, child);
+                                    throw new PropertyPathAccessException(path, bean,  bean + " has no value for property '" + part + "'");
                                 }
-                                lastPD = null;
-                            }                            
-                            else 
-                            {
-                                throw new InvalidPropertyPathException(path, "Cannot read property '" + part + "' from " + bean );
+                                Method wm = propertyInfo.getSetterMethod();
+                                if (wm == null)
+                                {
+                                    throw new InvalidPropertyPathException(path, "No write method for null value");
+                                }
+                                child = createNewObjectOfType(getterMethod.getReturnType(), objectFactories);
+                                wm.invoke(bean, child);
                             }
+                        }
+                        else if (bean instanceof DynamicProperties)
+                        {
+                            child = ((DynamicProperties)bean).getProperty(part);
+                            if (child == null)
+                            {
+                                if (!canGrow)
+                                {
+                                    throw new PropertyPathAccessException(path, bean,  bean + " has no value for dynamic property '" + part + "'");
+                                }
+                                Class type;
+                                if (isNumeric(parts[curPart+1]))
+                                {
+                                    type = ArrayList.class; 
+                                }
+                                else
+                                {
+                                    type = HashMap.class; 
+                                }
+                                child = createNewObjectOfType(type, objectFactories);
+                                
+                                ((DynamicProperties)bean).setProperty(part, child);
+                            }
+                            lastPD = null;
+                        }                
+                        else 
+                        {
+                            throw new InvalidPropertyPathException(path, "Cannot read property '" + part + "' from " + bean );
                         }
                         
                         lastDoc = bean;
                         bean = child;
-                        lastPD = pd;
+                        lastPD = propertyInfo;
                     }
                 }
             }
@@ -344,42 +337,28 @@ public class JSONPathUtil
             }
             else
             {
+                part = unquotePart(part);
+                PropertyInfo propertyInfo;
                 if ( bean instanceof Map)
                 {
                     ((Map)bean).put(part, value);
                 }
+                else if ((propertyInfo = ClassInfo.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isWriteable())
+                {
+                    Method setterMethod = propertyInfo.getSetterMethod();
+                    if (setterMethod != null)
+                    {
+                        setterMethod.invoke(bean, value);
+                        
+                    }
+                }
+                else if (bean instanceof DynamicProperties)
+                {
+                    ((DynamicProperties)bean).setProperty(part, value);
+                }
                 else
                 {
-                    part = unquotePart(part);   
-                    String propertyName = JSONParser.getPropertyNameFromAnnotation(bean, part);
-                    
-                    if (propertyName == null)
-                    {
-                        propertyName = part;
-                    }
-                    
-                    PropertyDescriptor pd = PropertyUtils.getPropertyDescriptor(bean, propertyName);
-                    boolean written = false;
-                    if (pd != null)
-                    {
-                        Method wm = pd.getWriteMethod();
-                        if (wm != null)
-                        {
-                            wm.invoke(bean, value);
-                            written = true;
-                        }
-                    }
-                    
-                    if (!written && bean instanceof DynamicProperties)
-                    {
-                        ((DynamicProperties)bean).setProperty(part, value);
-                        written = true;
-                    }
-                    
-                    if (!written)
-                    {
-                        throw new InvalidPropertyPathException(path, "Cannot set property path");
-                    }
+                    throw new InvalidPropertyPathException(path, "Cannot set property path");
                 }
             }
         }
@@ -396,10 +375,6 @@ public class JSONPathUtil
             throw ExceptionWrapper.wrap(e);
         }
         catch (InvocationTargetException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (NoSuchMethodException e)
         {
             throw ExceptionWrapper.wrap(e);
         }
@@ -433,30 +408,6 @@ public class JSONPathUtil
             }
             Array.set(bean, idx, child);
             return bean;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    private static Class getTypeHintFromAnnotation(PropertyDescriptor propertyDesc)
-    {
-        Method rm = propertyDesc.getReadMethod();
-        Method wm = propertyDesc.getWriteMethod();
-        
-        JSONTypeHint typeAnno = null;
-        if (rm != null)
-        {
-            typeAnno = rm.getAnnotation(JSONTypeHint.class);
-        }
-        if (typeAnno == null && wm != null)
-        {
-            typeAnno = wm.getAnnotation(JSONTypeHint.class);
-        }
-        if (typeAnno != null)
-        {
-            return typeAnno.value();
         }
         else
         {
