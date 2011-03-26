@@ -16,8 +16,9 @@ import org.svenson.converter.TypeConverter;
 import org.svenson.converter.TypeConverterRepository;
 import org.svenson.info.JSONClassInfo;
 import org.svenson.info.JSONPropertyInfo;
+import org.svenson.info.JavaObjectSupport;
+import org.svenson.info.ObjectSupport;
 import org.svenson.util.JSONBeanUtil;
-import org.svenson.util.TypeConverterCache;
 
 /**
  * Generates <a href="http://json.org">JSON</a> representations of nested java object
@@ -52,19 +53,25 @@ public class JSON
 
     private boolean escapeUnicodeChars = true;
 
-    private TypeConverterCache typeConverterCache;
-
     private Collection<String> ignoredProperties;
 
     private Map<Class,TypeConverter> typeConvertersByClass;
+
+    private ObjectSupport objectSupport;
     
     public JSON()
     {
-        this('"');
+        this(new JavaObjectSupport(),'"');
     }
 
     public JSON(char quoteChar)
     {
+        this(new JavaObjectSupport(), quoteChar);
+    }
+    
+    public JSON(ObjectSupport objectSupport, char quoteChar)
+    {
+        this.objectSupport = objectSupport;
         setQuoteChar(quoteChar);
     }
     
@@ -80,7 +87,7 @@ public class JSON
 
     public void setTypeConverterRepository(TypeConverterRepository typeConverterRepository)
     {
-        this.typeConverterCache = new TypeConverterCache(typeConverterRepository);
+        this.objectSupport = new JavaObjectSupport(typeConverterRepository);
     }
     
     public void registerJSONifier(Class c, JSONifier jsonifier)
@@ -360,7 +367,7 @@ public class JSON
                 out.append('{');
                 boolean first = true;
 
-                JSONClassInfo classInfo = JSONClassInfo.forClass(o.getClass());
+                JSONClassInfo classInfo = objectSupport.forClass(o.getClass());
 
                 for (JSONPropertyInfo propertyInfo : classInfo.getPropertyInfos())
                 {
@@ -374,24 +381,22 @@ public class JSON
 
                             if (value != null || !propertyInfo.isIgnoreIfNull())
                             {
-                                if (typeConverterCache != null)
-                                {
-                                    TypeConverter typeConverter = typeConverterCache.getTypeConverter( o, propertyInfo.getJavaPropertyName());
+                                    TypeConverter typeConverter = propertyInfo.getTypeConverter();
                                     if (typeConverter != null)
                                     {
                                         value = typeConverter.toJSON(value);
                                     }
-                                }
 
                                 String idProperty = propertyInfo.getLinkIdProperty();
                                 if (idProperty != null)
                                 {
+                                    JSONBeanUtil beanUtil = JSONBeanUtil.defaultUtil();
                                     if (value instanceof Collection)
                                     {
                                         List newList = new ArrayList();
                                         for (Object childObject : ((Collection)value) )
                                         {
-                                            newList.add(JSONBeanUtil.getProperty(childObject, idProperty));
+                                            newList.add(beanUtil.getProperty(childObject, idProperty));
                                         }
                                         value = newList;                                            
                                     }
@@ -401,7 +406,7 @@ public class JSON
                                         int len = Array.getLength(value);
                                         for (int i = 0; i < len; i++)
                                         {
-                                            newList.add(JSONBeanUtil.getProperty(Array.get(value, i), idProperty));
+                                            newList.add(beanUtil.getProperty(Array.get(value, i), idProperty));
                                         }
                                         value = newList;
                                     }
@@ -410,13 +415,13 @@ public class JSON
                                         Map newMap = new HashMap();
                                         for (Map.Entry<Object,Object> e : ((Map<Object,Object>)value).entrySet())
                                         {
-                                            newMap.put(e.getKey(), JSONBeanUtil.getProperty(e.getValue(), idProperty));
+                                            newMap.put(e.getKey(), beanUtil.getProperty(e.getValue(), idProperty));
                                         }
                                         value = newMap;
                                     }
                                     else
                                     {
-                                        value = JSONBeanUtil.getProperty(value, idProperty);
+                                        value = beanUtil.getProperty(value, idProperty);
                                     }
                                 }
 

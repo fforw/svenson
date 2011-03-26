@@ -15,6 +15,8 @@ import org.svenson.JSONParseException;
 import org.svenson.ObjectFactory;
 import org.svenson.info.JSONClassInfo;
 import org.svenson.info.JSONPropertyInfo;
+import org.svenson.info.JavaObjectSupport;
+import org.svenson.info.ObjectSupport;
 
 /**
  * Utility class that provides support for writing and reading java object graphs
@@ -31,7 +33,18 @@ public class JSONPathUtil
     private List<ObjectFactory<?>> objectFactories = Collections.emptyList();
     
     private boolean grow = true;
+    private ObjectSupport objectSupport;
     
+    public JSONPathUtil()
+    {
+        this(new JavaObjectSupport());
+    }
+    
+    public JSONPathUtil(ObjectSupport objectSupport)
+    {
+        this.objectSupport = objectSupport;
+    }
+
     /**
      * Sets whether growing on path expressions is allowed, that is the implementation will try
      * to fix missing objects or invalid indexes by creating new objects and increasing the size
@@ -221,7 +234,7 @@ public class JSONPathUtil
                             }
                             lastPD = null;
                         }
-                        else if ((propertyInfo = JSONClassInfo.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isReadable())
+                        else if ((propertyInfo = objectSupport.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isReadable())
                         {
                             String propertyName = propertyInfo.getJavaPropertyName();
                             if (propertyName == null)
@@ -309,7 +322,7 @@ public class JSONPathUtil
                 }
                 else
                 {
-                    return JSONBeanUtil.getProperty(bean, part);
+                    return JSONBeanUtil.defaultUtil().getProperty(bean, part);
                 }
             }
 
@@ -345,7 +358,7 @@ public class JSONPathUtil
                 {
                     ((Map)bean).put(part, value);
                 }
-                else if ((propertyInfo = JSONClassInfo.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isWriteable())
+                else if ((propertyInfo = objectSupport.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isWriteable())
                 {
                     Method setterMethod = propertyInfo.getSetterMethod();
                     if (setterMethod != null)

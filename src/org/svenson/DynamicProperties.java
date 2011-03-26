@@ -31,4 +31,21 @@ public interface DynamicProperties
      * @return
      */
     Set<String> propertyNames();
+    
+    
+    /**
+     * Returns <code>true</code> if this DynamicProperties object has a property with the given name.
+     *  
+     * @param name
+     * @return
+     */
+
+    boolean hasProperty(String name);
+    
+    /**
+     * Removes the property with the given name from this DynamicProperties object.
+     * @param name
+     * @return  the previous value of the removed property. 
+     */
+    Object removeProperty(String name);
 }

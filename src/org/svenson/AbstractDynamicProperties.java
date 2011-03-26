@@ -29,4 +29,14 @@ public abstract class AbstractDynamicProperties implements DynamicProperties
     {
         return attrs.keySet();
     }
+    
+    public boolean hasProperty(String name)
+    {
+        return attrs.containsKey(name);
+    }
+    
+    public Object removeProperty(String name)
+    {
+        return attrs.remove(name);
+    }    
 }

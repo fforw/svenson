@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.svenson.JSONParseException;
+import org.svenson.converter.TypeConverter;
 import org.svenson.util.ExceptionWrapper;
 
 /**
@@ -30,6 +31,8 @@ public class JSONPropertyInfo
     private String jsonName;
     
     private String linkIdProperty;
+
+    private TypeConverter typeConverter;
     
     public JSONPropertyInfo(String javaPropertyName, Method getterMethod, Method setterMethod)
     {
@@ -240,5 +243,16 @@ public class JSONPropertyInfo
             ", ignore=" + ignore + ", ignoreIfNull=" + ignoreIfNull + ", javaPropertyName=" +
             javaPropertyName + ", jsonName=" + jsonName + ", linkIdProperty=" + linkIdProperty +
             ", readOnly=" + readOnly + ", setterMethod=" + setterMethod + ", typeHint=" + typeHint ;
+    }
+
+
+    public void setTypeConverter(TypeConverter typeConverter)
+    {
+        this.typeConverter = typeConverter;
+    }
+    
+    public TypeConverter getTypeConverter()
+    {
+        return typeConverter;
     }
 }

@@ -16,11 +16,12 @@ import java.util.TreeSet;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.svenson.converter.JSONConverter;
+import org.svenson.converter.DefaultTypeConverterRepository;
 import org.svenson.converter.TypeConverter;
-import org.svenson.converter.TypeConverterRepository;
 import org.svenson.info.JSONClassInfo;
 import org.svenson.info.JSONPropertyInfo;
+import org.svenson.info.JavaObjectSupport;
+import org.svenson.info.ObjectSupport;
 import org.svenson.matcher.EqualsPathMatcher;
 import org.svenson.matcher.PathMatcher;
 import org.svenson.tokenize.JSONCharacterSource;
@@ -28,7 +29,6 @@ import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
 import org.svenson.tokenize.TokenType;
 import org.svenson.util.ExceptionWrapper;
-import org.svenson.util.TypeConverterCache;
 
 /**
  * Converts JSON strings into graphs of java objects. It offers
@@ -68,10 +68,9 @@ public class JSONParser
     
     private boolean allowSingleQuotes;
 
-    private TypeConverterCache typeConverterCache;
-
     private Map<Class,TypeConverter> typeConvertersByClass;
-    
+
+    private ObjectSupport objectSupport;
     
     public JSONParser()
     {
@@ -80,6 +79,12 @@ public class JSONParser
         interfaceMappings.put(Set.class, HashSet.class);
         interfaceMappings.put(List.class, ArrayList.class);
         interfaceMappings.put(Map.class, HashMap.class);
+        this.objectSupport = new JavaObjectSupport();
+    }
+    
+    public void setObjectSupport(ObjectSupport objectSupport)
+    {
+        this.objectSupport = objectSupport;
     }
     
     /**
@@ -102,12 +107,12 @@ public class JSONParser
             
             this.allowSingleQuotes = src.allowSingleQuotes;
     
-            this.typeConverterCache = src.typeConverterCache;
-            
             if (src.typeConvertersByClass != null)
             {
                 this.typeConvertersByClass = new HashMap<Class, TypeConverter>(src.typeConvertersByClass);
             }
+            
+            this.objectSupport = src.objectSupport;
         }
     }
 
@@ -238,16 +243,16 @@ public class JSONParser
         this.typeHints.put(pathMatcher, typeHint);
     }
     
-    /**
-     * Sets the type converter repository used by the parser.
-     * 
-     * @see JSONConverter
-     * @param typeConverterRepository
-     */
-    public void setTypeConverterRepository(TypeConverterRepository typeConverterRepository)
-    {
-        this.typeConverterCache = new TypeConverterCache(typeConverterRepository);
-    }
+//    /**
+//     * Sets the type converter repository used by the parser.
+//     * 
+//     * @see JSONConverter
+//     * @param typeConverterRepository
+//     */
+//    public void setTypeConverterRepository(TypeConverterRepository typeConverterRepository)
+//    {
+//        this.support.setTypeConverterRepository(typeConverterRepository);
+//    }
 
     public final Object parse( String json)
     {
@@ -552,7 +557,7 @@ public class JSONParser
             JSONPropertyInfo propertyInfo = null;
             if (!containerIsMap)
             {
-                classInfo = JSONClassInfo.forClass(cx.target.getClass());
+                classInfo = objectSupport.forClass(cx.target.getClass());
                 propertyInfo = classInfo.getPropertyInfo(jsonName);
                 if (propertyInfo != null)
                 {
@@ -579,12 +584,7 @@ public class JSONParser
                 }
             }
 
-            TypeConverter typeConverter = null;
-            
-            if (typeConverterCache != null)
-            {
-                typeConverter = typeConverterCache.getTypeConverter( cx.target, name);
-            }
+            TypeConverter typeConverter = propertyInfo == null ? null : propertyInfo.getTypeConverter();
             
             if (!( isProperty || containerIsMap ||containerIsDynAttrs || addMethod != null))
             {
@@ -612,7 +612,7 @@ public class JSONParser
 
                     if (isProperty)
                     {
-                        JSONPropertyInfo propertyInfo2 = JSONClassInfo.forClass(cx.target.getClass()).getPropertyInfo(name);
+                        JSONPropertyInfo propertyInfo2 = objectSupport.forClass(cx.target.getClass()).getPropertyInfo(name);
                         if (propertyInfo2 != null)
                         {
                             memberType = propertyInfo2.getTypeHint();
@@ -632,18 +632,15 @@ public class JSONParser
                         Class arrayTypeHint = typeHint;
                         if (isProperty)
                         {
-                            if (typeConverterCache != null)
+                            if (typeConverter != null && !List.class.isAssignableFrom(arrayTypeHint))
                             {
-                                if (typeConverter != null && !List.class.isAssignableFrom(arrayTypeHint))
-                                {
-                                    arrayTypeHint = List.class;
-                                }
+                                arrayTypeHint = List.class;
                             }
                         }
                         
                         newTarget = createNewTargetInstance(arrayTypeHint, false);
                         
-                        JSONPropertyInfo propertyInfo2 = JSONClassInfo.forClass(cx.target.getClass()).getPropertyInfo(name);
+                        JSONPropertyInfo propertyInfo2 = objectSupport.forClass(cx.target.getClass()).getPropertyInfo(name);
                         Class memberType = null;
                         if (propertyInfo2 != null)
                         {
@@ -921,7 +918,7 @@ public class JSONParser
         
         if (memberType == null && isProperty)
         {
-            JSONPropertyInfo propertyInfo = JSONClassInfo.forClass(cx.target.getClass()).getPropertyInfo(name);
+            JSONPropertyInfo propertyInfo = objectSupport.forClass(cx.target.getClass()).getPropertyInfo(name);
             if (propertyInfo != null)
             {
                 Class typeOfProperty = propertyInfo.getTypeOfProperty();
@@ -1042,6 +1039,11 @@ public class JSONParser
         {
             return super.toString()+", target = "+target+", memberType = "+memberType+", info = "+info;
         }
+    }
+
+    public void setTypeConverterRepository(DefaultTypeConverterRepository typeConverterRepository)
+    {
+        this.objectSupport = new JavaObjectSupport(typeConverterRepository);
     }
 
 }

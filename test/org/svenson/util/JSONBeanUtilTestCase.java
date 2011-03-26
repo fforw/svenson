@@ -23,7 +23,7 @@ public class JSONBeanUtilTestCase
         bean.setFoo("bar");
         bean.setProperty("baz", 42);
 
-        Set<String> names = JSONBeanUtil.getAllPropertyNames(bean);
+        Set<String> names = JSONBeanUtil.defaultUtil().getAllPropertyNames(bean);
 
         assertThat(names, is(notNullValue()));
         assertThat(names.size(),is(2));
@@ -37,7 +37,7 @@ public class JSONBeanUtilTestCase
     {
         DynPropTestBean bean = new DynPropTestBean();
 
-        Set<String> names = JSONBeanUtil.getBeanPropertyNames(bean);
+        Set<String> names = JSONBeanUtil.defaultUtil().getBeanPropertyNames(bean);
 
         assertThat(names, is(notNullValue()));
         assertThat(names.size(),is(1));
@@ -50,14 +50,14 @@ public class JSONBeanUtilTestCase
     {
         DynPropTestBean bean = new DynPropTestBean();
         bean.setFoo("bar!");
-        assertThat((String)JSONBeanUtil.getProperty(bean, "_foo"), is("bar!"));
+        assertThat((String)JSONBeanUtil.defaultUtil().getProperty(bean, "_foo"), is("bar!"));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void thatReadingUndefinedBeanPropertiesDoesNotWork()
     {
         Object bean = new Object();
-        JSONBeanUtil.getProperty(bean, "bar");
+        JSONBeanUtil.defaultUtil().getProperty(bean, "bar");
     }
 
     @Test
@@ -65,7 +65,7 @@ public class JSONBeanUtilTestCase
     {
         DynPropTestBean bean = new DynPropTestBean();
 
-        JSONBeanUtil.setProperty(bean, "_foo", "bar!");
+        JSONBeanUtil.defaultUtil().setProperty(bean, "_foo", "bar!");
         assertThat(bean.getFoo(), is("bar!"));
     }
 
@@ -73,6 +73,6 @@ public class JSONBeanUtilTestCase
     public void thatWritingUndefinedBeanPropertiesDoesNotWork()
     {
         Object bean = new Object();
-        JSONBeanUtil.setProperty(bean, "bar", "bar!");
+        JSONBeanUtil.defaultUtil().setProperty(bean, "bar", "bar!");
     }
 }
