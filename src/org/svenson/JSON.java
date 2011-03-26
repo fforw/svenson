@@ -371,8 +371,7 @@ public class JSON
 
                 for (JSONPropertyInfo propertyInfo : classInfo.getPropertyInfos())
                 {
-                    Method method = propertyInfo.getGetterMethod();
-                    if (method != null)
+                    if (propertyInfo.isReadable())
                     {
                         if (!propertyInfo.isIgnore() && (ignoredProps == null || !ignoredProps.contains(propertyInfo.getJsonName())))
                         {

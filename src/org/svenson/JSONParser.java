@@ -2,7 +2,6 @@ package org.svenson;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -552,7 +551,6 @@ public class JSONParser
 
             boolean isProperty = false;
             boolean isIgnoredOnParse = false;
-            Method addMethod = null;
             JSONClassInfo classInfo = null;
             JSONPropertyInfo propertyInfo = null;
             if (!containerIsMap)
@@ -578,15 +576,11 @@ public class JSONParser
                     isProperty = writeable || isIgnoredOnParse;
                 }
                 
-                if (propertyInfo != null)
-                {
-                    addMethod = propertyInfo.getAdderMethod();
-                }
             }
 
             TypeConverter typeConverter = propertyInfo == null ? null : propertyInfo.getTypeConverter();
             
-            if (!( isProperty || containerIsMap ||containerIsDynAttrs || addMethod != null))
+            if (!( isProperty || containerIsMap ||containerIsDynAttrs || (propertyInfo != null && propertyInfo.canAdd())))
             {
                 throw new JSONParseException("Cannot set property "+jsonName+" on "+cx.target.getClass());
             }
@@ -650,16 +644,14 @@ public class JSONParser
                     }
                     else
                     {
-
-                        if (addMethod != null)
+                        if (propertyInfo.canAdd())
                         {
-                            Class memberType = addMethod.getParameterTypes()[0];
                             List temp = new ArrayList();
-                            parseArrayInto(cx.push(temp,memberType, "."+name), tokenizer);
+                            parseArrayInto(cx.push(temp, propertyInfo.getAdderType(), "."+name), tokenizer);
 
                             for (Object o : temp)
                             {
-                                addMethod.invoke(cx.target, o);
+                                propertyInfo.add(cx.target, o);
                             }
                             continue;
                         }

@@ -1,8 +1,6 @@
 package org.svenson.util;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,7 +11,6 @@ import java.util.regex.Pattern;
 import org.svenson.DynamicProperties;
 import org.svenson.JSONParseException;
 import org.svenson.ObjectFactory;
-import org.svenson.info.JSONClassInfo;
 import org.svenson.info.JSONPropertyInfo;
 import org.svenson.info.JavaObjectSupport;
 import org.svenson.info.ObjectSupport;
@@ -214,7 +211,6 @@ public class JSONPathUtil
                                 Class type = null;
                                 if (lastPD != null)
                                 {
-                                    Method wm = lastPD.getSetterMethod();
                                     type = lastPD.getTypeHint();
                                 }
                                 else
@@ -242,8 +238,7 @@ public class JSONPathUtil
                                 propertyName = part;
                             }
 
-                            Method getterMethod = propertyInfo.getGetterMethod();
-                            child = getterMethod.invoke(bean, (Object[])null);
+                            child = propertyInfo.getProperty(bean);
 
                             if (child == null)
                             {
@@ -251,13 +246,13 @@ public class JSONPathUtil
                                 {
                                     throw new PropertyPathAccessException(path, bean,  bean + " has no value for property '" + part + "'");
                                 }
-                                Method wm = propertyInfo.getSetterMethod();
-                                if (wm == null)
+                                
+                                if (!propertyInfo.isWriteable())
                                 {
                                     throw new InvalidPropertyPathException(path, "No write method for null value");
                                 }
-                                child = createNewObjectOfType(getterMethod.getReturnType(), objectFactories);
-                                wm.invoke(bean, child);
+                                child = createNewObjectOfType(propertyInfo.getType(), objectFactories);
+                                propertyInfo.setProperty(bean, child);
                             }
                         }
                         else if (bean instanceof DynamicProperties)
@@ -360,12 +355,7 @@ public class JSONPathUtil
                 }
                 else if ((propertyInfo = objectSupport.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isWriteable())
                 {
-                    Method setterMethod = propertyInfo.getSetterMethod();
-                    if (setterMethod != null)
-                    {
-                        setterMethod.invoke(bean, value);
-                        
-                    }
+                    propertyInfo.setProperty(bean, value);
                 }
                 else if (bean instanceof DynamicProperties)
                 {
@@ -386,10 +376,6 @@ public class JSONPathUtil
             throw ExceptionWrapper.wrap(e);
         }
         catch (IllegalAccessException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (InvocationTargetException e)
         {
             throw ExceptionWrapper.wrap(e);
         }

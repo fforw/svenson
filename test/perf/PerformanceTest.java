@@ -7,7 +7,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.svenson.JSONParser;
 
-@Ignore
 public class PerformanceTest
 {
     private static final int NUM_FOOS = 500000;
@@ -15,7 +14,8 @@ public class PerformanceTest
     private final static char[] ALPHABET = "1234567890abcdefghijklmnopqrstuvwxyzäöüßABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ".toCharArray();
     
     private Random random = new Random(34987539487l);
-    
+
+    @Ignore
     @Test
     public void test()
     {
@@ -27,7 +27,7 @@ public class PerformanceTest
         long start = System.currentTimeMillis();
         foo = JSONParser.defaultJSONParser().parse(Foo.class, json);
         long end = System.currentTimeMillis() - start;
-        System.out.println("Parsing: " + end + " millis");
+        System.out.println("Parsing: " + ((NUM_FOOS * 1.0) / end) + " objects/ms");
 
 //        JSON.defaultJSON().forValue(foo);
 //        start = System.currentTimeMillis();

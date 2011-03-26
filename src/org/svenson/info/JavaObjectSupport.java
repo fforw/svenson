@@ -110,7 +110,7 @@ public class JavaObjectSupport implements ObjectSupport
 
         private JSONClassInfo createClassInfo()
         {
-            Map<String, JSONPropertyInfo> javaNameToInfo = new HashMap<String, JSONPropertyInfo>();
+            Map<String, JavaObjectPropertyInfo> javaNameToInfo = new HashMap<String, JavaObjectPropertyInfo>();
 
             for (Method m : cls.getMethods())
             {
@@ -124,14 +124,14 @@ public class JavaObjectSupport implements ObjectSupport
                 if (name.startsWith(SETTER_PREFIX) && m.getParameterTypes().length == 1)
                 {
                     String javaPropertyName = propertyName(name, SETTER_PREFIX.length());
-                    JSONPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
+                    JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                     if (pair != null)
                     {
                         pair.setSetterMethod(m);
                     }
                     else
                     {
-                        pair = new JSONPropertyInfo(javaPropertyName, null, m);
+                        pair = new JavaObjectPropertyInfo(javaPropertyName, null, m);
                         javaNameToInfo.put(javaPropertyName, pair);
                     }
 
@@ -149,28 +149,28 @@ public class JavaObjectSupport implements ObjectSupport
                     if (name.startsWith(GETTER_PREFIX))
                     {
                         String javaPropertyName = propertyName(name, GETTER_PREFIX.length());
-                        JSONPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
+                        JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                         if (pair != null)
                         {
                             pair.setGetterMethod(m);
                         }
                         else
                         {
-                            javaNameToInfo.put(javaPropertyName, new JSONPropertyInfo(javaPropertyName,
+                            javaNameToInfo.put(javaPropertyName, new JavaObjectPropertyInfo(javaPropertyName,
                                 m, null));
                         }
                     }
                     else if (name.startsWith(ISSER_PREFIX))
                     {
                         String javaPropertyName = propertyName(name, ISSER_PREFIX.length());
-                        JSONPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
+                        JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                         if (pair != null)
                         {
                             pair.setGetterMethod(m);
                         }
                         else
                         {
-                            javaNameToInfo.put(javaPropertyName, new JSONPropertyInfo(javaPropertyName,
+                            javaNameToInfo.put(javaPropertyName, new JavaObjectPropertyInfo(javaPropertyName,
                                 m, null));
                         }
                     }
@@ -178,26 +178,26 @@ public class JavaObjectSupport implements ObjectSupport
                 else if (name.startsWith(ADDER_PREFIX) && m.getParameterTypes().length == 1)
                 {
                     String javaPropertyName = propertyName(name, ADDER_PREFIX.length());
-                    JSONPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
+                    JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                     if (pair != null)
                     {
                         pair.setAdderMethod(m);
                     }
                     else
                     {
-                        JSONPropertyInfo newInfo = new JSONPropertyInfo(javaPropertyName, null, null);
+                        JavaObjectPropertyInfo newInfo = new JavaObjectPropertyInfo(javaPropertyName, null, null);
                         newInfo.setAdderMethod(m);
                         javaNameToInfo.put(javaPropertyName, newInfo);
                     }
                 }
             }
 
-            HashMap<String, JSONPropertyInfo> propertyInfos = new HashMap<String, JSONPropertyInfo>(javaNameToInfo.size());
+            HashMap<String, JavaObjectPropertyInfo> propertyInfos = new HashMap<String, JavaObjectPropertyInfo>(javaNameToInfo.size());
 
-            for (Map.Entry<String, JSONPropertyInfo> e : javaNameToInfo.entrySet())
+            for (Map.Entry<String, JavaObjectPropertyInfo> e : javaNameToInfo.entrySet())
             {
                 String jsonPropertyName = e.getKey();
-                JSONPropertyInfo propertyInfo = e.getValue();
+                JavaObjectPropertyInfo propertyInfo = e.getValue();
 
                 Method getterMethod = propertyInfo.getGetterMethod();
                 Method setterMethod = propertyInfo.getSetterMethod();

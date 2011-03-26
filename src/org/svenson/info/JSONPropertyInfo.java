@@ -1,258 +1,84 @@
 package org.svenson.info;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import org.svenson.JSONParseException;
 import org.svenson.converter.TypeConverter;
-import org.svenson.util.ExceptionWrapper;
 
-/**
- * Encapsulates svenson's knowledge about one property inside a class. An instance
- * of this is created for every readable or writeable property and for add* Methods. 
- * 
- * @author fforw at gmx dot de
- *
- */
-public class JSONPropertyInfo
+public interface JSONPropertyInfo
 {
-    private Method getterMethod;
 
-    private Method setterMethod;
-
-    private Method adderMethod;
-
-    private boolean ignore, ignoreIfNull, readOnly;
-    
-    private String javaPropertyName;
-
-    private Class<?> typeHint;
-
-    private String jsonName;
-    
-    private String linkIdProperty;
-
-    private TypeConverter typeConverter;
-    
-    public JSONPropertyInfo(String javaPropertyName, Method getterMethod, Method setterMethod)
-    {
-        this.javaPropertyName = javaPropertyName;
-        this.getterMethod = getterMethod;
-        this.setterMethod = setterMethod;
-    }
+    boolean isIgnore();
 
 
-    public Method getSetterMethod()
-    {
-        return setterMethod;
-    }
+    void setIgnore(boolean ignore);
 
 
-    public void setSetterMethod(Method setterMethod)
-    {
-        this.setterMethod = setterMethod;
-    }
+    boolean isIgnoreIfNull();
 
 
-    public Method getGetterMethod()
-    {
-        return getterMethod;
-    }
+    void setIgnoreIfNull(boolean ignoreIfNull);
 
 
-    public void setGetterMethod(Method getterMethod)
-    {
-        this.getterMethod = getterMethod;
-    }
+    boolean isReadOnly();
 
 
-    public boolean isIgnore()
-    {
-        return ignore;
-    }
+    void setReadOnly(boolean readOnly);
 
 
-    public void setIgnore(boolean ignore)
-    {
-        this.ignore = ignore;
-    }
+    String getJavaPropertyName();
 
 
-    public boolean isIgnoreIfNull()
-    {
-        return ignoreIfNull;
-    }
+    void setJavaPropertyName(String javaPropertyName);
 
 
-    public void setIgnoreIfNull(boolean ignoreIfNull)
-    {
-        this.ignoreIfNull = ignoreIfNull;
-    }
+    boolean isLinkedProperty();
 
 
-    public boolean isReadOnly()
-    {
-        return readOnly;
-    }
+    String getLinkIdProperty();
 
 
-    public void setReadOnly(boolean readOnly)
-    {
-        this.readOnly = readOnly;
-    }
+    void setLinkIdProperty(String linkIdProperty);
 
 
-    public String getJavaPropertyName()
-    {
-        return javaPropertyName;
-    }
+    Class<?> getTypeOfProperty();
 
 
-    public void setJavaPropertyName(String javaPropertyName)
-    {
-        this.javaPropertyName = javaPropertyName;
-    }
+    boolean isWriteable();
 
 
-    public boolean isLinkedProperty()
-    {
-        return linkIdProperty != null;
-    }
-
-    public String getLinkIdProperty()
-    {
-        return linkIdProperty;
-    }
+    boolean isReadable();
 
 
-    public void setLinkIdProperty(String linkIdProperty)
-    {
-        this.linkIdProperty = linkIdProperty;
-    }
+    Class<?> getTypeHint();
 
 
-    public Class<?> getTypeOfProperty()
-    {
-        if (setterMethod != null)
-        {
-            return setterMethod.getParameterTypes()[0];
-        }
-        return null;
-    }
+    void setTypeHint(Class<?> typeHint);
 
 
-    public boolean isWriteable()
-    {
-        return setterMethod != null;
-    }
+    String getJsonName();
 
 
-    public boolean isReadable()
-    {
-        return getterMethod != null;
-    }
-    
-    
-    public Class<?> getTypeHint()
-    {
-        return typeHint;
-    }
+    void setJsonName(String jsonName);
 
 
-    public void setTypeHint(Class<?> typeHint)
-    {
-        this.typeHint = typeHint;
-    }
-    
-    public Method getAdderMethod()
-    {
-        return adderMethod;
-    }
+    Object getProperty(Object target);
 
 
-    public void setAdderMethod(Method adderMethod)
-    {
-        this.adderMethod = adderMethod;
-    }
-
-    public String getJsonName()
-    {
-        return jsonName;
-    }
+    void setProperty(Object target, Object value);
 
 
-    public void setJsonName(String jsonName)
-    {
-        this.jsonName = jsonName;
-    }
+    void setTypeConverter(TypeConverter typeConverter);
 
 
-    public Object getProperty(Object target)
-    {
-        Method getterMethod = getGetterMethod();
-        if (getterMethod == null)
-        {
-            throw new JSONParseException("Property '" + getJavaPropertyName() + "' in " + target.getClass() + " is not readable.");
-        }
-        
-        try
-        {
-            return getterMethod.invoke(target);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (InvocationTargetException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-    }
-    
-    public void setProperty(Object target, Object value)
-    {
-        Method setterMethod = getSetterMethod();
-        if (setterMethod == null)
-        {
-            throw new JSONParseException("Property '" + getJavaPropertyName() + "' in " + target.getClass() + " is not writable.");
-        }
-
-        try
-        {
-            setterMethod.invoke(target, value);
-        }
-        catch (IllegalArgumentException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (InvocationTargetException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-    }
+    TypeConverter getTypeConverter();
 
 
-    @Override
-    public String toString()
-    {
-        return super.toString() + " adderMethod=" + adderMethod + ", getterMethod=" + getterMethod +
-            ", ignore=" + ignore + ", ignoreIfNull=" + ignoreIfNull + ", javaPropertyName=" +
-            javaPropertyName + ", jsonName=" + jsonName + ", linkIdProperty=" + linkIdProperty +
-            ", readOnly=" + readOnly + ", setterMethod=" + setterMethod + ", typeHint=" + typeHint ;
-    }
+    boolean canAdd();
 
 
-    public void setTypeConverter(TypeConverter typeConverter)
-    {
-        this.typeConverter = typeConverter;
-    }
-    
-    public TypeConverter getTypeConverter()
-    {
-        return typeConverter;
-    }
+    Class<Object> getAdderType();
+
+
+    void add(Object target, Object value);
+
+
+    Class<Object> getType();
 }

@@ -28,9 +28,9 @@ public class JSONClassInfo
 
     private Class cls;
 
-    protected Map<String, JSONPropertyInfo> propertyInfos;
+    protected Map<String, ? extends JSONPropertyInfo> propertyInfos;
 
-    public JSONClassInfo(Class cls, HashMap<String, JSONPropertyInfo> propertyInfos)
+    public JSONClassInfo(Class cls, Map<String, ? extends JSONPropertyInfo> propertyInfos)
     {
         this.cls = cls;
         this.propertyInfos = propertyInfos;
@@ -51,7 +51,7 @@ public class JSONClassInfo
 
     public Collection<JSONPropertyInfo> getPropertyInfos()
     {
-        return propertyInfos.values();
+        return (Collection<JSONPropertyInfo>)propertyInfos.values();
     }
 
 
