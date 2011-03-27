@@ -1,21 +1,8 @@
 package org.svenson.info;
 
-import java.beans.Introspector;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-import org.svenson.JSONProperty;
-import org.svenson.JSONReference;
-import org.svenson.JSONTypeHint;
-
-import com.sun.xml.internal.bind.v2.model.core.ClassInfo;
 
 /**
  * Encapsulates svensons knowledge about a class. Provides a constructor method. 
@@ -26,11 +13,11 @@ import com.sun.xml.internal.bind.v2.model.core.ClassInfo;
 public class JSONClassInfo
 {
 
-    private Class cls;
+    private Class<?> cls;
 
     protected Map<String, ? extends JSONPropertyInfo> propertyInfos;
 
-    public JSONClassInfo(Class cls, Map<String, ? extends JSONPropertyInfo> propertyInfos)
+    public JSONClassInfo(Class<?> cls, Map<String, ? extends JSONPropertyInfo> propertyInfos)
     {
         this.cls = cls;
         this.propertyInfos = propertyInfos;
@@ -49,6 +36,7 @@ public class JSONClassInfo
     }
 
 
+    @SuppressWarnings("unchecked")
     public Collection<JSONPropertyInfo> getPropertyInfos()
     {
         return (Collection<JSONPropertyInfo>)propertyInfos.values();

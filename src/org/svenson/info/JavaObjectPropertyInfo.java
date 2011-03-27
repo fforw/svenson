@@ -167,11 +167,12 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
     /* (non-Javadoc)
      * @see org.svenson.info.JSONPropertyInfo#getTypeOfProperty()
      */
-    public Class<?> getTypeOfProperty()
+    @SuppressWarnings("unchecked")
+    public Class<Object> getTypeOfProperty()
     {
         if (setterMethod != null)
         {
-            return setterMethod.getParameterTypes()[0];
+            return (Class<Object>) setterMethod.getParameterTypes()[0];
         }
         return null;
     }
@@ -198,9 +199,9 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
     /* (non-Javadoc)
      * @see org.svenson.info.JSONPropertyInfo#getTypeHint()
      */
-    public Class<?> getTypeHint()
+    public Class<Object> getTypeHint()
     {
-        return typeHint;
+        return (Class<Object>) typeHint;
     }
 
 
@@ -331,9 +332,10 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
     /* (non-Javadoc)
      * @see org.svenson.info.JSONPropertyInfo#getAdderType()
      */
-    public Class<?> getAdderType()
+    public Class<Object> getAdderType()
     {
-        return adderMethod.getParameterTypes()[0];
+        Class<Object> adder = (Class<Object>)adderMethod.getParameterTypes()[0];
+        return adder;
     }
 
     /* (non-Javadoc)
@@ -362,23 +364,26 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
     /* (non-Javadoc)
      * @see org.svenson.info.JSONPropertyInfo#getType()
      */
-    public Class getType()
+    @SuppressWarnings("unchecked")
+    public Class<Object> getType()
     {
+        Class<Object> type;
         if (getterMethod != null)
         {
-            return getterMethod.getReturnType();
+            type = (Class<Object>) getterMethod.getReturnType();
         }
         else if (setterMethod != null)
         {
-            return setterMethod.getParameterTypes()[0];
+            type = (Class<Object>) setterMethod.getParameterTypes()[0];
         }
         else if (adderMethod != null)
         {
-            return adderMethod.getParameterTypes()[0];
+            type = (Class<Object>) adderMethod.getParameterTypes()[0];
         }
         else
         {
             throw new IllegalStateException("No method!?");
         }
+        return type;
     }
 }

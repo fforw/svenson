@@ -555,7 +555,7 @@ public class JSONParser
             JSONPropertyInfo propertyInfo = null;
             if (!containerIsMap)
             {
-                classInfo = objectSupport.forClass(cx.target.getClass());
+                classInfo = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass());
                 propertyInfo = classInfo.getPropertyInfo(jsonName);
                 if (propertyInfo != null)
                 {
@@ -606,7 +606,7 @@ public class JSONParser
 
                     if (isProperty)
                     {
-                        JSONPropertyInfo propertyInfo2 = objectSupport.forClass(cx.target.getClass()).getPropertyInfo(name);
+                        JSONPropertyInfo propertyInfo2 = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass()).getPropertyInfo(name);
                         if (propertyInfo2 != null)
                         {
                             memberType = propertyInfo2.getTypeHint();
@@ -634,7 +634,7 @@ public class JSONParser
                         
                         newTarget = createNewTargetInstance(arrayTypeHint, false);
                         
-                        JSONPropertyInfo propertyInfo2 = objectSupport.forClass(cx.target.getClass()).getPropertyInfo(name);
+                        JSONPropertyInfo propertyInfo2 = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass()).getPropertyInfo(name);
                         Class memberType = null;
                         if (propertyInfo2 != null)
                         {
@@ -910,7 +910,7 @@ public class JSONParser
         
         if (memberType == null && isProperty)
         {
-            JSONPropertyInfo propertyInfo = objectSupport.forClass(cx.target.getClass()).getPropertyInfo(name);
+            JSONPropertyInfo propertyInfo = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass()).getPropertyInfo(name);
             if (propertyInfo != null)
             {
                 Class typeOfProperty = propertyInfo.getTypeOfProperty();

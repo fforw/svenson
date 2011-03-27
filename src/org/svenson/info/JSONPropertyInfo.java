@@ -38,7 +38,7 @@ public interface JSONPropertyInfo
     void setLinkIdProperty(String linkIdProperty);
 
 
-    Class<?> getTypeOfProperty();
+    Class<Object> getTypeOfProperty();
 
 
     boolean isWriteable();
@@ -47,7 +47,7 @@ public interface JSONPropertyInfo
     boolean isReadable();
 
 
-    Class<?> getTypeHint();
+    Class<Object> getTypeHint();
 
 
     void setTypeHint(Class<?> typeHint);

@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.svenson.DynamicProperties;
 import org.svenson.JSONParseException;
 import org.svenson.ObjectFactory;
+import org.svenson.TypeAnalyzer;
 import org.svenson.info.JSONPropertyInfo;
 import org.svenson.info.JavaObjectSupport;
 import org.svenson.info.ObjectSupport;
@@ -230,7 +231,7 @@ public class JSONPathUtil
                             }
                             lastPD = null;
                         }
-                        else if ((propertyInfo = objectSupport.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isReadable())
+                        else if ((propertyInfo = TypeAnalyzer.getClassInfo(objectSupport, bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isReadable())
                         {
                             String propertyName = propertyInfo.getJavaPropertyName();
                             if (propertyName == null)
@@ -353,7 +354,7 @@ public class JSONPathUtil
                 {
                     ((Map)bean).put(part, value);
                 }
-                else if ((propertyInfo = objectSupport.forClass(bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isWriteable())
+                else if ((propertyInfo = TypeAnalyzer.getClassInfo(objectSupport, bean.getClass()).getPropertyInfo(part)) != null && propertyInfo.isWriteable())
                 {
                     propertyInfo.setProperty(bean, value);
                 }

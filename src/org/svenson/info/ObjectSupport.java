@@ -3,5 +3,5 @@ package org.svenson.info;
 
 public interface ObjectSupport
 {
-    JSONClassInfo forClass(Class<?> cls);
+    JSONClassInfo createClassInfo(Class<?> cls);
 }

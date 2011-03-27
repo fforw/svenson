@@ -367,7 +367,7 @@ public class JSON
                 out.append('{');
                 boolean first = true;
 
-                JSONClassInfo classInfo = objectSupport.forClass(o.getClass());
+                JSONClassInfo classInfo = TypeAnalyzer.getClassInfo(objectSupport,o.getClass());
 
                 for (JSONPropertyInfo propertyInfo : classInfo.getPropertyInfos())
                 {
