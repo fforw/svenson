@@ -19,6 +19,15 @@ public class JSONClassInfo
 
     public JSONClassInfo(Class<?> cls, Map<String, ? extends JSONPropertyInfo> propertyInfos)
     {
+        if (cls == null)
+        {
+            throw new IllegalArgumentException("Class can't be null.");
+        }
+        if (propertyInfos == null)
+        {
+            throw new IllegalArgumentException("Infos can't be null.");
+        }
+        
         this.cls = cls;
         this.propertyInfos = propertyInfos;
     }

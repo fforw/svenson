@@ -1,13 +1,16 @@
 package org.svenson.util;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.svenson.DynamicProperties;
+import org.svenson.JSONParser;
+import org.svenson.TypeAnalyzer;
 import org.svenson.info.JSONClassInfo;
 import org.svenson.info.JSONPropertyInfo;
+import org.svenson.info.JavaObjectSupport;
+import org.svenson.info.ObjectSupport;
 
 /**
  * Contains some util methods to handle bean properties dynamically.
@@ -17,13 +20,22 @@ import org.svenson.info.JSONPropertyInfo;
  */
 public class JSONBeanUtil
 {
+    private final static JSONBeanUtil instance = new JSONBeanUtil();
+    
+    private ObjectSupport objectSupport = new JavaObjectSupport();
+    
+    public void setObjectSupport(ObjectSupport objectSupport)
+    {
+        this.objectSupport = objectSupport;
+    }
+    
     /**
      * Returns the names of all properties of this dynamic properties object including the java bean properties.
      * Note that the method will return the <em>JSON property name</em> of the java bean methods.
      * @param bean     DynamicProperties object
      * @return a set containing all property names, both dynamic and static (JSON) names.
      */
-    public static Set<String> getAllPropertyNames(Object bean)
+    public Set<String> getAllPropertyNames(Object bean)
     {
 
         Set<String> names  = new HashSet<String>( );
@@ -45,9 +57,15 @@ public class JSONBeanUtil
      * @param bean object
      * @return
      */
-    public static Set<String> getBeanPropertyNames(Object bean)
+    public Set<String> getBeanPropertyNames(Object bean)
     {
-        return JSONClassInfo.forClass(bean.getClass()).getPropertyNames();
+        JSONClassInfo classInfo = getClassInfoForBean(bean);
+        return classInfo.getPropertyNames();
+    }
+
+    protected JSONClassInfo getClassInfoForBean(Object bean)
+    {
+        return TypeAnalyzer.getClassInfo(objectSupport, bean.getClass());
     }
 
     /**
@@ -64,7 +82,7 @@ public class JSONBeanUtil
      *             class of the bean does not implement
      *             {@link DynamicProperties}
      */
-    public static Object getProperty(Object bean, String name)
+    public Object getProperty(Object bean, String name)
         throws IllegalArgumentException
     {
         JSONPropertyInfo propertyInfo;
@@ -72,7 +90,7 @@ public class JSONBeanUtil
         {
             return ((Map)bean).get(name);
         }
-        else if ((propertyInfo = JSONClassInfo.forClass(bean.getClass()).getPropertyInfo(name)) != null && propertyInfo.isReadable())
+        else if ((propertyInfo = getClassInfoForBean(bean).getPropertyInfo(name)) != null && propertyInfo.isReadable())
         {
                 return propertyInfo.getProperty(bean);
         }
@@ -103,7 +121,7 @@ public class JSONBeanUtil
      *             class of the bean does not implement
      *             {@link DynamicProperties}
      */
-    public static void setProperty(Object bean, String name, Object value)
+    public void setProperty(Object bean, String name, Object value)
         throws IllegalArgumentException
     {
         JSONPropertyInfo propertyInfo;
@@ -111,7 +129,7 @@ public class JSONBeanUtil
         {
             ((Map)bean).put(name, value);
         }
-        else if ((propertyInfo = JSONClassInfo.forClass(bean.getClass()).getPropertyInfo(name)) != null && propertyInfo.isWriteable())
+        else if ((propertyInfo = getClassInfoForBean(bean).getPropertyInfo(name)) != null && propertyInfo.isWriteable())
         {
             propertyInfo.setProperty(bean, value);
         }
@@ -125,5 +143,10 @@ public class JSONBeanUtil
                 " has no JSON property with the name '" + name +
                 "' and does not implements DynamicProperties");
         }
+    }
+
+    public static JSONBeanUtil defaultUtil()
+    {
+        return instance;
     }
 }
