@@ -595,7 +595,7 @@ public class JSONParser
                 name = jsonName;
             }
 
-            Class typeHint = getTypeHint( cx, cx.getParsePathInfo(jsonName), tokenizer, name, isProperty, valueType.isPrimitive());
+            Class typeHint = getTypeHint( cx, cx.getParsePathInfo(jsonName), tokenizer, jsonName, isProperty, valueType.isPrimitive());
             Object value;
             if (valueType.isPrimitive())
             {
@@ -610,7 +610,7 @@ public class JSONParser
 
                     if (isProperty)
                     {
-                        JSONPropertyInfo propertyInfo2 = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass()).getPropertyInfo(name);
+                        JSONPropertyInfo propertyInfo2 = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass()).getPropertyInfo(jsonName);
                         if (propertyInfo2 != null)
                         {
                             memberType = propertyInfo2.getTypeHint();
@@ -638,7 +638,7 @@ public class JSONParser
                         
                         newTarget = createNewTargetInstance(arrayTypeHint, false);
                         
-                        JSONPropertyInfo propertyInfo2 = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass()).getPropertyInfo(name);
+                        JSONPropertyInfo propertyInfo2 = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass()).getPropertyInfo(jsonName);
                         Class memberType = null;
                         if (propertyInfo2 != null)
                         {
@@ -840,7 +840,7 @@ public class JSONParser
             }
             if (convertedValue == null)
             {
-                convertedValue = ConvertUtils.convert(value.toString(), targetClass);
+                convertedValue = ConvertUtils.convert(value, targetClass);
             }
         }
         return convertedValue;
