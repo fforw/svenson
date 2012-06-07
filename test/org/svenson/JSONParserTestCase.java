@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.svenson.matcher.RegExPathMatcher;
+import org.svenson.test.Bar;
 import org.svenson.test.Bean;
 import org.svenson.test.BeanWithClassProperty;
 import org.svenson.test.BeanWithEnum;
@@ -334,4 +335,20 @@ public class JSONParserTestCase
         assertThat(JSONParser.getTypeDistance(Collection.class, Set.class,1), is(1));
         assertThat(JSONParser.getTypeDistance(Collection.class, SortedSet.class,1), is(2));
     }
+    
+    @Test
+    public void thatParsingNullValuesWorks()
+    {
+        JSONParser parser = JSONParser.defaultJSONParser();
+        Map m = parser.parse(Map.class, "null");
+        assertThat(m, is(nullValue()));
+
+        Bar bar = parser.parse(Bar.class, "null");
+        assertThat(bar, is(nullValue()));
+
+        List l = parser.parse(List.class, "null");
+        assertThat(l, is(nullValue()));
+        
+    }
+    
 }

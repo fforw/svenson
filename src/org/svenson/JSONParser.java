@@ -400,9 +400,13 @@ public class JSONParser
             {
                 return (T)Enum.valueOf((Class<Enum>)targetType, (String)token.value());
             }
+            else if (type == TokenType.NULL)
+            {
+                return null;
+            }
             else
             {
-                throw new JSONParseException("unexpected token "+token);
+                throw new JSONParseException("unexpected token " + token);
             }
             return t;
         }
