@@ -53,7 +53,13 @@ public class JavaObjectSupport extends AbstractObjectSupport
                 JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                 if (pair != null)
                 {
-                    pair.setSetterMethod(m);
+                    Method existing = pair.getSetterMethod();
+                    
+                    if (existing == null || isOveriding(m.getDeclaringClass(), existing.getDeclaringClass()))
+                    {
+                        pair.setSetterMethod(m);
+                    }
+                    
                 }
                 else
                 {
@@ -78,7 +84,12 @@ public class JavaObjectSupport extends AbstractObjectSupport
                     JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                     if (pair != null)
                     {
-                        pair.setGetterMethod(m);
+                        Method existing = pair.getGetterMethod();
+                        
+                        if (existing == null || isOveriding(m.getDeclaringClass(), existing.getDeclaringClass()))
+                        {
+                            pair.setGetterMethod(m);
+                        }
                     }
                     else
                     {
@@ -183,5 +194,32 @@ public class JavaObjectSupport extends AbstractObjectSupport
         }
         
         return new JSONClassInfo(cls, propertyInfos);
+    }
+
+    /**
+     * Returns <code>true</code> if class a is a subclass of class b or if b is <code>null</code>. 
+     * @param a
+     * @param b
+     * @return
+     */
+    static boolean isOveriding(Class<?> a, Class<?> b)
+    {
+        if (b == null)
+        {
+            return true;
+        }
+        
+        Class<?> cls = a;
+        Class<?> superClass;
+        while ( (superClass = cls.getSuperclass()) != null)
+        {
+            cls = superClass;
+            if (cls.equals(b))
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
