@@ -400,7 +400,10 @@ public class JSONTokenizer
             }
             else
             {
-                if (Character.isISOControl(c))
+                // we can't use java.lang.Character.isISOControl(int) because
+                // that uses an incorrect definition of control character.
+                // According to RFC4627 it's 0 to 31
+                if (c < 32)
                 {
                     throw new JSONParseException("Illegal control character 0x"+Integer.toHexString(c));
                 }
