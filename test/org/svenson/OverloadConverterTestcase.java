@@ -23,9 +23,6 @@ public class OverloadConverterTestcase
         typeConverterRepository.addTypeConverter(new MyDateConverter());
 
         // Convert to JSON.
-        // The valueNotOverridden attribute is converted correctly with the custom type converter.
-        // The value attribute (whose getter is overridden) is converter with the standard type
-        // converter because the bean introspection does not discover the annotation.
         JSON gen = new JSON();
         gen.setTypeConverterRepository(typeConverterRepository);
         String json = gen.forValue(subClass);
