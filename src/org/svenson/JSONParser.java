@@ -504,7 +504,7 @@ public class JSONParser
             {
                 ((Collection)cx.target).add(value);
             }
-            else
+            else 
             {
                 throw new JSONParseException("Cannot add value "+value+" to "+cx.target+" ( "+cx.target.getClass()+" )");
             }
@@ -610,10 +610,9 @@ public class JSONParser
 
                     if (isProperty)
                     {
-                        JSONPropertyInfo propertyInfo2 = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass()).getPropertyInfo(jsonName);
-                        if (propertyInfo2 != null)
+                        if (propertyInfo != null)
                         {
-                            memberType = propertyInfo2.getTypeHint();
+                            memberType = propertyInfo.getTypeHint();
                         }
                     }
 
@@ -624,10 +623,21 @@ public class JSONParser
                 {
                     //Class memberType = null;
 
-                    if (isProperty || containerIsMap || containerIsDynAttrs)
+                    if (propertyInfo != null && propertyInfo.canAdd())
+                    {
+                        List<?> temp = new ArrayList<Object>();
+                        parseArrayInto(cx.push(temp, propertyInfo.getAdderType(), "."+name), tokenizer);
+
+                        for (Object o : temp)
+                        {
+                            propertyInfo.add(cx.target, o);
+                        }
+                        continue;
+                    }
+                    else if (isProperty || containerIsMap || containerIsDynAttrs)
                     {
                         
-                        Class arrayTypeHint = typeHint;
+                        Class<?> arrayTypeHint = typeHint;
                         if (isProperty)
                         {
                             if (typeConverter != null && !List.class.isAssignableFrom(arrayTypeHint))
@@ -638,31 +648,17 @@ public class JSONParser
                         
                         newTarget = createNewTargetInstance(arrayTypeHint, false);
                         
-                        JSONPropertyInfo propertyInfo2 = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass()).getPropertyInfo(jsonName);
-                        Class memberType = null;
-                        if (propertyInfo2 != null)
+                        Class<?> memberType = null;
+                        if (propertyInfo != null)
                         {
-                            memberType = propertyInfo2.getTypeHint();
+                            memberType = propertyInfo.getTypeHint();
                         }
+                        
                         parseArrayInto(cx.push(newTarget,memberType, "."+name), tokenizer);
                     }
                     else
                     {
-                        if (propertyInfo.canAdd())
-                        {
-                            List temp = new ArrayList();
-                            parseArrayInto(cx.push(temp, propertyInfo.getAdderType(), "."+name), tokenizer);
-
-                            for (Object o : temp)
-                            {
-                                propertyInfo.add(cx.target, o);
-                            }
-                            continue;
-                        }
-                        else
-                        {
-                            throw new JSONParseException("Cannot set array to property "+name+" on "+cx.target);
-                        }
+                        throw new JSONParseException("Cannot set array to property "+name+" on "+cx.target);
                     }
                 }
                 else
@@ -1041,5 +1037,4 @@ public class JSONParser
     {
         this.objectSupport = new JavaObjectSupport(typeConverterRepository);
     }
-
 }

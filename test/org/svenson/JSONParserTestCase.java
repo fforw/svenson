@@ -24,6 +24,7 @@ import org.svenson.test.Bar;
 import org.svenson.test.Bean;
 import org.svenson.test.BeanWithClassProperty;
 import org.svenson.test.BeanWithEnum;
+import org.svenson.test.BeanWithStringAdder;
 import org.svenson.test.ContainerBean;
 import org.svenson.test.DynAttrsBean;
 import org.svenson.test.FooBean;
@@ -351,4 +352,14 @@ public class JSONParserTestCase
         
     }
     
+    @Test
+    public void testBeanWithStringAdder()
+    {
+        BeanWithStringAdder bean = JSONParser.defaultJSONParser().parse(BeanWithStringAdder.class, "{\"values\":[\"foo\",null,\"bar\"]}");
+        
+        assertThat(bean.getValues().size(), is(3));
+        assertThat(bean.getValues().get(0), is("foo"));
+        assertThat(bean.getValues().get(1), is( nullValue()));
+        assertThat(bean.getValues().get(2), is("bar"));
+    }
 }

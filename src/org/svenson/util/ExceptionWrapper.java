@@ -28,7 +28,7 @@ public class ExceptionWrapper
 
     public static SvensonRuntimeException wrap(InvocationTargetException e)
     {
-        return new SvensonRuntimeException("InvocationTargetException, target is"+e.getTargetException());
+        return new SvensonRuntimeException("InvocationTargetException", e.getTargetException());
     }
 
     public static SvensonRuntimeException wrap(NoSuchMethodException e)
