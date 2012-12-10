@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code.svenson</groupId>
     <artifactId>svenson</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
     <name>svenson</name>
     <packaging>jar</packaging>
     <description>Java5 JSON parser/generator</description>
     <url>http://code.google.com/p/svenson/</url>
-    <scm>
-        <connection>scm:svn:http://svenson.googlecode.com/svn/trunk</connection>
-        <developerConnection>scm:svn:https://svenson.googlecode.com/svn/trunk</developerConnection>
-        <url>http://svenson.googlecode.com/svn/trunk/</url>
-    </scm>
     <licenses>
         <license>
             <name>Revised BSD License</name>
             <url>http://svenson.googlecode.com/svn/trunk/LICENSE.TXT</url>
         </license>
     </licenses>
-
+    <scm>
+        <connection>scm:git:https://code.google.com/p/svenson/</connection>
+        <developerConnection>scm:git:https://fforw%40gmx.de@code.google.com/p/svenson/</developerConnection>
+        <url>https://code.google.com/p/svenson/</url>
+    </scm>
+    
+    <developers>
+        <developer>
+            <name>Sven Helmberger</name>
+            <email>sven dot helmberger at gmx dot de</email>
+            <url>http://fforw.de/</url>
+        </developer>
+    </developers>
+    
     <prerequisites>
         <maven>2</maven>
     </prerequisites>
-    
+
     <inceptionYear>2008</inceptionYear>
 
     <build>
@@ -44,6 +58,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
                 <configuration>
                     <source>1.5</source>
                     <target>1.5</target>
@@ -78,15 +93,29 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <extensions>
-          <extension>
-            <groupId>org.apache.maven.wagon</groupId>
-             <artifactId>wagon-ssh-external</artifactId>
-             <version>2.2</version>
-          </extension>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh-external</artifactId>
+                <version>2.2</version>
+            </extension>
         </extensions>
-      </build>
+    </build>
 
     <dependencies>
         <dependency>
@@ -151,19 +180,10 @@
             <scope>test</scope>
         </dependency>
 
-         <dependency>
+        <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.8.0</version>
         </dependency>
-
     </dependencies>
-
-    <distributionManagement>
-        <repository>
-          <id>fforw-de-ssh-repository</id>
-          <url>scpexe://fforw.de/home/mvnrsync/m2repo/releases</url>
-        </repository>
-    </distributionManagement>
-
 </project>
