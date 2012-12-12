@@ -50,7 +50,7 @@ public class InvocationTargetTestCase
         try
         {
             JSONParser parser = new JSONParser();
-            System.out.println(parser.parse(Target.class, "{\"value\":[\"foo\",\"bar\"]}"));
+            System.out.println(parser.parse(AdderTarget.class, "{\"value\":[\"foo\",\"bar\"]}"));
         }
         catch(Exception e)
         {
@@ -81,6 +81,11 @@ public class InvocationTargetTestCase
         {
             throw new IllegalArgumentException("getter error");
         }
+        
+    }
+
+    public static class AdderTarget
+    {
         
         public void addValue(String s)
         {

@@ -58,6 +58,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
                     if (existing == null || isOveriding(m.getDeclaringClass(), existing.getDeclaringClass()))
                     {
                         pair.setSetterMethod(m);
+                        pair.setAdderMethod(null);
                     }
                     
                 }
@@ -118,7 +119,10 @@ public class JavaObjectSupport extends AbstractObjectSupport
                 JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                 if (pair != null)
                 {
-                    pair.setAdderMethod(m);
+                    if ( pair.getSetterMethod() == null)
+                    {
+                        pair.setAdderMethod(m);
+                    }
                 }
                 else
                 {
