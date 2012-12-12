@@ -50,7 +50,7 @@ public class InputStreamSource
         {
             int result = reader.read();
             index++;
-            return (char)result;
+            return result;
         }
         catch (IOException e)
         {
