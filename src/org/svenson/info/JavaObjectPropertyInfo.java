@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.svenson.JSONParseException;
+import org.svenson.SvensonRuntimeException;
 import org.svenson.converter.TypeConverter;
 import org.svenson.util.ExceptionWrapper;
 
@@ -255,13 +256,9 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
         {
             return getterMethod.invoke(target);
         }
-        catch (IllegalAccessException e)
+        catch (Throwable t)
         {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (InvocationTargetException e)
-        {
-            throw ExceptionWrapper.wrap(e);
+            throw new SvensonRuntimeException("Error getting value from target " + target + " using " + getterMethod, t);
         }
     }
     
@@ -279,17 +276,9 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
         {
             setterMethod.invoke(target, value);
         }
-        catch (IllegalArgumentException e)
+        catch (Throwable t)
         {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (InvocationTargetException e)
-        {
-            throw ExceptionWrapper.wrap(e);
+            throw new SvensonRuntimeException("Error setting value " + value + " on target " + target + " using " + setterMethod, t);
         }
     }
 
@@ -347,17 +336,9 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
         {
             adderMethod.invoke(target, value);
         }
-        catch (IllegalArgumentException e)
+        catch (Throwable t)
         {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw ExceptionWrapper.wrap(e);
-        }
-        catch (InvocationTargetException e)
-        {
-            throw ExceptionWrapper.wrap(e);
+            throw new SvensonRuntimeException("Error adding value " + value + " to target " + target + " using " + adderMethod, t);
         }
     }
     
