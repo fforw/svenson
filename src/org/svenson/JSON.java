@@ -523,6 +523,8 @@ public class JSON
             return;
         }
 
+        boolean wasTagOpen = false;
+        
         buf.append(quoteChar);
         for (int i = 0; i < s.length(); i++)
         {
@@ -542,7 +544,7 @@ public class JSON
                     }
                     break;
                 case '/':
-                    buf.append("\\/");
+                    buf.append(wasTagOpen ? "\\/" : "/");
                     break;
                 case '\\':
                     buf.append("\\\\");
@@ -579,6 +581,7 @@ public class JSON
                     }
                     break;
             }
+            wasTagOpen = c == '<';
         }
         buf.append(quoteChar);
     }

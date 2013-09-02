@@ -41,6 +41,9 @@ public class JSONTestCase
         JSON json2 = new JSON();
         json2.setEscapeUnicodeChars(false);
         assertThat(json2.forValue("Hello \u00e4\u00f6\u00fc"), is("\"Hello \u00e4\u00f6\u00fc\""));
+        
+        assertThat(json.forValue("/</"), is("\"/<\\/\""));
+        
     }
     
     @Test
