@@ -34,6 +34,8 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
     private String linkIdProperty;
 
     private TypeConverter typeConverter;
+
+    private int priority = 0;
     
     public JavaObjectPropertyInfo(String javaPropertyName, Method getterMethod, Method setterMethod)
     {
@@ -366,5 +368,16 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
             throw new IllegalStateException("No method!?");
         }
         return type;
+    }
+
+
+    public void setPriority(int order)
+    {
+        this.priority = order;
+    }
+    
+    public int getPriority()
+    {
+        return priority;
     }
 }

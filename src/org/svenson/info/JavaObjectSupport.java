@@ -155,6 +155,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
                 propertyInfo.setIgnore(jsonProperty.ignore());
                 propertyInfo.setIgnoreIfNull(jsonProperty.ignoreIfNull());
                 propertyInfo.setReadOnly(jsonProperty.readOnly());
+                propertyInfo.setPriority(jsonProperty.priority());
             }
             propertyInfo.setJsonName(jsonPropertyName);
 

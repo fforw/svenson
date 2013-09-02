@@ -47,4 +47,6 @@ public @interface JSONProperty
      * @return
      */
     boolean readOnly() default false;
+
+    int priority() default 0;
 }

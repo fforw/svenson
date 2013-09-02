@@ -1,8 +1,12 @@
 package org.svenson.info;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Encapsulates svensons knowledge about a class. Provides a constructor method. 
@@ -15,7 +19,9 @@ public class JSONClassInfo
 
     private Class<?> cls;
 
-    protected Map<String, ? extends JSONPropertyInfo> propertyInfos;
+    protected Map<String, JSONPropertyInfo> propertyInfos;
+
+    private List<JSONPropertyInfo> sortedPropertyInfos;
 
     public JSONClassInfo(Class<?> cls, Map<String, ? extends JSONPropertyInfo> propertyInfos)
     {
@@ -29,7 +35,13 @@ public class JSONClassInfo
         }
         
         this.cls = cls;
-        this.propertyInfos = propertyInfos;
+        this.propertyInfos = (Map<String, JSONPropertyInfo>) propertyInfos;
+        
+        List<JSONPropertyInfo> copy = new ArrayList<JSONPropertyInfo>(propertyInfos.values());
+        
+        Collections.sort(copy, new JSONPropertyInfoComparator());
+        
+        this.sortedPropertyInfos = copy;
     }
 
 
@@ -46,9 +58,9 @@ public class JSONClassInfo
 
 
     @SuppressWarnings("unchecked")
-    public Collection<JSONPropertyInfo> getPropertyInfos()
+    public List<JSONPropertyInfo> getPropertyInfos()
     {
-        return (Collection<JSONPropertyInfo>)propertyInfos.values();
+        return sortedPropertyInfos;
     }
 
 

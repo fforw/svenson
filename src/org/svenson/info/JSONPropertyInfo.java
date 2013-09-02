@@ -46,4 +46,6 @@ public interface JSONPropertyInfo
     void add(Object target, Object value);
 
     Class<Object> getType();
+
+    int getPriority();
 }
