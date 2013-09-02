@@ -20,7 +20,7 @@ import org.svenson.info.ObjectSupport;
  * Utility class that provides support for writing and reading java object graphs
  * based on JavaScript-like path expressions (e.g. "array[5]") or "post.user["email-address"]")
  * 
- * @author shelmberger
+ * @author fforw at gmx dot de
  *
  */
 public class JSONPathUtil
