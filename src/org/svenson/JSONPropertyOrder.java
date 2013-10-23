@@ -15,7 +15,7 @@ import org.svenson.info.JSONPropertyPriorityComparator;
  * Marks beans as using an custom JSON property order for generation. The class of the comparator can be given as value.
  * For beans not annotated with this, the default {@link JSONPropertyPriorityComparator} is used.
  * <p>
- * If you replace it, you can feel to misuse the order attribute of {@link JSONProperty} if you feel like it.
+ * If you replace it, you can feel to misuse {@link JSONProperty#priority()} if you feel like it.
  *
  * @author fforw at gmx dot de
  */
