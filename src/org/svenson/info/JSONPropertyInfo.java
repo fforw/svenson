@@ -1,6 +1,7 @@
 package org.svenson.info;
 
 import org.svenson.converter.TypeConverter;
+import org.svenson.converter.TypeConverterRepository;
 
 public interface JSONPropertyInfo
 {
@@ -37,7 +38,7 @@ public interface JSONPropertyInfo
 
     void setProperty(Object target, Object value);
 
-    TypeConverter getTypeConverter();
+    TypeConverter getTypeConverter(TypeConverterRepository typeConverterRepository);
 
     boolean canAdd();
 

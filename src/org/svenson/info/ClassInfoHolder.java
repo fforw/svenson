@@ -21,6 +21,11 @@ public class ClassInfoHolder
         return cls;
     }
 
+    public ObjectSupport getObjectSupport()
+    {
+        return objectSupport;
+    }
+
     public JSONClassInfo getClassInfo()
     {
         if (classInfo == null)

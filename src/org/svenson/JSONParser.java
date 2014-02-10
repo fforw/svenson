@@ -70,7 +70,9 @@ public class JSONParser
     private Map<Class,TypeConverter> typeConvertersByClass;
 
     private ObjectSupport objectSupport;
-    
+
+    private DefaultTypeConverterRepository typeConverterRepository;
+
     public JSONParser()
     {
         interfaceMappings = new HashMap<Class, Class>();
@@ -582,7 +584,7 @@ public class JSONParser
                 
             }
 
-            TypeConverter typeConverter = propertyInfo == null ? null : propertyInfo.getTypeConverter();
+            TypeConverter typeConverter = propertyInfo == null ? null : propertyInfo.getTypeConverter(typeConverterRepository);
             
             if (!( isProperty || containerIsMap ||containerIsDynAttrs || (propertyInfo != null && propertyInfo.canAdd())))
             {
@@ -1035,6 +1037,6 @@ public class JSONParser
 
     public void setTypeConverterRepository(DefaultTypeConverterRepository typeConverterRepository)
     {
-        this.objectSupport = new JavaObjectSupport(typeConverterRepository);
+        this.typeConverterRepository = typeConverterRepository;
     }
 }

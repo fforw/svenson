@@ -11,6 +11,7 @@ import org.svenson.JSONTypeHint;
 import org.svenson.converter.JSONConverter;
 import org.svenson.converter.TypeConverter;
 import org.svenson.converter.TypeConverterRepository;
+import org.svenson.util.Util;
 
 public class JavaObjectSupport extends AbstractObjectSupport
 {
@@ -22,17 +23,11 @@ public class JavaObjectSupport extends AbstractObjectSupport
 
     private static final String ISSER_PREFIX = "is";
 
-    private TypeConverterRepository typeConverterRepository;
 
     public JavaObjectSupport()
     {
-        this(null);
     }
     
-    public JavaObjectSupport(TypeConverterRepository typeConverterRepository)
-    {
-        this.typeConverterRepository = typeConverterRepository;
-    }
 
     public JSONClassInfo createClassInfo(Class<?> cls)
     {
@@ -142,7 +137,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
 
             Method getterMethod = propertyInfo.getGetterMethod();
             Method setterMethod = propertyInfo.getSetterMethod();
-            JSONProperty jsonProperty = getAnnotation(JSONProperty.class, getterMethod,
+            JSONProperty jsonProperty = MethodUtil.getAnnotation(JSONProperty.class, getterMethod,
                 setterMethod);
 
             if (jsonProperty != null)
@@ -159,14 +154,14 @@ public class JavaObjectSupport extends AbstractObjectSupport
             }
             propertyInfo.setJsonName(jsonPropertyName);
 
-            JSONReference refAnno = getAnnotation(JSONReference.class, getterMethod, setterMethod);
+            JSONReference refAnno = MethodUtil.getAnnotation(JSONReference.class, getterMethod, setterMethod);
 
             if (refAnno != null)
             {
                 propertyInfo.setLinkIdProperty(refAnno.idProperty());
             }
 
-            JSONTypeHint typeHintAnno = getAnnotation(JSONTypeHint.class, getterMethod,
+            JSONTypeHint typeHintAnno = MethodUtil.getAnnotation(JSONTypeHint.class, getterMethod,
                 setterMethod);
             Class<?>[] parameterTypes;
             Class paramType;
@@ -174,26 +169,6 @@ public class JavaObjectSupport extends AbstractObjectSupport
             {
                 propertyInfo.setTypeHint(typeHintAnno.value());
             }
-            
-            if (typeConverterRepository != null)
-            {
-                JSONConverter converterAnno = getAnnotation(JSONConverter.class, getterMethod, setterMethod);
-                
-                if (converterAnno != null)
-                {
-                    TypeConverter typeConverter = null;
-                    if (converterAnno.name().length() == 0)
-                    {
-                         typeConverter = typeConverterRepository.getConverterByType(converterAnno.type());
-                    }
-                    else
-                    {
-                        typeConverter = typeConverterRepository.getConverterById(converterAnno.name());
-                    }
-                    propertyInfo.setTypeConverter(typeConverter);
-                }
-            }
-            
 
             propertyInfos.put(jsonPropertyName, propertyInfo);
         }

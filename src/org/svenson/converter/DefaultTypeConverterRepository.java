@@ -1,5 +1,7 @@
 package org.svenson.converter;
 
+import org.svenson.util.Util;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,4 +76,24 @@ public class DefaultTypeConverterRepository implements TypeConverterRepository
         return converters.get(id);
     }
 
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == this)
+        {
+            return true;
+        }
+
+        if (obj instanceof DefaultTypeConverterRepository)
+        {
+            return Util.equals(converters, ((DefaultTypeConverterRepository)obj).converters);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return 17 + 37 * converters.hashCode();
+    }
 }

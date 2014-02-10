@@ -42,6 +42,8 @@ public class JSON
 {
     private final static JSON defaultJSON = new JSON();
 
+    private TypeConverterRepository typeConverterRepository;
+
     public static JSON defaultJSON()
     {
         return defaultJSON;
@@ -87,7 +89,7 @@ public class JSON
 
     public void setTypeConverterRepository(TypeConverterRepository typeConverterRepository)
     {
-        this.objectSupport = new JavaObjectSupport(typeConverterRepository);
+        this.typeConverterRepository = typeConverterRepository;
     }
     
     public void registerJSONifier(Class c, JSONifier jsonifier)
@@ -380,7 +382,7 @@ public class JSON
 
                             if (value != null || !propertyInfo.isIgnoreIfNull())
                             {
-                                    TypeConverter typeConverter = propertyInfo.getTypeConverter();
+                                    TypeConverter typeConverter = propertyInfo.getTypeConverter(typeConverterRepository);
                                     if (typeConverter != null)
                                     {
                                         value = typeConverter.toJSON(value);

@@ -5,7 +5,9 @@ import java.lang.reflect.Method;
 
 import org.svenson.JSONParseException;
 import org.svenson.SvensonRuntimeException;
+import org.svenson.converter.JSONConverter;
 import org.svenson.converter.TypeConverter;
+import org.svenson.converter.TypeConverterRepository;
 import org.svenson.util.ExceptionWrapper;
 
 /**
@@ -32,8 +34,6 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
     private String jsonName;
     
     private String linkIdProperty;
-
-    private TypeConverter typeConverter;
 
     private int priority = 0;
     
@@ -296,19 +296,29 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
 
 
     /* (non-Javadoc)
-     * @see org.svenson.info.JSONPropertyInfo#setTypeConverter(org.svenson.converter.TypeConverter)
-     */
-    public void setTypeConverter(TypeConverter typeConverter)
-    {
-        this.typeConverter = typeConverter;
-    }
-    
-    /* (non-Javadoc)
      * @see org.svenson.info.JSONPropertyInfo#getTypeConverter()
      */
-    public TypeConverter getTypeConverter()
+    public TypeConverter getTypeConverter(TypeConverterRepository typeConverterRepository)
     {
-        return typeConverter;
+        if (typeConverterRepository != null)
+        {
+            JSONConverter converterAnno = MethodUtil.getAnnotation(JSONConverter.class, getterMethod, setterMethod);
+
+            if (converterAnno != null)
+            {
+                TypeConverter typeConverter = null;
+                if (converterAnno.name().length() == 0)
+                {
+                     typeConverter = typeConverterRepository.getConverterByType(converterAnno.type());
+                }
+                else
+                {
+                    typeConverter = typeConverterRepository.getConverterById(converterAnno.name());
+                }
+                return typeConverter;
+            }
+        }
+        return null;
     }
 
 
