@@ -1,6 +1,33 @@
 svenson json library change log:
 ================================
 
+Changes from 1.4.4 to 1.4.5:
+* Fix one but regarding typemappers ( commit f1618dd...)
+
+Changes from 1.4.3 to 1.4.4:
+* Change behavior of slash escape. Only escape slashes preceeding a < as a compromise between HTML pages and bad URL parsing.
+* Introduce property priorities and @JSONPropertyOrder.
+
+Changes from 1.4.2 to 1.4.3:
+* Minor bugfixes and stabilization
+* Corrected encoding bug where svenson would deviate from RFC 4627s strange ISO control
+  character definitions.
+* Make svenson more picky about detecting adders. Setters and adders are mutually exclusive now. 
+* Improve error reporting for setter, getter and adder methods
+
+Changes from 1.4.0 to 1.4.2:
+* Stabilized ObjectSupport API
+* ISO control character handling follows RFC now
+* Adder methods fixed
+* Overloaded method misdetection was fixed. 
+
+Changes from 1.3.8 to 1.4.0:
+
+* major refactoring of type knowledge and bean operations resulting in large performance
+gians
+* ObjectSupport/JSONPropertyInfo interfaces allow integrating of different objects/APIs/languages.
+
+
 Changes from 1.3.7 to 1.3.8:
  * fixed PrefixPathMatcher and SuffixPathMatcher. Tests were wrong.
  * documentation additions
