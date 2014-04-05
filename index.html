@@ -1,37 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
     <title>Svenson by fforw</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
   </head>
-
   <body>
-    <div id="container">
-      <div class="inner">
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/fforw/svenson">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/fforw/svenson/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/fforw/svenson/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
 
-        <header>
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
           <h1>Svenson</h1>
-          <h2>flexible Java5 json parser / generator</h2>
-        </header>
+          <p>flexible Java5 json parser / generator</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/fforw">fforw</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/fforw/svenson/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/fforw/svenson/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/fforw/svenson" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
-
-        <hr>
-
-        <section id="main_content">
-          <h1>
+        <h1>
 <a name="svenson" class="anchor" href="#svenson"><span class="octicon octicon-link"></span></a>Svenson</h1>
 
 <p>svenson is a Java5 JSON generator/parser. It lets you convert Java object graphs into JSON and vice versa. svenson offers an API and annotations to aid you in this.</p>
@@ -43,7 +50,7 @@
 <li><p>Free choice of java side objects: From total generic list/map scenarios to mapping POJOs to/from JSON or a mix between those two, from JSON generation being something your classes handle themselves to something JSONifying them.</p></li>
 <li><p>Annotations and interfaces to help you to create your own applications that work with JSON.</p></li>
 <li><p>Quality Assurance with unit tests ensures svenson keeps working after changes.</p></li>
-</ul><p></p>
+</ul><p><img src="http://fforw.de/static/image/svenson-cycle.png" alt="Svenson cycle"></p>
 
 <h2>
 <a name="javadoc" class="anchor" href="#javadoc"><span class="octicon octicon-link"></span></a>Javadoc</h2>
@@ -58,7 +65,7 @@
 <h2>
 <a name="svenson-and-slf4j" class="anchor" href="#svenson-and-slf4j"><span class="octicon octicon-link"></span></a>Svenson and slf4j</h2>
 
-<p>Svenson now uses slf4j for logging, so you need to configure slf4j to log to your favourite logging API. see [<a href="http://www.slf4j.org/manual.html">http://www.slf4j.org/manual.html</a> The slf4j manual] for details.</p>
+<p>Svenson now uses slf4j for logging, so you need to configure slf4j to log to your favourite logging API. see <a href="http://www.slf4j.org/manual.html">The slf4j manual</a> for details.</p>
 
 <p>If you use slf4j-log4j12, you still need a valid log4j configuration. svenson (especially parsing) will be slowed down considerably when that log4j configuration is missing.</p>
 
@@ -94,15 +101,10 @@ log4j.appender.Console.layout.ConversionPattern=%-5p %c: %m%n
 
 <p>I'm always interested in getting new ideas to improve my projects, so
 if your requirements are not met by svenson, you could try contacting me to give me a clearer idea of what could be added.</p>
-        </section>
+      </section>
 
-        <footer>
-          Svenson is maintained by <a href="https://github.com/fforw">fforw</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
-
-        
-      </div>
     </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
   </body>
 </html>
