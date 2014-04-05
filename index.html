@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Svenson by fforw</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Svenson</h1>
+          <h2>flexible Java5 json parser / generator</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/fforw/svenson/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/fforw/svenson/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/fforw/svenson" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="svenson" class="anchor" href="#svenson"><span class="octicon octicon-link"></span></a>Svenson</h1>
+
+<p>svenson is a Java5 JSON generator/parser. It lets you convert Java object graphs into JSON and vice versa. svenson offers an API and annotations to aid you in this.</p>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li><p>Free choice of java side objects: From total generic list/map scenarios to mapping POJOs to/from JSON or a mix between those two, from JSON generation being something your classes handle themselves to something JSONifying them.</p></li>
+<li><p>Annotations and interfaces to help you to create your own applications that work with JSON.</p></li>
+<li><p>Quality Assurance with unit tests ensures svenson keeps working after changes.</p></li>
+</ul><p></p>
+
+<h2>
+<a name="javadoc" class="anchor" href="#javadoc"><span class="octicon octicon-link"></span></a>Javadoc</h2>
+
+<p><a href="http://fforw.de/static/svenson-javadoc/">Current release javadoc</a></p>
+
+<h2>
+<a name="genesis" class="anchor" href="#genesis"><span class="octicon octicon-link"></span></a>Genesis</h2>
+
+<p>The initial code for svenson grew out of a simple generator tool class I once wrote for my projects. I wrote JSON parsing code while working on my own couchdb driver called [<a href="http://code.google.com/p/jcouchdb/">http://code.google.com/p/jcouchdb/</a> jcouchdb]. Later I decided to create a standalone svenson project because the outcome seemed to be sufficient for all kinds of scenarios not involving jcouchdb.</p>
+
+<h2>
+<a name="svenson-and-slf4j" class="anchor" href="#svenson-and-slf4j"><span class="octicon octicon-link"></span></a>Svenson and slf4j</h2>
+
+<p>Svenson now uses slf4j for logging, so you need to configure slf4j to log to your favourite logging API. see [<a href="http://www.slf4j.org/manual.html">http://www.slf4j.org/manual.html</a> The slf4j manual] for details.</p>
+
+<p>If you use slf4j-log4j12, you still need a valid log4j configuration. svenson (especially parsing) will be slowed down considerably when that log4j configuration is missing.</p>
+
+<h3>
+<a name="example-log4j-configuration" class="anchor" href="#example-log4j-configuration"><span class="octicon octicon-link"></span></a>example log4j configuration</h3>
+
+<pre><code>log4j.rootLogger=ERROR, Console
+
+# uncomment to set svenson logging to DEBUG
+#log4j.logger.org.svenson=DEBUG
+
+# log to the console
+log4j.appender.Console=org.apache.log4j.ConsoleAppender
+log4j.appender.Console.layout=org.apache.log4j.PatternLayout
+log4j.appender.Console.layout.ConversionPattern=%-5p %c: %m%n
+</code></pre>
+
+<h2>
+<a name="maven-repository" class="anchor" href="#maven-repository"><span class="octicon octicon-link"></span></a>Maven Repository</h2>
+
+<p>Now that we're sync by the big repositories, you just need to add the following dependency to your pom.xml:</p>
+
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;com.google.code.svenson&lt;/groupId&gt;
+  &lt;artifactId&gt;svenson&lt;/artifactId&gt;
+  &lt;version&gt;1.4.5&lt;/version&gt;
+  &lt;type&gt;jar&lt;/type&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h2>
+<a name="improve-svenson" class="anchor" href="#improve-svenson"><span class="octicon octicon-link"></span></a>Improve Svenson</h2>
+
+<p>I'm always interested in getting new ideas to improve my projects, so
+if your requirements are not met by svenson, you could try contacting me to give me a clearer idea of what could be added.</p>
+        </section>
+
+        <footer>
+          Svenson is maintained by <a href="https://github.com/fforw">fforw</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
