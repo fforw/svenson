@@ -329,15 +329,6 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
     {
         return adderMethod != null;
     }
-    
-    /* (non-Javadoc)
-     * @see org.svenson.info.JSONPropertyInfo#getAdderType()
-     */
-    public Class<Object> getAdderType()
-    {
-        Class<Object> adder = (Class<Object>)adderMethod.getParameterTypes()[0];
-        return adder;
-    }
 
     /* (non-Javadoc)
      * @see org.svenson.info.JSONPropertyInfo#add(java.lang.Object, java.lang.Object)

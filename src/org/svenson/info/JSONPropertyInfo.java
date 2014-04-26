@@ -18,9 +18,6 @@ public interface JSONPropertyInfo
 
     String getLinkIdProperty();
 
-    Class<Object> getTypeOfProperty();
-
-
     boolean isWriteable();
 
 
@@ -41,8 +38,6 @@ public interface JSONPropertyInfo
     TypeConverter getTypeConverter(TypeConverterRepository typeConverterRepository);
 
     boolean canAdd();
-
-    Class<Object> getAdderType();
 
     void add(Object target, Object value);
 
