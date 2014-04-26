@@ -628,7 +628,7 @@ public class JSONParser
                     if (propertyInfo != null && propertyInfo.canAdd())
                     {
                         List<?> temp = new ArrayList<Object>();
-                        parseArrayInto(cx.push(temp, propertyInfo.getAdderType(), "."+name), tokenizer);
+                        parseArrayInto(cx.push(temp, propertyInfo.getType(), "."+name), tokenizer);
 
                         for (Object o : temp)
                         {
@@ -678,7 +678,7 @@ public class JSONParser
             
             if (typeHint == null && propertyInfo != null)
             {
-                typeHint = propertyInfo.getTypeOfProperty();
+                typeHint = propertyInfo.getType();
             }
             
             
@@ -915,7 +915,7 @@ public class JSONParser
             JSONPropertyInfo propertyInfo = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass()).getPropertyInfo(name);
             if (propertyInfo != null)
             {
-                Class typeOfProperty = propertyInfo.getTypeOfProperty();
+                Class typeOfProperty = propertyInfo.getType();
                 if (typeOfProperty != null)
                 {
                     memberType = typeOfProperty;
