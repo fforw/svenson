@@ -15,9 +15,10 @@ svenson is a Java5 JSON generator/parser. It lets you convert Java object graphs
 ## Javadoc
 [Current release javadoc](http://fforw.de/static/svenson-javadoc/)
 
+
 ## Genesis
 
-The initial code for svenson grew out of a simple generator tool class I once wrote for my projects. I wrote JSON parsing code while working on my own couchdb driver called [http://code.google.com/p/jcouchdb/ jcouchdb]. Later I decided to create a standalone svenson project because the outcome seemed to be sufficient for all kinds of scenarios not involving jcouchdb.
+The initial code for svenson grew out of a simple generator tool class I once wrote for my projects. I wrote JSON parsing code while working on my own couchdb driver called [jcouchdb](http://code.google.com/p/jcouchdb/). Later I decided to create a standalone svenson project because the outcome seemed to be sufficient for all kinds of scenarios not involving jcouchdb.
 
 ## Svenson and slf4j
 
