@@ -18,6 +18,7 @@ import org.svenson.info.JSONClassInfo;
 import org.svenson.info.JSONPropertyInfo;
 import org.svenson.info.JavaObjectSupport;
 import org.svenson.info.ObjectSupport;
+import org.svenson.reflectasm.reflectasm.ReflectAsmObjectSupport;
 import org.svenson.util.JSONBeanUtil;
 
 /**
@@ -63,12 +64,12 @@ public class JSON
     
     public JSON()
     {
-        this(new JavaObjectSupport(),'"');
+        this(new ReflectAsmObjectSupport(),'"');
     }
 
     public JSON(char quoteChar)
     {
-        this(new JavaObjectSupport(), quoteChar);
+        this(new ReflectAsmObjectSupport(), quoteChar);
     }
     
     public JSON(ObjectSupport objectSupport, char quoteChar)

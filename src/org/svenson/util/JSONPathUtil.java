@@ -15,6 +15,7 @@ import org.svenson.TypeAnalyzer;
 import org.svenson.info.JSONPropertyInfo;
 import org.svenson.info.JavaObjectSupport;
 import org.svenson.info.ObjectSupport;
+import org.svenson.reflectasm.reflectasm.ReflectAsmObjectSupport;
 
 /**
  * Utility class that provides support for writing and reading java object graphs
@@ -35,7 +36,7 @@ public class JSONPathUtil
     
     public JSONPathUtil()
     {
-        this(new JavaObjectSupport());
+        this(new ReflectAsmObjectSupport());
     }
     
     public JSONPathUtil(ObjectSupport objectSupport)

@@ -23,6 +23,7 @@ import org.svenson.info.JavaObjectSupport;
 import org.svenson.info.ObjectSupport;
 import org.svenson.matcher.EqualsPathMatcher;
 import org.svenson.matcher.PathMatcher;
+import org.svenson.reflectasm.reflectasm.ReflectAsmObjectSupport;
 import org.svenson.tokenize.JSONCharacterSource;
 import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
@@ -80,7 +81,7 @@ public class JSONParser
         interfaceMappings.put(Set.class, HashSet.class);
         interfaceMappings.put(List.class, ArrayList.class);
         interfaceMappings.put(Map.class, HashMap.class);
-        this.objectSupport = new JavaObjectSupport();
+        this.objectSupport = new ReflectAsmObjectSupport();
     }
     
     public void setObjectSupport(ObjectSupport objectSupport)

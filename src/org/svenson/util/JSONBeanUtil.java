@@ -11,6 +11,7 @@ import org.svenson.info.JSONClassInfo;
 import org.svenson.info.JSONPropertyInfo;
 import org.svenson.info.JavaObjectSupport;
 import org.svenson.info.ObjectSupport;
+import org.svenson.reflectasm.reflectasm.ReflectAsmObjectSupport;
 
 /**
  * Contains some util methods to handle bean properties dynamically.
@@ -22,7 +23,7 @@ public class JSONBeanUtil
 {
     private final static JSONBeanUtil instance = new JSONBeanUtil();
     
-    private ObjectSupport objectSupport = new JavaObjectSupport();
+    private ObjectSupport objectSupport = new ReflectAsmObjectSupport();
     
     public void setObjectSupport(ObjectSupport objectSupport)
     {
