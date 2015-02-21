@@ -588,7 +588,7 @@ public class JSONParser
             
             if (!( isProperty || containerIsMap ||containerIsDynAttrs || (propertyInfo != null && propertyInfo.canAdd())))
             {
-                throw new JSONParseException("Cannot set property "+jsonName+" on "+cx.target.getClass());
+                    throw new JSONParseException("Cannot set property "+jsonName+" on "+cx.target.getClass());
             }
 
             
@@ -612,9 +612,9 @@ public class JSONParser
 
                     if (isProperty)
                     {
-                        if (propertyInfo != null)
+                        if (propertyInfo != null && propertyInfo.getTypeHint() != null)
                         {
-                            memberType = propertyInfo.getTypeHint();
+                            memberType = typeHint != null && !Map.class.isAssignableFrom(typeHint) ? null : propertyInfo.getTypeHint();
                         }
                     }
 
@@ -918,7 +918,15 @@ public class JSONParser
                 Class typeOfProperty = propertyInfo.getType();
                 if (typeOfProperty != null)
                 {
-                    memberType = typeOfProperty;
+                    Class<Object> typeHint = propertyInfo.getTypeHint();
+                    if (typeHint != null && typeOfProperty.isAssignableFrom(typeHint))
+                    {
+                        memberType = typeHint;
+                    }
+                    else
+                    {
+                        memberType = typeOfProperty;
+                    }
                 }
             }
             
