@@ -1,5 +1,6 @@
 package org.svenson.perftest;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ public class PerformanceTest
     private Random random = new Random(23870912735098l);
 
     @Test
+    @Ignore
     public void testPerformance()
     {
         JSONParser jsonParser = new JSONParser();
