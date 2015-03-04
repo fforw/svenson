@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration strict="true" name="XMLConfigTest"
+               packages="org.apache.logging.log4j.test">
+    <Appenders>
+        <Appender name="A1" type="Console">
+            <Layout type="PatternLayout" pattern="%d %-5p %c: %m%n" />
+        </Appender>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.svenson" level="debug" />
+
+        <Root level="INFO">
+            <AppenderRef ref="A1"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
