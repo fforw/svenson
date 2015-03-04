@@ -22,9 +22,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:https://code.google.com/p/svenson/</connection>
-        <developerConnection>scm:git:https://fforw%40gmx.de@code.google.com/p/svenson/</developerConnection>
-        <url>https://code.google.com/p/svenson/</url>
+        <connection>scm:git:https://github.com/fforw/svenson.git</connection>
+        <developerConnection>scm:git:git@github.com:fforw/svenson.git</developerConnection>
+        <url>https://github.com/fforw/svenson/</url>
     </scm>
     
     <developers>
