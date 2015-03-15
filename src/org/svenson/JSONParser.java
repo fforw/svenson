@@ -958,7 +958,7 @@ public class JSONParser
         }
         catch (InstantiationException e)
         {
-            throw ExceptionWrapper.wrap(e);
+            throw new SvensonRuntimeException("Error creating new instance of " + typeHint.getName(), e.getCause());
         }
         catch (IllegalAccessException e)
         {

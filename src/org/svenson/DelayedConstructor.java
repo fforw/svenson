@@ -4,6 +4,7 @@ import org.svenson.info.ConstructorInfo;
 import org.svenson.info.ParameterInfo;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -33,9 +34,17 @@ public class DelayedConstructor<T>
             Constructor<T> constructor = (Constructor<T>) info.getConstructor();
             return constructor.newInstance(args);
         }
-        catch (Exception e)
+        catch (InstantiationException e)
         {
-            throw new SvensonRuntimeException("Error constructing " + this, e);
+            throw new SvensonRuntimeException("Error constructing instance of " + info.getConstructor().getDeclaringClass().getName(), e.getCause());
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new SvensonRuntimeException("Error constructing instance of " + info.getConstructor().getDeclaringClass().getName(), e);
+        }
+        catch (InvocationTargetException e)
+        {
+            throw new SvensonRuntimeException("Error constructing instance of " + info.getConstructor().getDeclaringClass().getName(), e.getTargetException());
         }
     }
 
