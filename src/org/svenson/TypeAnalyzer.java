@@ -30,6 +30,11 @@ public class TypeAnalyzer
      */
     public static JSONClassInfo getClassInfo(ObjectSupport objectSupport, Class<?> cls)
     {
+        if (cls == null)
+        {
+            return null;
+        }
+
         ClassInfoHolder holder = new ClassInfoHolder(objectSupport, cls);
         ClassInfoHolder existing = holders.putIfAbsent(cls, holder);
         if (existing != null)

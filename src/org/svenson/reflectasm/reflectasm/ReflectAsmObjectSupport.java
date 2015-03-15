@@ -7,7 +7,6 @@ import org.svenson.JSONTypeHint;
 import org.svenson.converter.JSONConverter;
 import org.svenson.info.AbstractObjectSupport;
 import org.svenson.info.JSONClassInfo;
-import org.svenson.info.JSONPropertyInfo;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -217,7 +216,7 @@ public class ReflectAsmObjectSupport
         }
 
 
-        return new JSONClassInfo(cls, propertyInfos);
+        return new JSONClassInfo(cls, propertyInfos, null);
     }
     /**
      * Returns <code>true</code> if class a is a subclass of class b or if b is <code>null</code>.

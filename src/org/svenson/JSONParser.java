@@ -17,10 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.svenson.converter.DefaultTypeConverterRepository;
 import org.svenson.converter.TypeConverter;
+import org.svenson.info.ConstructorInfo;
 import org.svenson.info.JSONClassInfo;
 import org.svenson.info.JSONPropertyInfo;
 import org.svenson.info.JavaObjectSupport;
 import org.svenson.info.ObjectSupport;
+import org.svenson.info.ParameterInfo;
 import org.svenson.matcher.EqualsPathMatcher;
 import org.svenson.matcher.PathMatcher;
 import org.svenson.tokenize.JSONCharacterSource;
@@ -389,14 +391,16 @@ public class JSONParser
                     targetType = typeHint;
                 }
 
-                t = (T) createNewTargetInstance(targetType, true);
-                parseObjectInto(new ParseContext(t,null), tokenizer);
+                JSONClassInfo newClassInfo = TypeAnalyzer.getClassInfo(objectSupport, targetType);
+                t = (T) createNewTargetInstance(targetType, newClassInfo, true);
+                parseObjectInto(new ParseContext(t,null,newClassInfo), tokenizer);
+                t = DelayedConstructor.unwrap(t);
             }
             else if (type == TokenType.BRACKET_OPEN)
             {
-                
-                t = (T) createNewTargetInstance(targetType, false);
-                parseArrayInto(new ParseContext(t,null), tokenizer);
+                JSONClassInfo newClassInfo = TypeAnalyzer.getClassInfo(objectSupport, targetType);
+                t = (T) createNewTargetInstance(targetType, newClassInfo, false);
+                parseArrayInto(new ParseContext(t,null,newClassInfo), tokenizer);
             }
             else if (type == TokenType.STRING && Enum.class.isAssignableFrom(targetType) )
             {
@@ -479,7 +483,7 @@ public class JSONParser
 
                 if(typeHint != null)
                 {
-                    value = convertValueTo(value, typeHint);
+                    value = convertValueTo(value, typeHint, typeConvertersByClass);
                 }
             }
             else
@@ -487,13 +491,17 @@ public class JSONParser
                 Object newTarget = null;
                 if (valueType == TokenType.BRACE_OPEN)
                 {
-                    newTarget = createNewTargetInstance(typeHint, true);
-                    parseObjectInto(cx.push(newTarget,null,"[]"), tokenizer);
+                    JSONClassInfo classInfo = TypeAnalyzer.getClassInfo(objectSupport, typeHint);
+                    newTarget = createNewTargetInstance(typeHint, classInfo, true);
+                    parseObjectInto(cx.push(newTarget,null,"[]",classInfo), tokenizer);
+                    newTarget = DelayedConstructor.unwrap(newTarget);
                 }
                 else if (valueType == TokenType.BRACKET_OPEN)
                 {
-                    newTarget = createNewTargetInstance(typeHint, false);
-                    parseArrayInto(cx.push(newTarget,null,"[]"), tokenizer);
+                    JSONClassInfo classInfo = TypeAnalyzer.getClassInfo(objectSupport, typeHint);
+                    newTarget = createNewTargetInstance(typeHint, classInfo, false);
+                    parseArrayInto(cx.push(newTarget,null,"[]",classInfo), tokenizer);
+                    newTarget = DelayedConstructor.unwrap(newTarget);
                 }
                 else
                 {
@@ -561,7 +569,7 @@ public class JSONParser
             JSONPropertyInfo propertyInfo = null;
             if (!containerIsMap)
             {
-                classInfo = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass());
+                classInfo = cx.getClassInfo();
                 propertyInfo = classInfo.getPropertyInfo(jsonName);
                 if (propertyInfo != null)
                 {
@@ -610,6 +618,25 @@ public class JSONParser
                 {
                     Class memberType = null;
 
+                    if (cx.target instanceof DelayedConstructor)
+                    {
+                        ConstructorInfo constructorInfo = ((DelayedConstructor) cx.target).getConstructorInfo();
+                        ParameterInfo parameterInfo = constructorInfo
+                            .getParameterInfo(name);
+                        if (parameterInfo != null)
+                        {
+                            Class ctorTypeHint = parameterInfo.getTypeHint();
+                            if (ctorTypeHint != null)
+                            {
+                                memberType = ctorTypeHint;
+                            }
+                            else
+                            {
+                                typeHint =  constructorInfo.getConstructor().getParameterTypes()[parameterInfo.getIndex()];
+                            }
+                        }
+                    }
+
                     if (isProperty)
                     {
                         if (propertyInfo != null && propertyInfo.getTypeHint() != null)
@@ -618,8 +645,13 @@ public class JSONParser
                         }
                     }
 
-                    newTarget = createNewTargetInstance(typeHint, true);
-                    parseObjectInto(cx.push(newTarget, memberType, "."+name), tokenizer);
+
+                    JSONClassInfo newClassInfo = TypeAnalyzer.getClassInfo(objectSupport, typeHint);
+                    newTarget = createNewTargetInstance(typeHint, newClassInfo, true);
+
+                    parseObjectInto(cx.push(newTarget, memberType, "." + name, newClassInfo), tokenizer);
+                    newTarget = DelayedConstructor.unwrap(newTarget);
+
                 }
                 else if (valueType == TokenType.BRACKET_OPEN)
                 {
@@ -628,10 +660,13 @@ public class JSONParser
                     if (propertyInfo != null && propertyInfo.canAdd())
                     {
                         List<?> temp = new ArrayList<Object>();
-                        parseArrayInto(cx.push(temp, propertyInfo.getType(), "."+name), tokenizer);
+                        JSONClassInfo newClassInfo = TypeAnalyzer.getClassInfo(objectSupport, temp.getClass());
+                        parseArrayInto(cx.push(temp, propertyInfo.getTypeHint(), "."+name, newClassInfo), tokenizer);
+                        // XXX: unwrap
 
                         for (Object o : temp)
                         {
+                            o = DelayedConstructor.unwrap(o);
                             propertyInfo.add(cx.target, o);
                         }
                         continue;
@@ -647,16 +682,32 @@ public class JSONParser
                                 arrayTypeHint = List.class;
                             }
                         }
-                        
-                        newTarget = createNewTargetInstance(arrayTypeHint, false);
+
+                        JSONClassInfo newClassInfo = TypeAnalyzer.getClassInfo(objectSupport, arrayTypeHint);
+                        newTarget = createNewTargetInstance(arrayTypeHint, newClassInfo, false);
                         
                         Class<?> memberType = null;
                         if (propertyInfo != null)
                         {
                             memberType = propertyInfo.getTypeHint();
                         }
-                        
-                        parseArrayInto(cx.push(newTarget,memberType, "."+name), tokenizer);
+
+                        if (cx.target instanceof DelayedConstructor)
+                        {
+                            ParameterInfo parameterInfo = ((DelayedConstructor) cx.target).getConstructorInfo()
+                                .getParameterInfo(name);
+                            if (parameterInfo != null)
+                            {
+                                Class ctorTypeHint = parameterInfo.getTypeHint();
+                                if (ctorTypeHint != null)
+                                {
+                                    memberType = ctorTypeHint;
+                                }
+                            }
+                        }
+
+                        parseArrayInto(cx.push(newTarget,memberType, "."+name,newClassInfo), tokenizer);
+                        newTarget = DelayedConstructor.unwrap(newTarget);
                     }
                     else
                     {
@@ -684,7 +735,7 @@ public class JSONParser
             
             if(typeHint != null && !isIgnoredOnParse)
             {
-                value = convertValueTo(value, typeHint);
+                value = convertValueTo(value, typeHint, typeConvertersByClass);
             }
             
             if (isProperty)
@@ -773,7 +824,7 @@ public class JSONParser
         return null;
     }
 
-    private Object convertValueTo(Object value, Class targetClass)
+    static Object convertValueTo(Object value, Class targetClass, Map<Class,TypeConverter> typeConvertersByClass)
     {
         if (targetClass == null)
         {
@@ -845,7 +896,7 @@ public class JSONParser
     }
 
 
-    private Object createNewTargetInstance(Class typeHint, boolean object)
+    private Object createNewTargetInstance(Class typeHint, JSONClassInfo classInfo, boolean object)
     {
         if (typeHint == null || typeHint.equals(Object.class))
         {
@@ -893,6 +944,15 @@ public class JSONParser
             }
             else
             {
+                if (classInfo != null)
+                {
+                    ConstructorInfo ctorInfo = classInfo.getConstructorInfo();
+                    if (ctorInfo != null)
+                    {
+                        return new DelayedConstructor(ctorInfo);
+                    }
+                }
+
                 return typeHint.newInstance();
             }
         }
@@ -909,10 +969,10 @@ public class JSONParser
     private Class getTypeHint(ParseContext cx, String parsePathInfo, JSONTokenizer tokenizer, String name, boolean isProperty, boolean primitive)
     {
         Class memberType = cx.getMemberType();
-        
+
         if (memberType == null && isProperty)
         {
-            JSONPropertyInfo propertyInfo = TypeAnalyzer.getClassInfo(objectSupport,cx.target.getClass()).getPropertyInfo(name);
+            JSONPropertyInfo propertyInfo = cx.getClassInfo().getPropertyInfo(name);
             if (propertyInfo != null)
             {
                 Class typeOfProperty = propertyInfo.getType();
@@ -947,6 +1007,7 @@ public class JSONParser
                 log.debug("set typeHint to  "+memberType);
             }
         }
+
         return memberType;
     }
 
@@ -987,21 +1048,24 @@ public class JSONParser
 
     private class ParseContext
     {
-        private Object target;
-        private ParseContext parent;
-        private Class memberType;
+        private final Object target;
+        private final ParseContext parent;
+        private final Class memberType;
+        private final JSONClassInfo classInfo;
         private String info="";
 
-        public ParseContext(Object target, Class memberType)
+        public ParseContext(Object target, Class memberType, JSONClassInfo classInfo)
         {
-            this(target,memberType,null);
+            this(target,memberType,null, classInfo);
         }
 
-        private ParseContext(Object target, Class memberType, ParseContext parent)
+        private ParseContext(Object target, Class memberType, ParseContext parent, JSONClassInfo classInfo)
         {
             this.target = target;
             this.parent = parent;
             this.memberType = memberType;
+            this.classInfo = classInfo;
+
         }
 
         public Class getMemberType()
@@ -1009,9 +1073,9 @@ public class JSONParser
             return memberType;
         }
 
-        public ParseContext push(Object target, Class memberType, String info)
+        public ParseContext push(Object target, Class memberType, String info, JSONClassInfo classInfo)
         {
-            ParseContext child = new ParseContext(target, memberType, this);
+            ParseContext child = new ParseContext(target, memberType, this, classInfo);
             child.info = this.info + info;
             return child;
 
@@ -1040,6 +1104,11 @@ public class JSONParser
         public String toString()
         {
             return super.toString()+", target = "+target+", memberType = "+memberType+", info = "+info;
+        }
+
+        public JSONClassInfo getClassInfo()
+        {
+            return classInfo;
         }
     }
 

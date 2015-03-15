@@ -1,10 +1,13 @@
 package org.svenson.info;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.svenson.JSONParameter;
 import org.svenson.JSONProperty;
 import org.svenson.JSONReference;
 import org.svenson.JSONTypeHint;
@@ -33,6 +36,30 @@ public class JavaObjectSupport extends AbstractObjectSupport
     {
         Map<String, JavaObjectPropertyInfo> javaNameToInfo = new HashMap<String, JavaObjectPropertyInfo>();
 
+        Constructor<?> ctor = null;
+outer:
+        for (Constructor<?> c : cls.getConstructors())
+        {
+            Annotation[][] parameterAnnotations = c.getParameterAnnotations();
+            for (int i = 0, parameterAnnotationsLength = parameterAnnotations.length; i < parameterAnnotationsLength;
+                 i++)
+            {
+                Annotation[] annotations = parameterAnnotations[i];
+                for (Annotation annotation : annotations)
+                {
+                    if (annotation instanceof JSONParameter)
+                    {
+                        if (ctor != null)
+                        {
+                            throw new IllegalStateException("Classes can only have one constructor with @JSONParameter annotations");
+                        }
+                        ctor = c;
+                        continue outer;
+                    }
+                }
+            }
+        }
+
         for (Method m : cls.getMethods())
         {
             String name = m.getName();
@@ -44,6 +71,11 @@ public class JavaObjectSupport extends AbstractObjectSupport
 
             if (name.startsWith(SETTER_PREFIX) && m.getParameterTypes().length == 1)
             {
+                if (ctor != null)
+                {
+                    throw new IllegalStateException("Classes with @JSONParameter constructors can't have setters.");
+                }
+
                 String javaPropertyName = propertyName(name, SETTER_PREFIX.length());
                 JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                 if (pair != null)
@@ -110,6 +142,11 @@ public class JavaObjectSupport extends AbstractObjectSupport
             }
             else if (name.startsWith(ADDER_PREFIX) && m.getParameterTypes().length == 1)
             {
+                if (ctor != null)
+                {
+                    throw new IllegalStateException("Classes with @JSONParameter constructors can't have adders.");
+                }
+
                 String javaPropertyName = propertyName(name, ADDER_PREFIX.length());
                 JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                 if (pair != null)
@@ -128,6 +165,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
             }
         }
 
+
         HashMap<String, JavaObjectPropertyInfo> propertyInfos = new HashMap<String, JavaObjectPropertyInfo>(javaNameToInfo.size());
 
         for (Map.Entry<String, JavaObjectPropertyInfo> e : javaNameToInfo.entrySet())
@@ -137,11 +175,14 @@ public class JavaObjectSupport extends AbstractObjectSupport
 
             Method getterMethod = propertyInfo.getGetterMethod();
             Method setterMethod = propertyInfo.getSetterMethod();
+            Method adderMethod = propertyInfo.getAdderMethod();
+
             JSONProperty jsonProperty = MethodUtil.getAnnotation(JSONProperty.class, getterMethod,
                 setterMethod);
 
             if (jsonProperty != null)
             {
+
                 if (jsonProperty.value().length() > 0)
                 {
                     jsonPropertyName = jsonProperty.value();
@@ -169,11 +210,19 @@ public class JavaObjectSupport extends AbstractObjectSupport
             {
                 propertyInfo.setTypeHint(typeHintAnno.value());
             }
+            else
+            {
+                if (adderMethod != null)
+                {
+                    propertyInfo.setTypeHint(adderMethod.getParameterTypes()[0]);
+                }
+            }
 
             propertyInfos.put(jsonPropertyName, propertyInfo);
         }
-        
-        return new JSONClassInfo(cls, propertyInfos);
+
+
+        return new JSONClassInfo(cls, propertyInfos, ctor);
     }
 
     /**

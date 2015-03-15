@@ -1,5 +1,6 @@
 package org.svenson.info;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -25,6 +26,8 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
 
     private Method adderMethod;
 
+    private int ctorIndex = -1;
+
     private boolean ignore, ignoreIfNull, readOnly;
     
     private String javaPropertyName;
@@ -36,7 +39,8 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
     private String linkIdProperty;
 
     private int priority = 0;
-    
+    private Constructor<?> constructor;
+
     public JavaObjectPropertyInfo(String javaPropertyName, Method getterMethod, Method setterMethod)
     {
         this.javaPropertyName = javaPropertyName;
@@ -380,5 +384,25 @@ class JavaObjectPropertyInfo implements JSONPropertyInfo
     public int getPriority()
     {
         return priority;
+    }
+
+    public int getCtorIndex()
+    {
+        return ctorIndex;
+    }
+
+    public void setCtorIndex(int ctorIndex)
+    {
+        this.ctorIndex = ctorIndex;
+    }
+
+    public void setConstructor(Constructor<?> constructor)
+    {
+        this.constructor = constructor;
+    }
+
+    public Constructor<?> getConstructor()
+    {
+        return constructor;
     }
 }

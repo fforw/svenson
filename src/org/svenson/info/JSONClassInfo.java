@@ -1,18 +1,16 @@
 package org.svenson.info;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.svenson.JSONPropertyOrder;
 import org.svenson.util.ExceptionWrapper;
-
-import com.sun.org.apache.bcel.internal.ExceptionConstants;
 
 /**
  * Encapsulates svensons knowledge about a class. Provides a constructor method. 
@@ -23,13 +21,14 @@ import com.sun.org.apache.bcel.internal.ExceptionConstants;
 public class JSONClassInfo
 {
 
-    private Class<?> cls;
+    private final ConstructorInfo constructorInfo;
+    private final Class<?> cls;
 
-    protected Map<String, JSONPropertyInfo> propertyInfos;
+    protected final Map<String, JSONPropertyInfo> propertyInfos;
 
-    private List<JSONPropertyInfo> sortedPropertyInfos;
+    private final List<JSONPropertyInfo> sortedPropertyInfos;
 
-    public JSONClassInfo(Class<?> cls, Map<String, ? extends JSONPropertyInfo> propertyInfos)
+    public JSONClassInfo(Class<?> cls, Map<String, ? extends JSONPropertyInfo> propertyInfos, Constructor<?> ctor)
     {
         if (cls == null)
         {
@@ -41,6 +40,14 @@ public class JSONClassInfo
         }
         
         this.cls = cls;
+        if (ctor != null)
+        {
+            constructorInfo = new ConstructorInfo(ctor);
+        }
+        else
+        {
+            constructorInfo = null;
+        }
         this.propertyInfos = (Map<String, JSONPropertyInfo>) propertyInfos;
         
         List<JSONPropertyInfo> copy = new ArrayList<JSONPropertyInfo>(propertyInfos.values());
@@ -71,6 +78,8 @@ public class JSONClassInfo
     }
 
 
+
+
     public JSONPropertyInfo getPropertyInfo(String jsonPropertyName)
     {
         return propertyInfos.get(jsonPropertyName);
@@ -89,12 +98,15 @@ public class JSONClassInfo
         return sortedPropertyInfos;
     }
 
-
     @Override
     public String toString()
     {
         return super.toString() + " cls = " + cls + ", propertyInfos = " + propertyInfos;
     }
 
-    
+
+    public ConstructorInfo getConstructorInfo()
+    {
+        return constructorInfo;
+    }
 }
