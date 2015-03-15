@@ -625,14 +625,25 @@ public class JSONParser
                             .getParameterInfo(name);
                         if (parameterInfo != null)
                         {
+                            Class<?> parameterType = constructorInfo.getConstructor().getParameterTypes()[parameterInfo
+                                .getIndex()];
+
                             Class ctorTypeHint = parameterInfo.getTypeHint();
                             if (ctorTypeHint != null)
                             {
-                                memberType = ctorTypeHint;
+                                if (Collection.class.isAssignableFrom(parameterType) ||
+                                    Map.class.isAssignableFrom(parameterType))
+                                {
+                                    memberType = ctorTypeHint;
+                                }
+                                else
+                                {
+                                    typeHint = getTypeHint( cx.info, tokenizer, ctorTypeHint, true);
+                                }
                             }
                             else
                             {
-                                typeHint =  constructorInfo.getConstructor().getParameterTypes()[parameterInfo.getIndex()];
+                                typeHint = parameterType;
                             }
                         }
                     }
@@ -958,7 +969,7 @@ public class JSONParser
         }
         catch (InstantiationException e)
         {
-            throw new SvensonRuntimeException("Error creating new instance of " + typeHint.getName(), e.getCause());
+            throw new SvensonRuntimeException("Error creating new instance of " + typeHint.getName(), e);
         }
         catch (IllegalAccessException e)
         {

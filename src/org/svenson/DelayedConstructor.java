@@ -36,7 +36,7 @@ public class DelayedConstructor<T>
         }
         catch (InstantiationException e)
         {
-            throw new SvensonRuntimeException("Error constructing instance of " + info.getConstructor().getDeclaringClass().getName(), e.getCause());
+            throw new SvensonRuntimeException("Error constructing instance of " + info.getConstructor().getDeclaringClass().getName(), e);
         }
         catch (IllegalAccessException e)
         {

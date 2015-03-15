@@ -1,8 +1,14 @@
 package org.svenson;
 
 import org.junit.Test;
+import org.svenson.matcher.SubtypeMatcher;
 import org.svenson.test.AddImmutables;
 import org.svenson.test.Bar;
+import org.svenson.test.CTORListVariance;
+import org.svenson.test.CTORMapVariance;
+import org.svenson.test.CTORVariance;
+import org.svenson.test.CTVBase;
+import org.svenson.test.CTVExtension;
 import org.svenson.test.ConstructorParametrization;
 import org.svenson.test.Immutable;
 import org.svenson.test.ListOfImmutables;
@@ -100,6 +106,66 @@ public class ConstructorParametrizationTestCase
         assertThat(o.getQuxes(),is(notNullValue()));
         assertThat(o.getQuxes().get(0),is(notNullValue()));
         assertThat(o.getQuxes().get(0).getName(),is("Anna"));
+    }
+
+
+    @Test
+    public void testVariance()
+    {
+        JSONParser parser = setupParser();
+
+        CTORVariance o = parser.parse(CTORVariance.class,
+            "{\"value\":{\"type\" : \"CTVExtension\"}}");
+
+        assertThat(o,is(notNullValue()));
+        assertThat(o.getValue(),is(CTVExtension.class));
+        assertThat(o.getName(),is(nullValue()));
+
+        CTORVariance o2 = parser.parse(CTORVariance.class,
+            "{\"value\":\"Beate\"}");
+
+        assertThat(o2,is(notNullValue()));
+        assertThat(o2.getValue(),is(nullValue()));
+        assertThat(o2.getName(),is("Beate"));
+    }
+
+    private JSONParser setupParser()
+    {
+        JSONParser parser = new JSONParser();
+
+        ClassNameBasedTypeMapper typeMapper = new ClassNameBasedTypeMapper();
+        typeMapper.setBasePackage(CTVBase.class.getPackage().getName());
+        typeMapper.setEnforcedBaseType(CTVBase.class);
+        typeMapper.setDiscriminatorField("type");
+        typeMapper.setPathMatcher(new SubtypeMatcher(CTVBase.class));
+        parser.setTypeMapper(typeMapper);
+        return parser;
+    }
+
+    @Test
+    public void testListVariance()
+    {
+        JSONParser parser = setupParser();
+        CTORListVariance o = parser.parse(CTORListVariance.class,
+            "{\"value\":[\"Günther\", {\"type\" : \"CTVExtension\"}]}");
+
+        assertThat(o, is(notNullValue()));
+        assertThat(o.getValues(), is(notNullValue()));
+        assertThat(o.getValues().get(0), is(String.class));
+        assertThat(o.getValues().get(1), is(CTVExtension.class));
+    }
+
+    @Test
+    public void testMapVariance()
+    {
+        JSONParser parser = setupParser();
+        CTORMapVariance o = parser.parse(CTORMapVariance.class,
+            "{\"value\":{\"foo\":\"Jon\", \"bar\" : {\"type\" : \"CTVExtension\"}}}");
+
+        assertThat(o,is(notNullValue()));
+        assertThat(o.getValues(),is(notNullValue()));
+        assertThat(o.getValues().get("foo"),is(String.class));
+        assertThat(o.getValues().get("bar"),is(CTVExtension.class));
     }
 
 }

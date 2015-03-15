@@ -90,7 +90,7 @@ public abstract class AbstractPropertyValueBasedTypeMapper extends AbstractTypeM
                 {
                     token = tokenizer.next();
                 }
-                
+
                 Object value = getPropertyValueFromTokenStream(tokenizer, discriminatorField, token);
                 return getTypeHintFromTypeProperty(value);
             }
