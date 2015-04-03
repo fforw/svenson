@@ -1,0 +1,4 @@
+Generation: 281531.53153153154 ops/s
+Parsing   : 363372.0930232558 ops/s
+Generation: 336473.7550471063 ops/s
+Parsing   : 399361.02236421726 ops/s

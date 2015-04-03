@@ -16,7 +16,7 @@ public class Ox93TestCase
     @Test
     public void test() throws IOException
     {
-        String file = FileUtils.readFileToString(new File("./test/org/svenson/10571721.json"));
+        String file = FileUtils.readFileToString(new File("./src/test/java/org/svenson/10571721.json"));
         
         Map map = JSONParser.defaultJSONParser().parse(Map.class, file);
         
