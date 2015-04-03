@@ -1,0 +1,1230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a23c8a5b-4163-4245-91e2-2abd7a07d366" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_io_commons_io_2_4.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/build.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/compile/commons-beanutils-1.8.0.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/compile/commons-collections-2.0.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/compile/commons-io-1.4.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/compile/commons-logging-1.0.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/compile/slf4j-api-1.6.1.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/test/commons-logging-99.0-does-not-exist.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/test/easymock-2.3.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/test/hamcrest-all-1.1.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/test/jcl-over-slf4j-1.6.1.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/test/junit-4.4.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/test/log4j-1.2.13.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/test/slf4j-log4j12-1.6.1.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/AbstractDynamicProperties.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/AbstractPropertyValueBasedTypeMapper.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/AbstractTypeMapper.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/ClassNameBasedTypeMapper.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/CompositeTypeMapper.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/DelayedConstructor.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/DynamicProperties.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSON.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSONCharacterSink.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSONConfig.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSONParameter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSONParseException.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSONParser.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSONProperty.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSONPropertyOrder.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSONReference.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSONTypeHint.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSONable.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/JSONifier.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/ObjectFactory.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/PropertyValueBasedTypeMapper.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/SinkAwareJSONifier.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/StringBuilderSink.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/SvensonRuntimeException.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/TokenLogger.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/TypeAnalyzer.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/TypeMapper.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/WriterSink.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/converter/DateConverter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/converter/DefaultTypeConverterRepository.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/converter/JSONConverter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/converter/TypeConverter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/converter/TypeConverterRepository.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/info/AbstractObjectSupport.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/info/ClassInfoHolder.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/info/ConstructorInfo.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/info/JSONClassInfo.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/info/JSONPropertyInfo.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/info/JSONPropertyPriorityComparator.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/info/JavaObjectPropertyInfo.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/info/JavaObjectSupport.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/info/MethodUtil.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/info/ObjectSupport.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/info/ParameterInfo.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/matcher/AndMatcher.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/matcher/EqualsPathMatcher.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/matcher/MapValuePathMatcher.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/matcher/NotMatcher.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/matcher/OrMatcher.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/matcher/PathMatcher.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/matcher/PrefixPathMatcher.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/matcher/RegExPathMatcher.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/matcher/SubtypeMatcher.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/matcher/SuffixPathMatcher.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/package.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/reflectasm/reflectasm/MethodUtil.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/reflectasm/reflectasm/ReflectAsmObjectSupport.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/reflectasm/reflectasm/ReflectAsmPropertyInfo.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/tokenize/InputStreamSource.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/tokenize/JSONCharacterSource.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/tokenize/JSONTokenizer.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/tokenize/StringJSONSource.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/tokenize/Token.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/tokenize/TokenType.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/tokenize/package.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/util/ExceptionWrapper.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/util/InvalidPropertyPathException.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/util/JSONBeanUtil.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/util/JSONPathUtil.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/util/PropertyPathAccessException.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/util/Util.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/util/ValueHolder.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/svenson/util/package.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/log4j2-test.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/10571721.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/AdderTypeHintTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/ArrayTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/BigDecimalTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/ClassNameBasedTypeMapperTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/ComplexLookaheadTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/ConflictingAdderTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/ConstructorParametrizationTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/DefaultIgnoredPropsTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/EnumHashMapTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/IgnoreReadTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/IgnoreWriteTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/InvocationTargetTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/JSONParserTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/JSONTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/LinkedTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/LocaleArrayTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/LongTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/OverloadConverterTestcase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/Ox93TestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/PropertyValueBasedTypeMapperTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/RandomJSON.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/ReadJSONOld.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/RenamedHintTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/SinkAwareJSONifierTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/TestPropertyPriority.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/TypeConverterCachingTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/TypeConverterTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/converter/BeanWithCCDate.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/converter/BeanWithDate.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/converter/ComplexDateConverter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/converter/TypeConverterTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/info/JavaObjectSupportTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/matcher/MapValuePathMatcherTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/matcher/PathMatcherTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/perftest/Foo.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/perftest/PerformanceTest.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/AbstractAlphaComparator.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/AddImmutables.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/AdderTypeHint.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/AlphaComparator.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/Bar.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/Bean.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/BeanWithArray.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/BeanWithBeanArray.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/BeanWithClassProperty.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/BeanWithEnum.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/BeanWithEnumMap.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/BeanWithStringAdder.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/BeanWrapper.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/CTORListVariance.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/CTORMapVariance.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/CTORVariance.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/CTVBase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/CTVExtension.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/ConstructorParametrization.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/ContainerBean.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/DescAlphaComparator.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/DynAttrsBean.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/FooBean.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/IgnoreTestBean.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/IgnoredPropertyBean.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/Immutable.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/InnerBean.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/InnerImmutable.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/LinkedArrayBase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/LinkedBeanBase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/LinkedChildBean.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/LinkedListBase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/LinkedMapBase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/ListOfImmutables.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/MapOfImmutables.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/MediaEntry.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/MediaInfo.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/MyDateConverter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/NegativePriority.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/Priority.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/PriorityOnBar.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/Qux.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/RenamedHintBase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/RenamedHintChild.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/SomeEnum.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/SortedAlpha.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/SortedDescAlpha.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/SubClass.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/SuperClass.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/TypeConverterCachingBean.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/TypedListCTOR.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/TypedMapCTOR.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/Base.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/Foo.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/ListVarianceContainer.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/MapVarianceContainer.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/PropertyVarianceContainer.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/tokenize/JSONTokenizerTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/util/DynPropTestBean.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/util/JSONBeanUtilTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/org/svenson/util/JSONPathUtilTestCase.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/tutorial/CollectionsTestCase.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.properties" afterPath="$PROJECT_DIR$/build.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+    </list>
+    <ignored path="svenson.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DebuggerManager">
+    <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true" converted="true">
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </breakpoint_any>
+    <ui_properties converted="true" />
+    <breakpoint_rules converted="true" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="svenson" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Ox93TestCase.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/Ox93TestCase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="18" column="69" selection-start-line="18" selection-start-column="69" selection-end-line="18" selection-end-column="69" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="10571721.json" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/10571721.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="log4j2-test.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/resources/log4j2-test.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="package_json" />
+      </list>
+    </option>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitLogSettings">
+    <option name="myDateState">
+      <MyDateState />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/B.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/Converter.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/Base.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/Container.java" />
+        <option value="/JSON Fragment (ComplexLookaheadTestCase.java:846).json" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/Container2.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/perftest/PerformanceTest.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/Foo.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/PropertyVarianceContainer.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/MapVarianceContainer.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/ListVarianceContainer.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/ComplexLookaheadTestCase.java" />
+        <option value="$PROJECT_DIR$/src/log4j2-test.xml" />
+        <option value="$PROJECT_DIR$/test/log4j2-test.xml" />
+        <option value="$PROJECT_DIR$/src/org/svenson/info/JavaObjectPropertyInfo.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/reflectasm/reflectasm/ReflectAsmObjectSupport.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/TypeAnalyzer.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/JSONProperty.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/JSONParameter.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/ConstructorParametrization.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/JSON.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/info/JSONClassInfo.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/ConstructorParsingPlaceholder.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/ConstructorParametrization2.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/JSONTypeHint.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/info/ParameterInfo.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/info/ConstructorInfo.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/ConstructorParametrization3.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/InnerImmutable.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/Immutable.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/TypedListCTOR.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/Qux.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/TypedMapCTOR.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/ListOfImmutables.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/MapOfImmutables.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/AddImmutables.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/info/JavaObjectSupport.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/AdderTypeHintTestcase.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/AdderTypeHintTestCase.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/AdderTypeHint.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/DelayedConstructor.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/CTVExtension.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/CTORVariance.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/CTORListVariance.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/CTORMapVariance.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/AbstractPropertyValueBasedTypeMapper.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/test/CTVBase.java" />
+        <option value="$PROJECT_DIR$/src/org/svenson/JSONParser.java" />
+        <option value="$PROJECT_DIR$/test/org/svenson/ConstructorParametrizationTestCase.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/test/java/org/svenson/Ox93TestCase.java" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Bundled (Maven 3)" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+    <option name="enabledProfiles">
+      <list>
+        <option value="sonatype-oss-release" />
+      </list>
+    </option>
+  </component>
+  <component name="NamedScopeManager">
+    <order />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="-4" />
+    <option name="width" value="1680" />
+    <option name="height" value="1054" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>General</id>
+          </State>
+          <State>
+            <id>Internationalization issues</id>
+          </State>
+          <State>
+            <id>JUnit issues</id>
+          </State>
+          <State>
+            <id>TestNG</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Abstraction issues</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tutorial" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="svenson" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="recentsLimit" value="5" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="options.lastSelected" value="preferences.pluginManager" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="dynamic.classpath" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="FullScreen" value="false" />
+    <property name="LayoutCode.rearrangeEntriesJava" value="false" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="OverrideImplement.overriding.sorted" value="false" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="161" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="171" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="177" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="1086" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="161" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="171" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="177" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="1086" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+    <property name="extract.method.default.visibility" value="private" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.svenson.test" />
+      <recent name="org.svenson" />
+      <recent name="org.svenson.test.complexlookahead" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/org/svenson/reflectasm" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.svenson.test" />
+      <recent name="org.svenson.info" />
+      <recent name="org.svenson" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/java/org/svenson" />
+      <recent name="$PROJECT_DIR$/src/test/resources/org.svenson" />
+      <recent name="$PROJECT_DIR$/src/test/resources" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.All in svenson">
+    <configuration default="false" name="org.svenson.test in svenson" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="svenson" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="org.svenson.test" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="All in svenson" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="svenson" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ConstructorParametrizationTestCase.testVariance" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="svenson" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="org.svenson" />
+      <option name="MAIN_CLASS_NAME" value="org.svenson.ConstructorParametrizationTestCase" />
+      <option name="METHOD_NAME" value="testVariance" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ConstructorParametrizationTestCase.testListVariance" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="svenson" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="org.svenson" />
+      <option name="MAIN_CLASS_NAME" value="org.svenson.ConstructorParametrizationTestCase" />
+      <option name="METHOD_NAME" value="testListVariance" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ConstructorParametrizationTestCase" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="svenson" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="org.svenson" />
+      <option name="MAIN_CLASS_NAME" value="org.svenson.ConstructorParametrizationTestCase" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="JarApplication" factoryName="JAR Application">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="">
+      <method />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <pass-parent-envs>true</pass-parent-envs>
+      <envs />
+      <method />
+    </configuration>
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="JUnit.org.svenson.test in svenson" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.All in svenson" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.ConstructorParametrizationTestCase.testVariance" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.ConstructorParametrizationTestCase.testListVariance" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.ConstructorParametrizationTestCase" />
+    </list>
+    <recent_temporary>
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="JUnit.All in svenson" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.ConstructorParametrizationTestCase.testVariance" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.ConstructorParametrizationTestCase" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.ConstructorParametrizationTestCase.testListVariance" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.org.svenson.test in svenson" />
+      </list>
+    </recent_temporary>
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a23c8a5b-4163-4245-91e2-2abd7a07d366" name="Default" comment="" />
+      <created>1392036073630</created>
+      <option name="number" value="Default" />
+      <updated>1392036073630</updated>
+      <workItem from="1395934367985" duration="983000" />
+      <workItem from="1396701668177" duration="294000" />
+      <workItem from="1396702040577" duration="2903000" />
+      <workItem from="1398523903518" duration="81000" />
+      <workItem from="1398524118543" duration="3702000" />
+      <workItem from="1398550306611" duration="12000" />
+      <workItem from="1398550739717" duration="1717000" />
+      <workItem from="1398611360713" duration="8959000" />
+      <workItem from="1398890423919" duration="55000" />
+      <workItem from="1401092700998" duration="83000" />
+      <workItem from="1424456466122" duration="742000" />
+      <workItem from="1424520277292" duration="795000" />
+      <workItem from="1424524049698" duration="5137000" />
+      <workItem from="1425484735738" duration="1943000" />
+      <workItem from="1426373914114" duration="8641000" />
+      <workItem from="1426383553677" duration="2586000" />
+      <workItem from="1426391869099" duration="1541000" />
+      <workItem from="1426426333020" duration="4300000" />
+      <workItem from="1426441500304" duration="396000" />
+      <workItem from="1426449224634" duration="2591000" />
+      <workItem from="1426875071635" duration="204000" />
+      <workItem from="1428100701757" duration="223000" />
+      <workItem from="1428100940970" duration="874000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="48762000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="-4" width="1680" height="1054" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3262032" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32299465" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Tool Output" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24908425" sideWeight="0.67071825" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24847375" sideWeight="0.67071825" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3262032" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24969475" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/org/svenson/util/JSONPathUtil.java</url>
+          <line>366</line>
+          <properties />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/org/svenson/info/JavaObjectPropertyInfo.java</url>
+          <line>286</line>
+          <properties />
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/test/org/svenson/JSONParserTestCase.java</url>
+          <line>109</line>
+          <properties />
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/org/svenson/info/JavaObjectPropertyInfo.java</url>
+          <line>343</line>
+          <properties />
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/test/org/svenson/ConstructorParametrizationTestCase.java</url>
+          <line>116</line>
+          <properties />
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+      </breakpoints>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="45" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/api-docs/org/svenson/JSONProperty.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/local/java/jdk1.7/jre/lib/rt.jar!/sun/reflect/NativeConstructorAccessorImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.6">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/local/java/jdk1.7/jre/lib/rt.jar!/sun/reflect/ConstructorAccessor.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.2">
+          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/local/java/jdk1.7/jre/lib/rt.jar!/sun/reflect/CallerSensitive.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.8">
+          <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/local/java/jdk1.7/src.zip!/java/lang/reflect/Constructor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="508" column="18" selection-start-line="508" selection-start-column="18" selection-end-line="508" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/local/java/jdk1.7/src.zip!/java/lang/Class.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1516" column="28" selection-start-line="1516" selection-start-column="28" selection-end-line="1516" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="13" column="18" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/local/java/jdk1.7/jre/lib/rt.jar!/java/util/Map.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/log4j2-test.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/Ox93TestCase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="69" selection-start-line="18" selection-start-column="69" selection-end-line="18" selection-end-column="69" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/10571721.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>JSXTransformer</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>IDEA IU-139.1117.1</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>svenson</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.7</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.20000002" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: com.esotericsoftware.reflectasm:reflectasm:1.09</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
