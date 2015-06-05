@@ -21,6 +21,7 @@ public class ConstructorInfo
 
         Map<String, ParameterInfo> map = new HashMap<String, ParameterInfo>();
         Annotation[][] parameterAnnotations = constructor.getParameterAnnotations();
+
         for (int i = 0; i < parameterAnnotations.length; i++)
         {
             Annotation[] annotations = parameterAnnotations[i];

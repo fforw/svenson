@@ -3,9 +3,13 @@ package org.svenson;
 import org.svenson.info.ConstructorInfo;
 import org.svenson.info.ParameterInfo;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,12 +23,37 @@ public class DelayedConstructor<T>
 {
     private final ConstructorInfo info;
     private final Object[] args;
+    private final int wildCardArgsIndex;
 
     public DelayedConstructor(ConstructorInfo info)
     {
         this.info = info;
         Class<?>[] parameterTypes = info.getConstructor().getParameterTypes();
         this.args = new Object[parameterTypes.length];
+
+        wildCardArgsIndex = findWildcardParam(info.getConstructor());
+        if (wildCardArgsIndex >= 0)
+        {
+            args[wildCardArgsIndex] = new HashMap<String,Object>();
+        }
+    }
+
+    private int findWildcardParam(Constructor<?> constructor)
+    {
+        Annotation[][] annotations = constructor.getParameterAnnotations();
+        for (int paramIndex = 0; paramIndex < annotations.length; paramIndex++)
+        {
+            Annotation[] paramAnnos = annotations[paramIndex];
+            for (int annoIndex = 0; annoIndex < paramAnnos.length; annoIndex++)
+            {
+                Annotation annotation = paramAnnos[annoIndex];
+                if (annotation instanceof JSONParameters)
+                {
+                    return paramIndex;
+                }
+            }
+        }
+        return -1;
     }
 
     public T construct()
@@ -62,7 +91,15 @@ public class DelayedConstructor<T>
         ParameterInfo paramInfo = info.getParameterInfo(name);
         if (paramInfo == null)
         {
-            throw new IllegalArgumentException("No constructor parameter for JSON property '" + name + "' in " + info.getConstructor().getDeclaringClass());
+            if (wildCardArgsIndex >= 0)
+            {
+                wildCardMap().put(name, value);
+                return;
+            }
+            else
+            {
+                throw new IllegalArgumentException("No constructor parameter for JSON property '" + name + "' in " + info.getConstructor().getDeclaringClass());
+            }
         }
         int index = paramInfo.getIndex();
 
@@ -77,6 +114,20 @@ public class DelayedConstructor<T>
         }
 
         args[index] = unwrap(value);
+
+    }
+
+    private Map<String, Object> wildCardMap()
+    {
+        Object map = args[wildCardArgsIndex];
+        if (map instanceof Map)
+        {
+            return (Map<String, Object>) map;
+        }
+        else
+        {
+            throw new SvensonRuntimeException("No map");
+        }
     }
 
     public Object getProperty(String name)
@@ -84,6 +135,10 @@ public class DelayedConstructor<T>
         ParameterInfo paramInfo = info.getParameterInfo(name);
         if (paramInfo == null)
         {
+            if (wildCardArgsIndex >= 0)
+            {
+                return wildCardMap().get(name);
+            }
             throw new IllegalArgumentException("No constructor parameter for JSON property '" + name + "' in " + info.getConstructor().getDeclaringClass());
         }
         int index = paramInfo.getIndex();
@@ -92,7 +147,32 @@ public class DelayedConstructor<T>
 
     public Set<String> propertyNames()
     {
-        return info.getJSONPropertyNames();
+
+        Set<String> jsonPropertyNames = info.getJSONPropertyNames();
+        if (wildCardArgsIndex < 0)
+        {
+            // no wildcards at all -> json JSON properties
+            return jsonPropertyNames;
+        }
+        else
+        {
+            Set<String> wildCardKeys = wildCardMap().keySet();
+            if (jsonPropertyNames.size() == 0)
+            {
+                // no json properties -> return wildCardKeys (potentially empty)
+                return wildCardKeys;
+            }
+
+            if (wildCardKeys.size() == 0)
+            {
+                // no wildcards -> json properties names
+                return jsonPropertyNames;
+            }
+            // merge json and wildcard properties
+            HashSet<String> set = new HashSet<String>(jsonPropertyNames);
+            set.addAll(wildCardKeys);
+            return set;
+        }
     }
 
     public boolean hasProperty(String name)
@@ -105,6 +185,11 @@ public class DelayedConstructor<T>
         ParameterInfo paramInfo = info.getParameterInfo(name);
         if (paramInfo == null)
         {
+            if (wildCardArgsIndex >= 0)
+            {
+                return wildCardMap().remove(name);
+            }
+
             throw new IllegalArgumentException("No constructor parameter for JSON property '" + name + "' in " + info.getConstructor().getDeclaringClass());
         }
         int index = paramInfo.getIndex();

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.svenson.JSONParameter;
+import org.svenson.JSONParameters;
 import org.svenson.JSONProperty;
 import org.svenson.JSONReference;
 import org.svenson.JSONTypeHint;
@@ -41,6 +42,7 @@ outer:
         for (Constructor<?> c : cls.getConstructors())
         {
             Annotation[][] parameterAnnotations = c.getParameterAnnotations();
+
             for (int i = 0, parameterAnnotationsLength = parameterAnnotations.length; i < parameterAnnotationsLength;
                  i++)
             {
@@ -55,6 +57,15 @@ outer:
                         }
                         ctor = c;
                         continue outer;
+                    }
+                    else if (annotation instanceof JSONParameters)
+                    {
+                        if (!Map.class.isAssignableFrom(c.getParameterTypes()[0]))
+                        {
+                            throw new IllegalStateException("@JSONParameters annotation must be on a constructor map parameter");
+                        }
+                        ctor = c;
+                        break outer;
                     }
                 }
             }

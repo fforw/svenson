@@ -10,11 +10,15 @@ import org.svenson.test.CTORVariance;
 import org.svenson.test.CTVBase;
 import org.svenson.test.CTVExtension;
 import org.svenson.test.ConstructorParametrization;
+import org.svenson.test.CtorParams;
+import org.svenson.test.CtorParams2;
 import org.svenson.test.Immutable;
 import org.svenson.test.ListOfImmutables;
 import org.svenson.test.MapOfImmutables;
 import org.svenson.test.TypedListCTOR;
 import org.svenson.test.TypedMapCTOR;
+
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
@@ -168,4 +172,28 @@ public class ConstructorParametrizationTestCase
         assertThat(o.getValues().get("bar"),is(CTVExtension.class));
     }
 
+    @Test
+    public void testParams()
+    {
+        Object o;
+        JSONParser parser = setupParser();
+//        CtorParams p = parser.parse(CtorParams.class,
+//            "{\"foo\":123,\"bar\":[1,2,3]}");
+//
+//        assertThat(p,is(notNullValue()));
+//        assertThat((Long) p.getMap().get("foo"),is(123l));
+//        o = p.getMap().get("bar");
+//        assertThat(o,is(List.class));
+//        assertThat(((List)o).size(),is(3));
+
+        CtorParams2 p2 = parser.parse(CtorParams2.class,
+            "{\"foo\":\"abc\",\"bar\":[1,2,3]}");
+
+        assertThat(p2,is(notNullValue()));
+        assertThat( p2.getMap().get("foo"),is(nullValue()));
+        assertThat( p2.getFoo(),is("abc"));
+        o = p2.getMap().get("bar");
+        assertThat(o,is(List.class));
+        assertThat(((List)o).size(),is(3));
+    }
 }
