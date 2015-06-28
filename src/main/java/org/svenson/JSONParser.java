@@ -919,9 +919,9 @@ public class JSONParser
             {
                 typeHint = List.class;
             }
-            if (log.isDebugEnabled())
+            if (log.isTraceEnabled())
             {
-                log.debug("replace null typeHint with "+typeHint);
+                log.trace("replace null typeHint with "+typeHint);
             }
         }
 
@@ -932,9 +932,9 @@ public class JSONParser
             if (replacement != null)
             {
                 typeHint = replacement;
-                if (log.isDebugEnabled())
+                if (log.isTraceEnabled())
                 {
-                    log.debug("interface replaced with "+typeHint);
+                    log.trace("interface replaced with "+typeHint);
                 }
             }
         }
@@ -1003,9 +1003,9 @@ public class JSONParser
             
         }
         
-        if (log.isDebugEnabled())
+        if (log.isTraceEnabled())
         {
-            log.debug("typeHint = "+memberType+", name = "+name);
+            log.trace("typeHint = "+memberType+", name = "+name);
         }
 
         Class cls = getTypeHint( parsePathInfo,tokenizer, memberType, !primitive);
@@ -1013,9 +1013,9 @@ public class JSONParser
         if (cls != null)
         {
             memberType = cls;
-            if (log.isDebugEnabled())
+            if (log.isTraceEnabled())
             {
-                log.debug("set typeHint to  "+memberType);
+                log.trace("set typeHint to  "+memberType);
             }
         }
 
@@ -1030,9 +1030,9 @@ public class JSONParser
             PathMatcher matcher = e.getKey();
             if (matcher.matches(parsePathInfo, Object.class))
             {
-                if (log.isDebugEnabled())
+                if (log.isTraceEnabled())
                 {
-                    log.debug("Parse path '" + parsePathInfo + "' matches " + matcher + ": setting type hint to " + typeHint);
+                    log.trace("Parse path '" + parsePathInfo + "' matches " + matcher + ": setting type hint to " + typeHint);
                 }
                 typeHint = e.getValue();
                 break;
