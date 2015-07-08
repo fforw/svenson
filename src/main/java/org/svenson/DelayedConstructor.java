@@ -31,29 +31,11 @@ public class DelayedConstructor<T>
         Class<?>[] parameterTypes = info.getConstructor().getParameterTypes();
         this.args = new Object[parameterTypes.length];
 
-        wildCardArgsIndex = findWildcardParam(info.getConstructor());
+        wildCardArgsIndex = info.getWildCardArgsIndex();
         if (wildCardArgsIndex >= 0)
         {
             args[wildCardArgsIndex] = new HashMap<String,Object>();
         }
-    }
-
-    private int findWildcardParam(Constructor<?> constructor)
-    {
-        Annotation[][] annotations = constructor.getParameterAnnotations();
-        for (int paramIndex = 0; paramIndex < annotations.length; paramIndex++)
-        {
-            Annotation[] paramAnnos = annotations[paramIndex];
-            for (int annoIndex = 0; annoIndex < paramAnnos.length; annoIndex++)
-            {
-                Annotation annotation = paramAnnos[annoIndex];
-                if (annotation instanceof JSONParameters)
-                {
-                    return paramIndex;
-                }
-            }
-        }
-        return -1;
     }
 
     public T construct()
