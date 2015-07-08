@@ -28,7 +28,8 @@ public class JSONClassInfo
 
     private final List<JSONPropertyInfo> sortedPropertyInfos;
 
-    public JSONClassInfo(Class<?> cls, Map<String, ? extends JSONPropertyInfo> propertyInfos, Constructor<?> ctor)
+    public JSONClassInfo(Class<?> cls, Map<String, ? extends JSONPropertyInfo> propertyInfos, Constructor<?> ctor,
+                         Class<?> ctorTypeHint)
     {
         if (cls == null)
         {
@@ -42,7 +43,7 @@ public class JSONClassInfo
         this.cls = cls;
         if (ctor != null)
         {
-            constructorInfo = new ConstructorInfo(ctor);
+            constructorInfo = new ConstructorInfo(ctor, ctorTypeHint);
         }
         else
         {

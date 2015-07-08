@@ -14,8 +14,9 @@ public class ConstructorInfo
 {
     private final Constructor constructor;
     private final Map<String,ParameterInfo> indexMap;
+    private final Class<?> ctorTypeHint;
 
-    public ConstructorInfo(Constructor constructor)
+    public ConstructorInfo(Constructor constructor, Class<?> ctorTypeHint)
     {
         this.constructor = constructor;
 
@@ -48,7 +49,7 @@ public class ConstructorInfo
                 map.put(name, new ParameterInfo(i, typeHint));
             }
         }
-
+        this.ctorTypeHint = ctorTypeHint;
         indexMap = Collections.unmodifiableMap(map);
     }
 
@@ -65,5 +66,10 @@ public class ConstructorInfo
     public Set<String> getJSONPropertyNames()
     {
         return indexMap.keySet();
+    }
+
+    public Class<?> getCtorTypeHint()
+    {
+        return ctorTypeHint;
     }
 }

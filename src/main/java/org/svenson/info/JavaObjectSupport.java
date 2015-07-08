@@ -38,7 +38,9 @@ public class JavaObjectSupport extends AbstractObjectSupport
         Map<String, JavaObjectPropertyInfo> javaNameToInfo = new HashMap<String, JavaObjectPropertyInfo>();
 
         Constructor<?> ctor = null;
-outer:
+        Class<?> ctorTypeHint = null;
+        boolean isWildCard = false;
+        int wildCardIndex = -1;
         for (Constructor<?> c : cls.getConstructors())
         {
             Annotation[][] parameterAnnotations = c.getParameterAnnotations();
@@ -51,21 +53,33 @@ outer:
                 {
                     if (annotation instanceof JSONParameter)
                     {
-                        if (ctor != null)
-                        {
-                            throw new IllegalStateException("Classes can only have one constructor with @JSONParameter annotations");
-                        }
                         ctor = c;
-                        continue outer;
                     }
                     else if (annotation instanceof JSONParameters)
                     {
-                        if (!Map.class.isAssignableFrom(c.getParameterTypes()[0]))
+                        if (!Map.class.isAssignableFrom(c.getParameterTypes()[i]))
                         {
                             throw new IllegalStateException("@JSONParameters annotation must be on a constructor map parameter");
                         }
                         ctor = c;
-                        break outer;
+                        isWildCard = true;
+                        wildCardIndex = i;
+                    }
+                    if (annotation instanceof JSONTypeHint)
+                    {
+                        Class<?>[] parameterTypes = c.getParameterTypes();
+                        if (wildCardIndex == i)
+                        {
+                            if (parameterTypes.length != 1)
+                            {
+                                throw new IllegalStateException("@JSONParameters/@JSONTypeHint combination must only have one map parameter");
+                            }
+                            if (!Map.class.isAssignableFrom(parameterTypes[0]))
+                            {
+                                throw new IllegalStateException("@JSONParameters/@JSONTypeHint combination must be on a constructor map parameter");
+                            }
+                            ctorTypeHint = ((JSONTypeHint)annotation).value();
+                        }
                     }
                 }
             }
@@ -233,7 +247,7 @@ outer:
         }
 
 
-        return new JSONClassInfo(cls, propertyInfos, ctor);
+        return new JSONClassInfo(cls, propertyInfos, ctor, ctorTypeHint);
     }
 
     /**

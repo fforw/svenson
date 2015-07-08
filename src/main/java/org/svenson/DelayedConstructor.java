@@ -204,6 +204,11 @@ public class DelayedConstructor<T>
     }
 
 
+    public int getWildCardArgsIndex()
+    {
+        return wildCardArgsIndex;
+    }
+
     @Override
     public String toString()
     {

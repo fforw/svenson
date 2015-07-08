@@ -620,31 +620,43 @@ public class JSONParser
 
                     if (cx.target instanceof DelayedConstructor)
                     {
-                        ConstructorInfo constructorInfo = ((DelayedConstructor) cx.target).getConstructorInfo();
+                        DelayedConstructor target = (DelayedConstructor) cx.target;
+                        ConstructorInfo constructorInfo = target.getConstructorInfo();
                         ParameterInfo parameterInfo = constructorInfo
                             .getParameterInfo(name);
+                            Class ctorTypeHint;
+
+                        Class<?> parameterType;
                         if (parameterInfo != null)
                         {
-                            Class<?> parameterType = constructorInfo.getConstructor().getParameterTypes()[parameterInfo
+                            parameterType = constructorInfo.getConstructor().getParameterTypes()[parameterInfo
                                 .getIndex()];
 
-                            Class ctorTypeHint = parameterInfo.getTypeHint();
-                            if (ctorTypeHint != null)
+                            ctorTypeHint = parameterInfo.getTypeHint();
+                        }
+                        else
+                        {
+                            parameterType = constructorInfo.getConstructor().getParameterTypes()[target.getWildCardArgsIndex()];
+                            ctorTypeHint = constructorInfo.getCtorTypeHint();
+                        }
+
+                        if (ctorTypeHint != null)
+                        {
+                            if (parameterInfo != null && (
+                                Collection.class.isAssignableFrom(parameterType) ||
+                                Map.class.isAssignableFrom(parameterType)
+                            ))
                             {
-                                if (Collection.class.isAssignableFrom(parameterType) ||
-                                    Map.class.isAssignableFrom(parameterType))
-                                {
-                                    memberType = ctorTypeHint;
-                                }
-                                else
-                                {
-                                    typeHint = getTypeHint( cx.info, tokenizer, ctorTypeHint, true);
-                                }
+                                memberType = ctorTypeHint;
                             }
                             else
                             {
-                                typeHint = parameterType;
+                                typeHint = getTypeHint( cx.info, tokenizer, ctorTypeHint, true);
                             }
+                        }
+                        else
+                        {
+                            typeHint = parameterType;
                         }
                     }
 

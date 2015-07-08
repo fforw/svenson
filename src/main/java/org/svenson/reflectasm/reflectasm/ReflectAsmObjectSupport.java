@@ -216,7 +216,7 @@ public class ReflectAsmObjectSupport
         }
 
 
-        return new JSONClassInfo(cls, propertyInfos, null);
+        return new JSONClassInfo(cls, propertyInfos, null, null);
     }
     /**
      * Returns <code>true</code> if class a is a subclass of class b or if b is <code>null</code>.
