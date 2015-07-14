@@ -636,8 +636,17 @@ public class JSONParser
                         }
                         else
                         {
-                            parameterType = constructorInfo.getConstructor().getParameterTypes()[target.getWildCardArgsIndex()];
-                            ctorTypeHint = constructorInfo.getCtorTypeHint();
+                            int wildCardArgsIndex = target.getWildCardArgsIndex();
+                            if (wildCardArgsIndex >= 0)
+                            {
+                                parameterType = constructorInfo.getConstructor().getParameterTypes()[wildCardArgsIndex];
+                                ctorTypeHint = constructorInfo.getCtorTypeHint();
+                            }
+                            else
+                            {
+                                parameterType = null;
+                                ctorTypeHint = null;
+                            }
                         }
 
                         if (ctorTypeHint != null)
