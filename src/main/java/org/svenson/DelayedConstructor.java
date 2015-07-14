@@ -1,5 +1,7 @@
 package org.svenson;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.svenson.info.ConstructorInfo;
 import org.svenson.info.ParameterInfo;
 
@@ -21,12 +23,19 @@ import java.util.Set;
 public class DelayedConstructor<T>
     implements DynamicProperties
 {
+    private static Logger log = LoggerFactory.getLogger(DelayedConstructor.class);
+
     private final ConstructorInfo info;
     private final Object[] args;
     private final int wildCardArgsIndex;
 
     public DelayedConstructor(ConstructorInfo info)
     {
+        if (log.isDebugEnabled())
+        {
+            log.debug("DelayedConstructor for {}", info.getConstructor().getDeclaringClass());
+        }
+
         this.info = info;
         Class<?>[] parameterTypes = info.getConstructor().getParameterTypes();
         this.args = new Object[parameterTypes.length];
