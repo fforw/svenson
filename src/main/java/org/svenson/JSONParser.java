@@ -30,6 +30,7 @@ import org.svenson.tokenize.JSONTokenizer;
 import org.svenson.tokenize.Token;
 import org.svenson.tokenize.TokenType;
 import org.svenson.util.ExceptionWrapper;
+import org.svenson.util.TokenUtil;
 
 /**
  * Converts JSON strings into graphs of java objects. It offers
@@ -550,6 +551,7 @@ public class JSONParser
             {
                 key = tokenizer.expectNext( TokenType.STRING);
             }
+            first = false;
 
             String jsonName = (String)key.value();
             if (jsonName.length() == 0)
@@ -580,7 +582,22 @@ public class JSONParser
                 if (name != null)
                 {
                     boolean writeable = propertyInfo.isWriteable();
-                    isIgnoredOnParse = (!writeable && propertyInfo.isReadOnly()); 
+                    isIgnoredOnParse = (!writeable && propertyInfo.isReadOnly());
+
+                    if (isIgnoredOnParse)
+                    {
+                        if (valueType == TokenType.BRACE_OPEN)
+                        {
+                            TokenUtil.skipObjectValue(tokenizer);
+                            continue;
+                        }
+
+                        if (valueType == TokenType.BRACKET_OPEN)
+                        {
+                            TokenUtil.skipArrayValue(tokenizer);
+                            continue;
+                        }
+                    }
                     
                     if (propertyInfo.isLinkedProperty())
                     {
@@ -790,7 +807,6 @@ public class JSONParser
                 throw new JSONParseException("Cannot set property "+name+" on "+cx.target);
             }
 
-            first = false;
         } // end while
     }
 
