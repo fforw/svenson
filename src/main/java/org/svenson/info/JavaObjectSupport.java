@@ -17,6 +17,8 @@ import org.svenson.converter.TypeConverter;
 import org.svenson.converter.TypeConverterRepository;
 import org.svenson.util.Util;
 
+import javax.annotation.PostConstruct;
+
 public class JavaObjectSupport extends AbstractObjectSupport
 {
     private static final String ADDER_PREFIX = "add";
@@ -41,6 +43,8 @@ public class JavaObjectSupport extends AbstractObjectSupport
         Class<?> ctorTypeHint = null;
         boolean isWildCard = false;
         int wildCardIndex = -1;
+        Method postConstructMethod = null;
+
         for (Constructor<?> c : cls.getConstructors())
         {
             Annotation[][] parameterAnnotations = c.getParameterAnnotations();
@@ -93,6 +97,17 @@ public class JavaObjectSupport extends AbstractObjectSupport
             {
                 continue;
             }
+
+            if (m.getAnnotation(PostConstruct.class) != null)
+            {
+                if (m.getParameterTypes().length != 0)
+                {
+                    throw new IllegalStateException("@PostConstruct methods can't have parameters: " + m);
+                }
+
+                postConstructMethod = m;
+            }
+
 
             if (name.startsWith(SETTER_PREFIX) && m.getParameterTypes().length == 1)
             {
@@ -247,7 +262,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
         }
 
 
-        return new JSONClassInfo(cls, propertyInfos, ctor, ctorTypeHint);
+        return new JSONClassInfo(cls, propertyInfos, ctor, ctorTypeHint, postConstructMethod);
     }
 
     /**

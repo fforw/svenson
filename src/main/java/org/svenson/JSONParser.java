@@ -2,6 +2,7 @@ package org.svenson;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -396,12 +397,31 @@ public class JSONParser
                 t = (T) createNewTargetInstance(targetType, newClassInfo, true);
                 parseObjectInto(new ParseContext(t,null,newClassInfo), tokenizer);
                 t = DelayedConstructor.unwrap(t);
+
+                if (newClassInfo != null)
+                {
+                    Method postConstructMethod = newClassInfo.getPostConstructMethod();
+                    if (postConstructMethod != null)
+                    {
+                        postConstructMethod.invoke(t);
+                    }
+                }
+
             }
             else if (type == TokenType.BRACKET_OPEN)
             {
                 JSONClassInfo newClassInfo = TypeAnalyzer.getClassInfo(objectSupport, targetType);
                 t = (T) createNewTargetInstance(targetType, newClassInfo, false);
                 parseArrayInto(new ParseContext(t,null,newClassInfo), tokenizer);
+
+                if (newClassInfo != null)
+                {
+                    Method postConstructMethod = newClassInfo.getPostConstructMethod();
+                    if (postConstructMethod != null)
+                    {
+                        postConstructMethod.invoke(t);
+                    }
+                }
             }
             else if (type == TokenType.STRING && Enum.class.isAssignableFrom(targetType) )
             {
@@ -496,6 +516,16 @@ public class JSONParser
                     newTarget = createNewTargetInstance(typeHint, classInfo, true);
                     parseObjectInto(cx.push(newTarget,null,"[]",classInfo), tokenizer);
                     newTarget = DelayedConstructor.unwrap(newTarget);
+
+                    if (classInfo != null)
+                    {
+                        Method postConstructMethod = classInfo.getPostConstructMethod();
+                        if (postConstructMethod != null)
+                        {
+                            postConstructMethod.invoke(newTarget);
+                        }
+                    }
+
                 }
                 else if (valueType == TokenType.BRACKET_OPEN)
                 {
@@ -503,6 +533,14 @@ public class JSONParser
                     newTarget = createNewTargetInstance(typeHint, classInfo, false);
                     parseArrayInto(cx.push(newTarget,null,"[]",classInfo), tokenizer);
                     newTarget = DelayedConstructor.unwrap(newTarget);
+                    if (classInfo != null)
+                    {
+                        Method postConstructMethod = classInfo.getPostConstructMethod();
+                        if (postConstructMethod != null)
+                        {
+                            postConstructMethod.invoke(newTarget);
+                        }
+                    }
                 }
                 else
                 {
@@ -701,6 +739,14 @@ public class JSONParser
                     parseObjectInto(cx.push(newTarget, memberType, "." + name, newClassInfo), tokenizer);
                     newTarget = DelayedConstructor.unwrap(newTarget);
 
+                    if (newClassInfo != null)
+                    {
+                        Method postConstructMethod = newClassInfo.getPostConstructMethod();
+                        if (postConstructMethod != null)
+                        {
+                            postConstructMethod.invoke(newTarget);
+                        }
+                    }
                 }
                 else if (valueType == TokenType.BRACKET_OPEN)
                 {
@@ -757,6 +803,15 @@ public class JSONParser
 
                         parseArrayInto(cx.push(newTarget,memberType, "."+name,newClassInfo), tokenizer);
                         newTarget = DelayedConstructor.unwrap(newTarget);
+
+                        if (newClassInfo != null)
+                        {
+                            Method postConstructMethod = newClassInfo.getPostConstructMethod();
+                            if (postConstructMethod != null)
+                            {
+                                postConstructMethod.invoke(newTarget);
+                            }
+                        }
                     }
                     else
                     {

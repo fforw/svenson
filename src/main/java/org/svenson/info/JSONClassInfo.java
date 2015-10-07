@@ -1,6 +1,7 @@
 package org.svenson.info;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,9 +28,10 @@ public class JSONClassInfo
     protected final Map<String, JSONPropertyInfo> propertyInfos;
 
     private final List<JSONPropertyInfo> sortedPropertyInfos;
+    private final Method postConstructMethod;
 
     public JSONClassInfo(Class<?> cls, Map<String, ? extends JSONPropertyInfo> propertyInfos, Constructor<?> ctor,
-                         Class<?> ctorTypeHint)
+                         Class<?> ctorTypeHint, Method postConstructMethod)
     {
         if (cls == null)
         {
@@ -76,6 +78,7 @@ public class JSONClassInfo
         }
         
         this.sortedPropertyInfos = copy;
+        this.postConstructMethod = postConstructMethod;
     }
 
 
@@ -109,5 +112,10 @@ public class JSONClassInfo
     public ConstructorInfo getConstructorInfo()
     {
         return constructorInfo;
+    }
+
+    public Method getPostConstructMethod()
+    {
+        return postConstructMethod;
     }
 }

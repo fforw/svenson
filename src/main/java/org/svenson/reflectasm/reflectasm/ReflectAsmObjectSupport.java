@@ -8,6 +8,7 @@ import org.svenson.converter.JSONConverter;
 import org.svenson.info.AbstractObjectSupport;
 import org.svenson.info.JSONClassInfo;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -32,6 +33,8 @@ public class ReflectAsmObjectSupport
 
         MethodAccess methodAccess = MethodAccess.get(cls);
 
+        Method postConstructMethod = null;
+
         for (Method m : cls.getMethods())
         {
             String name = m.getName();
@@ -39,6 +42,16 @@ public class ReflectAsmObjectSupport
             if ((m.getModifiers() & Modifier.PUBLIC) == 0 || name.equals("getClass"))
             {
                 continue;
+            }
+
+            if (m.getAnnotation(PostConstruct.class) != null)
+            {
+                if (m.getParameterTypes().length != 0)
+                {
+                    throw new IllegalStateException("@PostConstruct methods can't have parameters: " + m);
+                }
+
+                postConstructMethod = m;
             }
 
             if (name.startsWith(SETTER_PREFIX) && m.getParameterTypes().length == 1)
@@ -216,7 +229,7 @@ public class ReflectAsmObjectSupport
         }
 
 
-        return new JSONClassInfo(cls, propertyInfos, null, null);
+        return new JSONClassInfo(cls, propertyInfos, null, null, postConstructMethod);
     }
     /**
      * Returns <code>true</code> if class a is a subclass of class b or if b is <code>null</code>.
