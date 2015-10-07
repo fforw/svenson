@@ -16,7 +16,8 @@ public abstract class AbstractTypeMapper implements TypeMapper
 
     protected Object getPropertyValueFromTokenStream(JSONTokenizer tokenizer, String propertyName, Token first)
     {
-        return getPropertyTokenFromTokenStream(tokenizer, propertyName, first).value();
+        Token token = getPropertyTokenFromTokenStream(tokenizer, propertyName, first);
+        return token != null ? token.value() : null;
     }
     protected Token getPropertyTokenFromTokenStream(JSONTokenizer tokenizer, String propertyName, Token first)
     {
