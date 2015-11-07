@@ -319,7 +319,7 @@ public class JSONParser
     /**
      * Parses a JSON String
      * @param <T> The type to parse the root object into
-     * @param targetType   Runtime class for <T>
+     * @param targetType   Runtime class for &lt;T&gt;
      * @param json  json string
      * @return the resulting object
      */
@@ -350,7 +350,7 @@ public class JSONParser
     /**
      * Parses a JSON String
      * @param <T>           The type to parse the root object into
-     * @param targetType    Runtime class for <T>
+     * @param targetType    Runtime class for &lt;T&gt;
      * @param source        json character source to parse
      * @return the resulting object
      */
