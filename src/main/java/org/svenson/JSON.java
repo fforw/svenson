@@ -255,7 +255,7 @@ public class JSON
         }
         catch(StackOverflowError e)
         {
-            throw new CyclicStructureException("Cyclic JSON structure", e);
+            throw new CyclicStructureException("Cyclic JSON structure" + o, e);
         }
     }
 
@@ -276,7 +276,7 @@ public class JSON
         }
         catch(StackOverflowError e)
         {
-            throw new CyclicStructureException("Cyclic JSON structure", e);
+            throw new CyclicStructureException("Cyclic JSON structure: " + o, e);
         }
     }
 
