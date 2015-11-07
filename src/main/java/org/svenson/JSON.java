@@ -249,7 +249,14 @@ public class JSON
      */
     public void dumpObject(JSONCharacterSink out, Object o)
     {
-        dumpObject(out, o, '\0', ignoredProperties);
+        try
+        {
+            dumpObject(out, o, '\0', ignoredProperties);
+        }
+        catch(StackOverflowError e)
+        {
+            throw new CyclicStructureException("Cyclic JSON structure", e);
+        }
     }
 
     /**
@@ -263,7 +270,14 @@ public class JSON
     public void dumpObject(JSONCharacterSink out, Object o,
             Collection<String> ignoredProps)
     {
-        dumpObject(out, o, '\0', ignoredProps);
+        try
+        {
+            dumpObject(out, o, '\0', ignoredProps);
+        }
+        catch(StackOverflowError e)
+        {
+            throw new CyclicStructureException("Cyclic JSON structure", e);
+        }
     }
 
     /**
