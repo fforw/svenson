@@ -39,13 +39,12 @@ If you use slf4j-log4j12, you still need a valid log4j configuration. svenson (e
 
 ## Maven Repository
 
-Now that we're sync by the big repositories, you just need to add the following dependency to your pom.xml:
+Now that we're synced by the big repositories, you just need to add the following dependency to your pom.xml:
 
     <dependency>
       <groupId>com.google.code.svenson</groupId>
       <artifactId>svenson</artifactId>
       <version>1.4.5</version>
-      <type>jar</type>
     </dependency>
 
 
