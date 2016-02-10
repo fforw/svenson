@@ -831,7 +831,7 @@ public class JSONParser
                 value = typeConverter.fromJSON(value);
             }
             
-            if (typeHint == null && propertyInfo != null)
+            if (typeHint == null && propertyInfo != null && isProperty)
             {
                 typeHint = propertyInfo.getType();
             }

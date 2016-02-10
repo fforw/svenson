@@ -102,7 +102,7 @@ public class DelayedConstructor<T>
         {
             Class<?>[] parameterTypes = info.getConstructor().getParameterTypes();
             Class<?> targetClass = parameterTypes[index];
-            if (!targetClass.equals(value.getClass()))
+            if (/*!targetClass.equals(Object.class) &&*/ !targetClass.equals(value.getClass()))
             {
                 value = JSONParser.convertValueTo(value, targetClass, null);
             }

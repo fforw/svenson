@@ -6,6 +6,7 @@ import org.svenson.test.AddImmutables;
 import org.svenson.test.Bar;
 import org.svenson.test.CTORListVariance;
 import org.svenson.test.CTORMapVariance;
+import org.svenson.test.CTORObject;
 import org.svenson.test.CTORVariance;
 import org.svenson.test.CTVBase;
 import org.svenson.test.CTVExtension;
@@ -195,5 +196,15 @@ public class ConstructorParametrizationTestCase
         o = p2.getMap().get("bar");
         assertThat(o,is(List.class));
         assertThat(((List)o).size(),is(3));
+    }
+
+
+    @Test
+    public void testObject() throws Exception
+    {
+        JSONParser parser = JSONParser.defaultJSONParser();
+        CTORObject obj =  parser.parse(CTORObject.class, "{\"value\" : true}");
+        assertThat((String) obj.getValue(), is("java.lang.Boolean:true"));
+
     }
 }
