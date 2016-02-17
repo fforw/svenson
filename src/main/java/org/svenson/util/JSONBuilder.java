@@ -1,6 +1,7 @@
 package org.svenson.util;
 
 import org.svenson.JSON;
+import org.svenson.JSONCharacterSink;
 import org.svenson.StringBuilderSink;
 
 import java.util.Collection;
@@ -10,6 +11,7 @@ import java.util.Collection;
  * <p>
  * Allows constructing JSON structures piece-by-piece while including
  * normally JSONified objects.
+ * </p>
  *
  * @see #buildObject()
  * @see #buildObject(JSON)
@@ -20,7 +22,7 @@ public class JSONBuilder
 {
     private final JSON generator;
 
-    private final StringBuilderSink sink;
+    private final JSONCharacterSink sink;
 
     /**
      * Points to the topmost / most inner object level this builder is currently positioned at.
@@ -28,7 +30,7 @@ public class JSONBuilder
     private Level topMost;
 
 
-    private JSONBuilder(JSON generator, StringBuilderSink sink, boolean isObject)
+    private JSONBuilder(JSON generator, JSONCharacterSink sink, boolean isObject)
     {
         this.generator = generator != null ? generator : JSON.defaultJSON();
         this.sink = sink;
@@ -85,7 +87,7 @@ public class JSONBuilder
      * Defines an object property with the given name, leaving the object open for further building.
      *
      * @param name property name
-     * @return this builder
+     * @return the builder itself
      */
     public JSONBuilder objectProperty(String name)
     {
@@ -106,7 +108,7 @@ public class JSONBuilder
      * Defines an array property with the given name, leaving the array open for further building.
      *
      * @param name
-     * @return this builder
+     * @return the builder itself
      */
     public JSONBuilder arrayProperty(String name)
     {
@@ -125,7 +127,7 @@ public class JSONBuilder
     /**
      * Defines an object array element, leaving the object open for further building.
      *
-     * @return this builder
+     * @return the builder itself
      */
     public JSONBuilder objectElement()
     {
@@ -142,7 +144,7 @@ public class JSONBuilder
     /**
      * Defines a new array as array element, leaving the new array open for further building.
      *
-     * @return this builder
+     * @return the builder itself
      */
     public JSONBuilder arrayElement()
     {
@@ -161,7 +163,7 @@ public class JSONBuilder
      *
      * @param name  property name
      * @param value JSONifiable property value.
-     * @return this builder
+     * @return the builder itself
      * @throws IllegalBuilderStateException if builder is in array mode.
      */
     public JSONBuilder property(String name, Object value)
@@ -183,7 +185,7 @@ public class JSONBuilder
      * Creates a new array element on the current level.
      *
      * @param value JSONifiable value
-     * @return this builder
+     * @return the builder itself
      * @throws IllegalBuilderStateException if builder is in object mode.
      */
     public JSONBuilder element(Object value)
@@ -204,7 +206,7 @@ public class JSONBuilder
      * Adds the given varargs as array elements to the current level.
      *
      * @param values JSONifiable values to embed in the current array
-     * @return this builder
+     * @return the builder itself
      */
     public JSONBuilder elements(Object... values)
     {
@@ -227,7 +229,7 @@ public class JSONBuilder
      * Adds the given collection values as array elements to the current level.
      *
      * @param values Collection of JSONifiable values to embed in the current array
-     * @return this builder
+     * @return the builder itself
      */
     public JSONBuilder elements(Collection<?> values)
     {
@@ -249,7 +251,7 @@ public class JSONBuilder
     /**
      * Closes one builder level.
      *
-     * @return this builder.
+     * @return the builder itself .
      * @throws IllegalBuilderStateException if the root level was already closed.
      */
     public JSONBuilder close()
@@ -323,15 +325,36 @@ public class JSONBuilder
      * Returns the collected output of this builder closing all open levels if that has not already happened.
      *
      * @return JSON output
+     * @throws IllegalBuilderStateException if the underlying JSON sink does not support string context extraction.
+     *                                      Just use {@link #closeAll()} in this case and the builder will write
+     *                                      out everything to the backing sink.
      */
     public String output()
     {
-        if (!isLocked())
+        closeAll();
+
+        if (!(sink instanceof StringBuilderSink))
         {
-            return close().output();
+            throw new IllegalBuilderStateException("Cannot get output from sink " + sink + ", it is not a " +
+                "StringBuilderSink");
+        }
+        return ((StringBuilderSink) sink).getContent();
+    }
+
+
+    /**
+     * Closes all open levels on the JSON builder.
+     *
+     * @return the builder itself
+     */
+    public JSONBuilder closeAll()
+    {
+        while (!isLocked())
+        {
+            close();
         }
 
-        return sink.getContent();
+        return this;
     }
 
 
@@ -343,7 +366,6 @@ public class JSONBuilder
     public static JSONBuilder buildObject()
     {
         return buildObject(null);
-
     }
 
 
@@ -355,7 +377,19 @@ public class JSONBuilder
      */
     public static JSONBuilder buildObject(JSON generator)
     {
-        StringBuilderSink sink = new StringBuilderSink();
+        return buildObject(generator, new StringBuilderSink());
+    }
+
+
+    /**
+     * Creates a new JSON builder with an object as root using the given JSON generator.
+     *
+     * @param generator JSON generator
+     * @param sink      JSON sink to append output to.
+     * @return new builder
+     */
+    public static JSONBuilder buildObject(JSON generator, JSONCharacterSink sink)
+    {
         sink.append('{');
         return new JSONBuilder(generator, sink, true);
     }
@@ -366,11 +400,9 @@ public class JSONBuilder
      *
      * @return new builder
      */
-
     public static JSONBuilder buildArray()
     {
         return buildArray(null);
-
     }
 
 
@@ -382,7 +414,20 @@ public class JSONBuilder
      */
     public static JSONBuilder buildArray(JSON generator)
     {
-        StringBuilderSink sink = new StringBuilderSink();
+        return buildArray(generator, new StringBuilderSink());
+    }
+
+
+    /**
+     * Creates a new JSON builder with an array as object as root using the given JSON generator and character sink.
+     *
+     * @param generator JSON generator
+     * @param sink      JSON sink to append output to.
+     * @return new builder
+     */
+
+    public static JSONBuilder buildArray(JSON generator, JSONCharacterSink sink)
+    {
         sink.append('[');
         return new JSONBuilder(generator, sink, false);
     }
@@ -391,7 +436,7 @@ public class JSONBuilder
     /**
      * Returns the current JSON builder object depth. This can be used in combination with {@link #closeUntil(Level)} to
      * reset the builder to a known deeper level.
-     *
+     * <p/>
      * <pre>
      *     JSONBuilder.buildObject()
      *         .property("foo",1);
@@ -419,7 +464,6 @@ public class JSONBuilder
      * Closes all open levels above the given level
      *
      * @param level level to have as current level after this method exists.
-     *
      * @return this builder
      */
     public JSONBuilder closeUntil(Level level)

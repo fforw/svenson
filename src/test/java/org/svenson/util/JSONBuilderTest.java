@@ -1,6 +1,9 @@
 package org.svenson.util;
 
+import org.junit.After;
 import org.junit.Test;
+import org.svenson.JSON;
+import org.svenson.StringBuilderSink;
 
 import java.util.Arrays;
 
@@ -73,6 +76,27 @@ public class JSONBuilderTest
     }
 
 
+    @Test
+    public void testAllEntryPoints() throws Exception
+    {
+        {
+            assertThat(JSONBuilder.buildObject().output(), is("{}"));
+            assertThat(JSONBuilder.buildObject(new JSON()).output(), is("{}"));
+            StringBuilderSink sink = new StringBuilderSink();
+            sink.append("!");
+            assertThat(JSONBuilder.buildObject(new JSON(), sink).output(), is("!{}"));
+        }
+
+        {
+            assertThat(JSONBuilder.buildArray().output(), is("[]"));
+            assertThat(JSONBuilder.buildArray(new JSON()).output(), is("[]"));
+            StringBuilderSink sink = new StringBuilderSink();
+            sink.append("!");
+            assertThat(JSONBuilder.buildArray(new JSON(), sink).output(), is("![]"));
+        }
+    }
+
+
     private void sub(JSONBuilder b)
     {
         b.objectProperty("value")
@@ -98,7 +122,6 @@ public class JSONBuilderTest
             return name;
         }
     }
-
 
     @Test(expected = IllegalBuilderStateException.class)
     public void testLockedProperty() throws Exception
