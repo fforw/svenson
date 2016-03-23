@@ -274,6 +274,23 @@ public class JSONBuilder
 
 
     /**
+     * Includes a JSON string as object into the current builder state.
+     *
+     * @param json  JSON to be inserted
+     *
+     * @return the builder itself .
+     */
+    public JSONBuilder include(String json)
+    {
+        ensureUnlocked();
+        commaUnlessFirst();
+
+        sink.append(json);
+        return this;
+    }
+
+
+    /**
      * Ensures that the builder is still writable.
      *
      * @throws IllegalBuilderStateException if the build is locked.

@@ -77,6 +77,27 @@ public class JSONBuilderTest
 
 
     @Test
+    public void testInclude() throws Exception
+    {
+
+        assertThat(
+            buildObject()
+                .property("foo", 1)
+                .include("{\"bar\":2}")
+                .output(), is("{\"foo\":1,{\"bar\":2}}"));
+
+        assertThat(
+            buildArray()
+                .objectElement()
+                .property("bar", 1)
+                .close()
+                .include("{\"bar\":2}")
+                .output(), is("[{\"bar\":1},{\"bar\":2}]"));
+
+    }
+
+
+    @Test
     public void testAllEntryPoints() throws Exception
     {
         {
