@@ -103,6 +103,19 @@ public class JSONBuilder
         return this;
     }
 
+    public JSONBuilder includeProperty(String name, String json)
+    {
+        ensureUnlocked();
+        ensureObject();
+        commaUnlessFirst();
+
+        generator.quote(sink, name);
+        sink.append(":");
+        sink.append(json);
+
+        return this;
+    }
+
 
     /**
      * Defines an array property with the given name, leaving the array open for further building.
@@ -280,9 +293,10 @@ public class JSONBuilder
      *
      * @return the builder itself .
      */
-    public JSONBuilder include(String json)
+    public JSONBuilder includeElement(String json)
     {
         ensureUnlocked();
+        ensureArray();
         commaUnlessFirst();
 
         sink.append(json);

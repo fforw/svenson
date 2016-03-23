@@ -83,15 +83,15 @@ public class JSONBuilderTest
         assertThat(
             buildObject()
                 .property("foo", 1)
-                .include("{\"bar\":2}")
-                .output(), is("{\"foo\":1,{\"bar\":2}}"));
+                .includeProperty("included", "{\"bar\":2}")
+                .output(), is("{\"foo\":1,\"included\":{\"bar\":2}}"));
 
         assertThat(
             buildArray()
                 .objectElement()
                 .property("bar", 1)
                 .close()
-                .include("{\"bar\":2}")
+                .includeElement("{\"bar\":2}")
                 .output(), is("[{\"bar\":1},{\"bar\":2}]"));
 
     }
