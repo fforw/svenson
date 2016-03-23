@@ -44,7 +44,7 @@ Now that we're synced by the big repositories, you just need to add the followin
     <dependency>
       <groupId>com.google.code.svenson</groupId>
       <artifactId>svenson</artifactId>
-      <version>1.4.5</version>
+      <version>1.5.2</version>
     </dependency>
 
 
