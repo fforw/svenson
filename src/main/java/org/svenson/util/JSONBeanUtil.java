@@ -131,7 +131,15 @@ public class JSONBeanUtil
         }
         else if ((propertyInfo = getClassInfoForBean(bean).getPropertyInfo(name)) != null && propertyInfo.isWriteable())
         {
-            propertyInfo.setProperty(bean, value);
+            if (Enum.class.isAssignableFrom(propertyInfo.getType()) && value instanceof String)
+            {
+                Class<Enum> cls = (Class)propertyInfo.getType();
+                propertyInfo.setProperty(bean, Enum.valueOf(cls, (String)value));
+            }
+            else
+            {
+                propertyInfo.setProperty(bean, value);
+            }
         }
         else if (bean instanceof DynamicProperties)
         {

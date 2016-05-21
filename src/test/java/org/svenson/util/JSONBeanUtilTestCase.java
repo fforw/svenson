@@ -10,8 +10,10 @@ import java.util.Set;
 import org.junit.Test;
 import org.svenson.test.Bean;
 import org.svenson.test.BeanWithArray;
+import org.svenson.test.BeanWithEnum;
 import org.svenson.test.BeanWrapper;
 import org.svenson.test.InnerBean;
+import org.svenson.test.SomeEnum;
 
 
 public class JSONBeanUtilTestCase
@@ -51,6 +53,19 @@ public class JSONBeanUtilTestCase
         DynPropTestBean bean = new DynPropTestBean();
         bean.setFoo("bar!");
         assertThat((String)JSONBeanUtil.defaultUtil().getProperty(bean, "_foo"), is("bar!"));
+    }
+
+    @Test
+    public void thatSettingEnumsWorks()
+    {
+        BeanWithEnum b = new BeanWithEnum();
+
+        assertThat(b.getSomeEnum(), is(nullValue()));
+        JSONBeanUtil.defaultUtil().setProperty(b, "someEnum", "VAL1");
+        assertThat(b.getSomeEnum(), is(SomeEnum.VAL1));
+
+        JSONBeanUtil.defaultUtil().setProperty(b, "someEnum", SomeEnum.VAL2);
+        assertThat(b.getSomeEnum(), is(SomeEnum.VAL2));
     }
 
     @Test(expected = IllegalArgumentException.class)
