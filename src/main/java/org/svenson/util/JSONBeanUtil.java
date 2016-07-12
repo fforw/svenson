@@ -37,16 +37,15 @@ public class JSONBeanUtil
      */
     public Set<String> getAllPropertyNames(Object bean)
     {
+        if (bean instanceof Map)
+        {
+            return new HashSet<String>(((Map)bean).keySet());
+        }
 
         Set<String> names  = new HashSet<String>( );
-
         if (bean instanceof DynamicProperties)
         {
             names.addAll(((DynamicProperties)bean).propertyNames());
-        }
-        if (bean instanceof Map)
-        {
-            names.addAll(((Map)bean).keySet());
         }
         names.addAll( getBeanPropertyNames(bean));
         return names;

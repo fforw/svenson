@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
@@ -67,6 +69,22 @@ public class JSONBeanUtilTestCase
         JSONBeanUtil.defaultUtil().setProperty(b, "someEnum", SomeEnum.VAL2);
         assertThat(b.getSomeEnum(), is(SomeEnum.VAL2));
     }
+
+
+    @Test
+    public void thatMapNamesAreCorrect() throws Exception
+    {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("a", "b");
+
+        final Set<String> names = JSONBeanUtil.defaultUtil().getAllPropertyNames(map);
+
+        System.out.println(names);
+
+        assertThat(names.size(), is(1));
+
+    }
+
 
     @Test(expected = IllegalArgumentException.class)
     public void thatReadingUndefinedBeanPropertiesDoesNotWork()
