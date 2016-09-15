@@ -118,6 +118,15 @@ public class JSONBuilderTest
     }
 
 
+    @Test
+    public void testPropertyUnlessNull() throws Exception
+    {
+        assertThat(buildObject().propertyUnlessNull("foo", null).output(), is("{}"));
+        assertThat(buildObject().propertyUnlessNull("foo", 1).output(), is("{\"foo\":1}"));
+
+    }
+
+
     private void sub(JSONBuilder b)
     {
         b.objectProperty("value")

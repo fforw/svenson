@@ -174,8 +174,8 @@ public class JSONBuilder
     /**
      * Creates a property on the current object level.
      *
-     * @param name  property name
-     * @param value JSONifiable property value.
+     * @param name      property name
+     * @param value     JSONifiable property value.
      * @return the builder itself
      * @throws IllegalBuilderStateException if builder is in array mode.
      */
@@ -193,6 +193,24 @@ public class JSONBuilder
         return this;
     }
 
+
+    /**
+     * Creates a property on the current object level unless the given value is null.
+     *
+     * @param name      property name
+     * @param value     JSONifiable property value.
+     * @return the builder itself
+     *
+     * @throws IllegalBuilderStateException if builder is in array mode.
+     */
+    public JSONBuilder propertyUnlessNull(String name, Object value)
+    {
+        if (value != null)
+        {
+            return property(name, value);
+        }
+        return this;
+    }
 
     /**
      * Creates a new array element on the current level.
