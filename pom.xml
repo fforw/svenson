@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>7</version>
     </parent>
-    
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code.svenson</groupId>
     <artifactId>svenson</artifactId>
@@ -25,9 +26,9 @@
         <connection>scm:git:https://github.com/fforw/svenson.git</connection>
         <developerConnection>scm:git:git@github.com:fforw/svenson.git</developerConnection>
         <url>https://github.com/fforw/svenson/</url>
-      <tag>HEAD</tag>
-  </scm>
-    
+        <tag>HEAD</tag>
+    </scm>
+
     <developers>
         <developer>
             <name>Sven Helmberger</name>
@@ -35,7 +36,7 @@
             <url>http://fforw.de/</url>
         </developer>
     </developers>
-    
+
     <prerequisites>
         <maven>2</maven>
     </prerequisites>
@@ -85,6 +86,22 @@
                     <goals>deploy</goals>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>1.4.5</version>
+                <configuration>
+                    <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 
         <extensions>
@@ -106,7 +123,7 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.9.2</version>
+            <version>1.9.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
