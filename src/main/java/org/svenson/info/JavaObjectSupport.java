@@ -111,7 +111,8 @@ public class JavaObjectSupport extends AbstractObjectSupport
 
             if (name.startsWith(SETTER_PREFIX) && m.getParameterTypes().length == 1)
             {
-                if (ctor != null)
+                JSONProperty jsonProperty;
+                if (ctor != null && ((jsonProperty = m.getAnnotation(JSONProperty.class)) == null || !jsonProperty.ignore()) )
                 {
                     throw new IllegalStateException("Classes with @JSONParameter constructors can't have setters.");
                 }
@@ -182,7 +183,8 @@ public class JavaObjectSupport extends AbstractObjectSupport
             }
             else if (name.startsWith(ADDER_PREFIX) && m.getParameterTypes().length == 1)
             {
-                if (ctor != null)
+                JSONProperty jsonProperty;
+                if (ctor != null && ((jsonProperty = m.getAnnotation(JSONProperty.class)) == null || !jsonProperty.ignore()) )
                 {
                     throw new IllegalStateException("Classes with @JSONParameter constructors can't have adders.");
                 }

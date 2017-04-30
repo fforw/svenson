@@ -4,9 +4,11 @@ import org.junit.Test;
 import org.svenson.matcher.SubtypeMatcher;
 import org.svenson.test.AddImmutables;
 import org.svenson.test.Bar;
+import org.svenson.test.CTORIgnoredSetter;
 import org.svenson.test.CTORListVariance;
 import org.svenson.test.CTORMapVariance;
 import org.svenson.test.CTORObject;
+import org.svenson.test.CTORReadOnly;
 import org.svenson.test.CTORVariance;
 import org.svenson.test.CTVBase;
 import org.svenson.test.CTVExtension;
@@ -205,6 +207,35 @@ public class ConstructorParametrizationTestCase
         JSONParser parser = JSONParser.defaultJSONParser();
         CTORObject obj =  parser.parse(CTORObject.class, "{\"value\" : true}");
         assertThat((String) obj.getValue(), is("java.lang.Boolean:true"));
+
+    }
+
+
+    @Test
+    public void testIgnored() throws Exception
+    {
+        JSONParser parser = JSONParser.defaultJSONParser();
+        CTORIgnoredSetter obj = parser.parse(CTORIgnoredSetter.class, "{\"field\" : \"opeitqxd\"}");
+        assertThat(obj.getField(), is("opeitqxd"));
+
+        final CTORIgnoredSetter o2 = new CTORIgnoredSetter("ikwrpui");
+
+        assertThat(JSON.defaultJSON().forValue(o2), is("{\"field\":\"ikwrpui\"}"));
+
+    }
+
+    @Test
+    public void testReadOnly() throws Exception
+    {
+        JSONParser parser = JSONParser.defaultJSONParser();
+        CTORReadOnly obj = parser.parse(CTORReadOnly.class, "{\"field\" : \"woripi\"}");
+        assertThat(obj.getField(), is("woripi"));
+
+        final CTORReadOnly o2 = new CTORReadOnly("jqwojkq");
+
+        final String json = JSON.defaultJSON().forValue(o2);
+        assertThat(json, containsString("\"field\":\"jqwojkq\""));
+        assertThat(json, containsString("\"meta\":\"meta value\""));
 
     }
 }
