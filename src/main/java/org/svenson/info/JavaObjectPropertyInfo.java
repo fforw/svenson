@@ -18,7 +18,7 @@ import org.svenson.util.ExceptionWrapper;
  * @author fforw at gmx dot de
  *
  */
-class JavaObjectPropertyInfo implements JSONPropertyInfo
+public class JavaObjectPropertyInfo implements JSONPropertyInfo
 {
     private Method getterMethod;
 

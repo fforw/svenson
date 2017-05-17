@@ -9,10 +9,7 @@ import org.svenson.info.JSONPropertyInfo;
 
 import java.lang.reflect.Method;
 
-/**
- * Created by sven on 26.04.14.
- */
-class ReflectAsmPropertyInfo implements JSONPropertyInfo
+public class ReflectAsmPropertyInfo implements JSONPropertyInfo
 {
     private MethodAccess methodAccess;
 
