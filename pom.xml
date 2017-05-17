@@ -36,10 +36,6 @@
         </developer>
     </developers>
 
-    <prerequisites>
-        <maven>2</maven>
-    </prerequisites>
-
     <inceptionYear>2008</inceptionYear>
 
     <build>
