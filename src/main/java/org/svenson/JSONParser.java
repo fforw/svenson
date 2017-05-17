@@ -129,7 +129,7 @@ public class JSONParser
     /**
      * Sets a {@link TypeMapper} to use on the token streams parsed
      * by this parser.
-     * @param typeMapper
+     * @param typeMapper    type mapper to use for this parser
      */
     public void setTypeMapper(TypeMapper typeMapper)
     {
@@ -158,7 +158,7 @@ public class JSONParser
      * ( e.g. <code>".value[]"</code> mapped to <code>FooBean.class</code> would
      * make the parser create FooBean instances for all array elements inside the value property of the root object )
      *
-     * @param typeHints
+     * @param typeHints map of type hints
      */
     public void setTypeHints(Map<String, Class> typeHints)
     {
@@ -173,7 +173,7 @@ public class JSONParser
     /**
      * Makes it possible to define which implementation is to be used for an interface.
      * Per default {@link Collection} and {@link List} are mapped to {@link ArrayList} and {@link Map} is mapped to {@link HashMap}.
-     * @param interfaceMappings
+     * @param interfaceMappings     map mapping interface classes to the implementations to use to parse them
      */
     public void setInterfaceMappings(Map<Class, Class> interfaceMappings)
     {
@@ -198,6 +198,12 @@ public class JSONParser
         this.interfaceMappings = interfaceMappings;
     }
 
+
+    /**
+     * Adds the given object factory as possible object factory to this parser.
+     *
+     * @param objectFactory object factory
+     */
     public void addObjectFactory(ObjectFactory objectFactory)
     {
         if (objectFactory == null)
@@ -207,14 +213,15 @@ public class JSONParser
         
         objectFactories.add(objectFactory);
     }
-    
+
+
     /**
      * Sets a type hint for a given parsing path location.
-     * 
+     *
      * The parse path location is built by appending "[]" whenever
      * the parser enters an array and ".propertyName" whenever the
-     * parser enters the property value of an object. 
-     * 
+     * parser enters the property value of an object.
+     *
      *  <p>
      *  for example: using a type hint
      *  <br><br>
@@ -230,7 +237,9 @@ public class JSONParser
      *
      *  so that the values inside the array of the foo property
      *  of the root object are mapped to Foo instances.
-     *
+
+     * @param key           parse path to use with an EqualsPathMatcher
+     * @param typeHint      resulting type hint
      */
     public void addTypeHint(String key, Class typeHint)
     {
@@ -459,7 +468,7 @@ public class JSONParser
     /**
      * Allows single quotes to be used for quoting JSON strings.
      *
-     * @param allowSingleQuotes
+     * @param allowSingleQuotes     <code>true</code> if you want to parse JSON quoted with single quotes. (e.g.<code>{'MyObject':'single quoted'}</code>)
      */
     public void setAllowSingleQuotes(boolean allowSingleQuotes)
     {
@@ -468,12 +477,13 @@ public class JSONParser
 
     /**
      * Expects the next object of the given tokenizer to be an array and parses it into the given {@link ParseContext}
-     * @param cx
-     * @param tokenizer
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     * @throws NoSuchMethodException
+     * @param cx            parse context
+     * @param tokenizer     tokenizer
+     *
+     * @throws InstantiationException       if an object instantiation goes wrong
+     * @throws IllegalAccessException       if a method cannot be accessed in the currrent security context
+     * @throws InvocationTargetException    if an exception occured in the methods used to set parsed information
+     * @throws NoSuchMethodException        if a method is mysteriously missing suddenly
      */
     private void parseArrayInto(ParseContext cx, JSONTokenizer tokenizer) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
     {

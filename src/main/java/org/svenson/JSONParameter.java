@@ -21,8 +21,8 @@ import java.lang.annotation.Target;
 public @interface JSONParameter
 {
     /**
-     * JSON property name to use for this constructor parameter.
-     * @return
+     * Returns the JSON property name to use for this constructor parameter.
+     * @return JSON property name to use for this constructor parameter
      */
     String value();
 }

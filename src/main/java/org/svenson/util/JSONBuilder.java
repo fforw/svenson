@@ -87,7 +87,10 @@ public class JSONBuilder
      * Defines an object property with the given name, leaving the object open for further building.
      *
      * @param name property name
+     *
      * @return the builder itself
+     *
+     * @throws IllegalBuilderStateException if builder is in array mode.
      */
     public JSONBuilder objectProperty(String name)
     {
@@ -103,6 +106,17 @@ public class JSONBuilder
         return this;
     }
 
+
+    /**
+     * Includes the given JSON snippet as property in the current object
+     *
+     * @param name      property name
+     * @param json      JSON snippet
+     *
+     * @return the builder itself
+     * 
+     * @throws IllegalBuilderStateException if the builder is in array mode.
+     */
     public JSONBuilder includeProperty(String name, String json)
     {
         ensureUnlocked();
@@ -120,8 +134,11 @@ public class JSONBuilder
     /**
      * Defines an array property with the given name, leaving the array open for further building.
      *
-     * @param name
+     * @param name      property name
+     *
      * @return the builder itself
+     *
+     * @throws IllegalBuilderStateException if the builder is in array mode.
      */
     public JSONBuilder arrayProperty(String name)
     {
@@ -141,6 +158,8 @@ public class JSONBuilder
      * Defines an object array element, leaving the object open for further building.
      *
      * @return the builder itself
+     *
+     * @throws IllegalBuilderStateException if the builder is in object mode.
      */
     public JSONBuilder objectElement()
     {
@@ -158,6 +177,8 @@ public class JSONBuilder
      * Defines a new array as array element, leaving the new array open for further building.
      *
      * @return the builder itself
+     *
+     * @throws IllegalBuilderStateException if the builder is in object mode.
      */
     public JSONBuilder arrayElement()
     {
@@ -176,7 +197,9 @@ public class JSONBuilder
      *
      * @param name      property name
      * @param value     JSONifiable property value.
+     *
      * @return the builder itself
+     *
      * @throws IllegalBuilderStateException if builder is in array mode.
      */
     public JSONBuilder property(String name, Object value)
@@ -199,6 +222,7 @@ public class JSONBuilder
      *
      * @param name      property name
      * @param value     JSONifiable property value.
+     *
      * @return the builder itself
      *
      * @throws IllegalBuilderStateException if builder is in array mode.
@@ -215,8 +239,10 @@ public class JSONBuilder
     /**
      * Creates a new array element on the current level.
      *
-     * @param value JSONifiable value
+     * @param value     JSONifiable value
+     *
      * @return the builder itself
+     *
      * @throws IllegalBuilderStateException if builder is in object mode.
      */
     public JSONBuilder element(Object value)
@@ -236,8 +262,11 @@ public class JSONBuilder
     /**
      * Adds the given varargs as array elements to the current level.
      *
-     * @param values JSONifiable values to embed in the current array
+     * @param values    JSONifiable values to embed in the current array
+     *
      * @return the builder itself
+     *
+     * @throws IllegalBuilderStateException if builder is in object mode.
      */
     public JSONBuilder elements(Object... values)
     {
@@ -259,8 +288,11 @@ public class JSONBuilder
     /**
      * Adds the given collection values as array elements to the current level.
      *
-     * @param values Collection of JSONifiable values to embed in the current array
+     * @param values    Collection of JSONifiable values to embed in the current array
+     *
      * @return the builder itself
+     *
+     * @throws IllegalBuilderStateException if builder is in object mode.
      */
     public JSONBuilder elements(Collection<?> values)
     {
@@ -310,6 +342,8 @@ public class JSONBuilder
      * @param json  JSON to be inserted
      *
      * @return the builder itself .
+     *
+     * @throws IllegalBuilderStateException if builder is in object mode.
      */
     public JSONBuilder includeElement(String json)
     {
@@ -339,7 +373,8 @@ public class JSONBuilder
     /**
      * Returns <code>true</code> if the builder is locked, that is the topmost level has already been closed.
      *
-     * @return
+     * @return  <code>true</code> if the builder is locked
+     *
      * @see #output()
      */
     public boolean isLocked()
@@ -351,7 +386,7 @@ public class JSONBuilder
     /**
      * Returns <code>true</code> if the topmost level is in object mode
      *
-     * @return
+     * @return <code>true</code> if in object mode
      */
     public boolean isObject()
     {
@@ -362,7 +397,7 @@ public class JSONBuilder
     /**
      * Returns <code>true</code> if the topmost level is still hasn't received it's first element.
      *
-     * @return
+     * @return <code>true</code> if still first element
      */
     public boolean isFirst()
     {
@@ -485,7 +520,7 @@ public class JSONBuilder
     /**
      * Returns the current JSON builder object depth. This can be used in combination with {@link #closeUntil(Level)} to
      * reset the builder to a known deeper level.
-     * <p/>
+     * 
      * <pre>
      *     JSONBuilder.buildObject()
      *         .property("foo",1);

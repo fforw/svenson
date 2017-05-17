@@ -54,7 +54,7 @@ public class JSONBeanUtil
     /**
      * Returns all readable and writable bean property JSON names of the given object.
      * @param bean object
-     * @return
+     * @return  All bean property names
      */
     public Set<String> getBeanPropertyNames(Object bean)
     {

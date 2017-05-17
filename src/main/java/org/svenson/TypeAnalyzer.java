@@ -24,9 +24,9 @@ public class TypeAnalyzer
     /**
      * Returns a class info for the given {@link ObjectSupport} and type.
      * 
-     * @param objectSupport
-     * @param cls
-     * @return
+     * @param objectSupport     object support to analyze the class with
+     * @param cls               class to analyze
+     * @return  JSON class info
      */
     public static JSONClassInfo getClassInfo(ObjectSupport objectSupport, Class<?> cls)
     {

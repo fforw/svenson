@@ -41,8 +41,9 @@ public enum TokenType
     /**
      * Throws an {@link IllegalArgumentException} if the given value does not match
      * the requirements of this token type.
-     * @param value
-     * @throws IllegalArgumentException
+     * @param value     value to check
+     *
+     * @throws IllegalArgumentException if the token type does not match
      */
     public void checkValue(Object value) throws IllegalArgumentException
     {
@@ -75,7 +76,8 @@ public enum TokenType
 
     /**
      * Returns <code>true</code> if the valid content for this token type is restricted to instances of a class.
-     * @return
+     * 
+     * @return <code>true</code> if the valid content for this token type is restricted to instances of a class.
      */
     public boolean isClassRestricted()
     {
@@ -84,7 +86,8 @@ public enum TokenType
 
     /**
      * Returns the valid content for this token type.
-     * @return
+     *
+     * @return  valid token content
      */
     public Object getValidContent()
     {
@@ -102,7 +105,8 @@ public enum TokenType
      * <li> {@link TokenType#INTEGER}</li>
      * <li> {@link TokenType#DECIMAL}</li>
      * </ul>
-     * @return
+     *
+     * @return  <code>true</code> if the token type represents a primitive value.
      */
     public boolean isPrimitive()
     {

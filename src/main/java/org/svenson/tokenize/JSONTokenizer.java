@@ -43,8 +43,8 @@ public class JSONTokenizer
      * is <code>true</code>, the parser will also allow the JSON to contain quoted string that are
      * quoted with single quotes.
      *
-     * @param json
-     * @param allowSingleQuotes
+     * @param json                  JSON string
+     * @param allowSingleQuotes     <code>true</code> to parse JSON expecting all quotes to be single quotes
      */
     public JSONTokenizer(String json, boolean allowSingleQuotes)
     {
@@ -119,7 +119,8 @@ public class JSONTokenizer
     /**
      * Ensures that the token stream stand on the given identifier suffix. This
      * is used to e.g. check if "rue" is really following an initial 't'.
-     * @param word
+     *
+     * @param word  word to ensure present
      */
     private void ensureKeywordSuffix(String word)
     {
@@ -137,7 +138,8 @@ public class JSONTokenizer
     /**
      * Returns the next token.
      * If there are no more tokens, a token with {@link TokenType#END} will be returned
-     * @return
+     *
+     * @return next token
      */
     public final Token next()
     {
@@ -270,8 +272,8 @@ public class JSONTokenizer
 
     /**
      * Parses the current parsing stream position into a token with the type {@link TokenType#INTEGER} or {@link TokenType#DECIMAL}.
-     * @param c1
-     * @return
+     * @param c1    first character
+     * @return  number token
      */
     private Token parseNumber(char c1)
     {
@@ -323,8 +325,8 @@ public class JSONTokenizer
 
     /**
      * Parses the given string into a token with the type {@link TokenType#DECIMAL}.
-     * @param number
-     * @return
+     * @param number    number to parse as decimal
+     * @return  DECIMAL token
      */
     private Token parseDecimal(String number)
     {
@@ -343,7 +345,8 @@ public class JSONTokenizer
      * Parses the current position into a quoted string quoted by the given
      * quote char.
      * @param quoteChar character that starts and ends this quoted string. must be a single or a double quote.
-     * @return
+     *
+     * @return STRING token
      */
     private Token parseString(char quoteChar)
     {
@@ -444,7 +447,8 @@ public class JSONTokenizer
 
     /**
      * Returns an info string containing the line and column of the current parsing position.
-     * @return
+     *
+     * @return  info string
      */
     private String info()
     {
@@ -453,8 +457,9 @@ public class JSONTokenizer
 
     /**
      * Returns <code>true</code> if the given character is either a carriage return or linefeed
-     * @param c
-     * @return
+     * @param c     character
+     *
+     * @return <code>true</code> if the given character is either a carriage return or linefeed
      */
     private boolean isCR(char c)
     {
@@ -463,7 +468,8 @@ public class JSONTokenizer
 
     /**
      * Returns the next character.
-     * @return
+     *
+     * @return  next character
      */
     private int nextChar()
     {
@@ -511,10 +517,12 @@ public class JSONTokenizer
     }
 
     /**
-     * Expects the next token to be of one of the given token types
+     * Expects the next token to be of one of the given token types and returns it.
      *
-     * @param types varg list of types to expect
-     * @return
+     * @param types     varg list of types to expect
+     *
+     * @return next token
+     * 
      * @throws JSONParseException if the expectation is not fulfilled
      */
     public Token expectNext(TokenType... types)

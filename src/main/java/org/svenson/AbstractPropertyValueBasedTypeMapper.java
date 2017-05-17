@@ -22,7 +22,8 @@ public abstract class AbstractPropertyValueBasedTypeMapper extends AbstractTypeM
      * discriminator field values that are mapped to no class. Otherwise an
      * exception is thrown in that case.
      *
-     * @param allowUndefined
+     * @param allowUndefined    <code>true</code> if you objects with undefined type to be parsed as HashMap instead of
+     *                          the mapper throwing an error.
      */
     public void setAllowUndefined(boolean allowUndefined)
     {
@@ -43,7 +44,7 @@ public abstract class AbstractPropertyValueBasedTypeMapper extends AbstractTypeM
     /**
      * Sets the parse path info at which the type discrimination is applied.
      *
-     * @param parsePathInfo
+     * @param parsePathInfo parse path to match with an EqualsPathMatcher for this type mapper.
      */
     public void setParsePathInfo(String parsePathInfo)
     {
@@ -59,7 +60,7 @@ public abstract class AbstractPropertyValueBasedTypeMapper extends AbstractTypeM
      * Sets the property used to discriminate between the different document
      * types
      *
-     * @param discriminatorField
+     * @param discriminatorField    property used to discriminate between the different document types
      */
     public void setDiscriminatorField(String discriminatorField)
     {

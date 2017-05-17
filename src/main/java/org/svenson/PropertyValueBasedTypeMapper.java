@@ -48,8 +48,12 @@ public class PropertyValueBasedTypeMapper extends AbstractPropertyValueBasedType
     }
     
     /**
-     * @param value
+     * Converts a property value into a type hint class
+     *
+     * @param value     property value.
+     *
      * @return Class or <code>null</code>
+     *
      * @throws IllegalStateException if there is no class configured for this
      *             value and {@link #allowUndefined} is false.
      */

@@ -122,7 +122,7 @@ public class JSON
      * Sets the properties this JSON generator ignores. Most effective when 
      * called with a set.
      * 
-     * @param ignoredProperties 
+     * @param ignoredProperties     property names to ignore
      */
     public void setIgnoredProperties(Collection<String> ignoredProperties)
     {
@@ -132,7 +132,7 @@ public class JSON
     /**
      * Returns the properties this JSON generator ignores.
      * 
-     * @return
+     * @return the currently ignored property names
      */
     public Collection<String> getIgnoredProperties()
     {
@@ -264,7 +264,7 @@ public class JSON
      * StreamBuilder
      *
      * @param out           character sink
-     * @param o
+     * @param o             object to dump
      * @param ignoredProps  collection of property names to ignore. Overrides the ignored properties set on the JSON generator
      */
     public void dumpObject(JSONCharacterSink out, Object o,
@@ -511,9 +511,9 @@ public class JSON
     /**
      * Returns a JSON representation of the given object as String.
      *
-     * @param o
-     * @param ignoredProps  collection of property names to ignore. Overrides the ignored properties set on the JSON generator
-     * @return
+     * @param o                 object to convert to JSON
+     * @param ignoredProps      collection of property names to ignore. Overrides the ignored properties set on the JSON generator
+     * @return JSON representation of the given object
      */
     public String forValue(Object o, Collection<String> ignoredProps)
     {

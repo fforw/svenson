@@ -18,7 +18,7 @@ public class DefaultTypeConverterRepository implements TypeConverterRepository
     /**
      * Registers the given converter under a generated id.
      * 
-     * @param converter
+     * @param converter     type converter
      */
     public void addTypeConverter(TypeConverter converter)
     {
@@ -29,8 +29,8 @@ public class DefaultTypeConverterRepository implements TypeConverterRepository
     /**
      * Registers the given converter under the given id.
      * 
-     * @param id
-     * @param converter
+     * @param id            id
+     * @param converter     type converter
      */
     public void addTypeConverter(String id, TypeConverter converter)
     {
@@ -39,7 +39,7 @@ public class DefaultTypeConverterRepository implements TypeConverterRepository
     
     /**
      * Creates a converter id.
-     * @return
+     * @return  new id
      */
     private String createId()
     {

@@ -15,7 +15,7 @@ public class CompositeTypeMapper implements TypeMapper
 
     /**
      * Sets the type mappers that are consulted for type hints in the order in which they are in the list
-     * @param typeMappers
+     * @param typeMappers   list of type mappers to compose 
      */
     public void setTypeMappers(List<TypeMapper> typeMappers)
     {

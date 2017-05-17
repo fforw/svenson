@@ -13,15 +13,15 @@ public interface JSONCharacterSource
 {
     /**
      * Returns the next character or -1 if the end of the character stream was reached.
-     * @return
-     * @throws IOException 
+     *
+     * @return  next character or -1
      */
     int nextChar();
 
     /**
      * Returns the current character index.
      * 
-     * @return
+     * @return  current character index
      */
     int getIndex();
     

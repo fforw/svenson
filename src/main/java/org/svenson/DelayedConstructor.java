@@ -18,7 +18,7 @@ import java.util.Set;
  * Implements dynamic properties to store JSON property values being used
  * in @JSONParameter annotated constructors.
  *
- * @param <T>
+ * @param <T>   target class to construct 
  */
 public class DelayedConstructor<T>
     implements DynamicProperties

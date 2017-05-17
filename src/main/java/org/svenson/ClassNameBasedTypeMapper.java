@@ -16,7 +16,8 @@ public class ClassNameBasedTypeMapper extends AbstractPropertyValueBasedTypeMapp
     /**
      * Sets the base type to which all created instances must be assignable to.
      * 
-     * @param enforcedBaseType
+     * @param enforcedBaseType  if <code>true</code>, make sure that the instances create are assignable to the given
+     *                          base type
      */
     public void setEnforcedBaseType(Class enforcedBaseType)
     {
@@ -27,7 +28,8 @@ public class ClassNameBasedTypeMapper extends AbstractPropertyValueBasedTypeMapp
      * Sets the base package that is put before the given type to form the fully qualified
      * class names.
      * 
-     * @param basePackage
+     * @param basePackage   the base package that is put before the given type to form the fully qualified
+     *                      class names
      */
     public void setBasePackage(String basePackage)
     {

@@ -24,13 +24,14 @@ public @interface JSONReference
 {
     /**
      * JSON property to use as replacement for the links value(s). Default is "_id", the CouchDB id field.
-     * @return
+     * @return  JSON property to use as replacement for the links value(s)
      */
     String idProperty() default "_id";
 
     /**
      * Generic Reference identifier.
-     * @return
+     * 
+     * @return Generic Reference identifier
      */
     String value() default "";
 }

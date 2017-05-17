@@ -24,19 +24,19 @@ public @interface JSONProperty
 {
     /**
      * JSON property name to use for this property. if not given, the java property name is used.
-     * @return
+     * @return  JSON property name
      */
     String value() default "";
 
     /**
      * if <code>true</code>, always ignore the property.
-     * @return
+     * @return <code>true</code> if the property is always ignored
      */
     boolean ignore() default false;
 
     /**
      * if <code>true</code>, ignore the property if it contains a <code>null</code> value.
-     * @return
+     * @return  <code>true</code> if the property should be ignored in case it is <code>null</code>.
      */
     boolean ignoreIfNull() default false;
     
@@ -44,9 +44,14 @@ public @interface JSONProperty
      * Marks a property as read-only which means the JSON generator will generate a property for 
      * such a method but the JSON parser should ignore it.
      *  
-     * @return
+     * @return  <code>true</code> if the property is read-only.
      */
     boolean readOnly() default false;
 
+    /**
+     * Returns the priority for this property. Larger priorities appear before smaller.
+     *
+     * @return  priority value
+     */
     int priority() default 0;
 }

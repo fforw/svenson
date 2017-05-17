@@ -77,7 +77,8 @@ public class Token
 
     /**
      * Returns the value of the token
-     * @return
+     *
+     * @return  token value
      */
     public final Object value()
     {
@@ -86,7 +87,8 @@ public class Token
 
     /**
      * Returns the type of the token
-     * @return
+     *
+     * @return token type
      */
     public final TokenType type()
     {
@@ -112,9 +114,10 @@ public class Token
     }
 
     /**
-     * Returns true if the token is of the given type
-     * @param type
-     * @return
+     * Returns <code>true</code> if the token is of the given type
+     * @param type      token type
+     *
+     * @return <code>true</code> if the token is of the given type
      */
     public boolean isType(TokenType type)
     {
@@ -124,8 +127,8 @@ public class Token
     /**
      * Expects the given token to be of one of the given token types
      *
-     * @param types vararg list of possible types  
-     * @return
+     * @param types     vararg list of possible types
+     *                
      * @throws JSONParseException if the expectation is not fulfilled
      */
     public void expect(TokenType... types)

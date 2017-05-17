@@ -12,9 +12,11 @@ public class Util
     }
 
     /**
-     * Safe equals implementation.
-     * @param a
-     * @param b
+     * Null-safe equals implementation.
+     *
+     * @param a     first object
+     * @param b     second object
+     *              
      * @return <code>true</code> if a is not <code>null</code> and equals b or if a and b are both <code>null</code>.
      */
     public static boolean equals(Object a, Object b)
@@ -24,8 +26,9 @@ public class Util
 
     /**
      * Returns the hash code of the given Object or <code>0</code> if the Object is <code>null</code>.
-     * @param o
-     * @return
+     * @param o     object
+     *
+     * @return  hash code
      */
     public static int safeHashcode(Object o)
     {

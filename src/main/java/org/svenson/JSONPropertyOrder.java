@@ -27,7 +27,7 @@ public @interface JSONPropertyOrder
 {
     /**
      * Comparator to use to sort the {@link JSONPropertyInfo} entries for this class.
-     * @return
+     * @return  comparator class
      */
     Class<? extends Comparator<JSONPropertyInfo>> value();
 }

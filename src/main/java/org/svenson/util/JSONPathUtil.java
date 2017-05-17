@@ -48,7 +48,7 @@ public class JSONPathUtil
      * to fix missing objects or invalid indexes by creating new objects and increasing the size
      * of lists.  
      * 
-     * @param grow
+     * @param grow  whether growing on path expressions is allowed
      */
     public void setGrow(boolean grow)
     {

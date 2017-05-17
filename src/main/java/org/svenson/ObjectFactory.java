@@ -14,15 +14,15 @@ public interface ObjectFactory<T>
     /**
      * Returns <code>true</code> if the factory can create objects of the given class
      * 
-     * @param cls
-     * @return
+     * @param cls   Class to check for support of
+     * @return  <code>true</code> if the given class can be created by this factory
      */
     boolean supports(Class<T> cls);
     
     /**
      * Creates an instance of the given type.
-     * @param typeHint
-     * @return
+     * @param cls   Class to create an instance of
+     * @return  new instance
      */
-    T create(Class<T> typeHint);
+    T create(Class<T> cls);
 }
