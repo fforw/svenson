@@ -49,7 +49,7 @@ public class JavaObjectPropertyInfo implements JSONPropertyInfo
     }
 
 
-    Method getSetterMethod()
+    public Method getSetterMethod()
     {
         return setterMethod;
     }
@@ -61,7 +61,7 @@ public class JavaObjectPropertyInfo implements JSONPropertyInfo
     }
 
 
-    Method getGetterMethod()
+    public Method getGetterMethod()
     {
         return getterMethod;
     }
@@ -220,7 +220,7 @@ public class JavaObjectPropertyInfo implements JSONPropertyInfo
         this.typeHint = typeHint;
     }
     
-    Method getAdderMethod()
+    public Method getAdderMethod()
     {
         return adderMethod;
     }
