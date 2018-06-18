@@ -22,12 +22,16 @@ import javax.annotation.PostConstruct;
 public class JavaObjectSupport extends AbstractObjectSupport
 {
     private static final String ADDER_PREFIX = "add";
+    private static final int ADDER_PREFIX_LEN = ADDER_PREFIX.length();
 
     private static final String SETTER_PREFIX = "set";
+    private static final int SETTER_PREFIX_LEN = SETTER_PREFIX.length();
 
     private static final String GETTER_PREFIX = "get";
+    private static final int GETTER_PREFIX_LEN = GETTER_PREFIX.length();
 
     private static final String ISSER_PREFIX = "is";
+    private static final int ISSER_PREFIX_LEN = ISSER_PREFIX.length();
 
 
     public JavaObjectSupport()
@@ -93,7 +97,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
         {
             String name = m.getName();
 
-            if ((m.getModifiers() & Modifier.PUBLIC) == 0 || name.equals("getClass"))
+            if ((m.getModifiers() & Modifier.STATIC) != 0 || (m.getModifiers() & Modifier.PUBLIC) == 0 || name.equals("getClass"))
             {
                 continue;
             }
@@ -109,7 +113,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
             }
 
 
-            if (name.startsWith(SETTER_PREFIX) && m.getParameterTypes().length == 1)
+            if (name.length() > SETTER_PREFIX_LEN && name.startsWith(SETTER_PREFIX) && m.getParameterTypes().length == 1)
             {
                 JSONProperty jsonProperty;
                 if (ctor != null && ((jsonProperty = m.getAnnotation(JSONProperty.class)) == null || !jsonProperty.ignore()) )
@@ -117,7 +121,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
                     throw new IllegalStateException("Classes with @JSONParameter constructors can't have setters.");
                 }
 
-                String javaPropertyName = propertyName(name, SETTER_PREFIX.length());
+                String javaPropertyName = propertyName(name, SETTER_PREFIX_LEN);
                 JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                 if (pair != null)
                 {
@@ -147,9 +151,9 @@ public class JavaObjectSupport extends AbstractObjectSupport
             }
             else if (m.getParameterTypes().length == 0 && !m.getReturnType().equals(void.class))
             {
-                if (name.startsWith(GETTER_PREFIX))
+                if ( name.length() > GETTER_PREFIX_LEN && name.startsWith(GETTER_PREFIX))
                 {
-                    String javaPropertyName = propertyName(name, GETTER_PREFIX.length());
+                    String javaPropertyName = propertyName(name, GETTER_PREFIX_LEN);
                     JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                     if (pair != null)
                     {
@@ -166,9 +170,9 @@ public class JavaObjectSupport extends AbstractObjectSupport
                             m, null));
                     }
                 }
-                else if (name.startsWith(ISSER_PREFIX))
+                else if (name.length() > ISSER_PREFIX_LEN && name.startsWith(ISSER_PREFIX))
                 {
-                    String javaPropertyName = propertyName(name, ISSER_PREFIX.length());
+                    String javaPropertyName = propertyName(name, ISSER_PREFIX_LEN);
                     JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                     if (pair != null)
                     {
@@ -181,7 +185,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
                     }
                 }
             }
-            else if (name.startsWith(ADDER_PREFIX) && m.getParameterTypes().length == 1)
+            else if (name.length() > ADDER_PREFIX_LEN && name.startsWith(ADDER_PREFIX) && m.getParameterTypes().length == 1)
             {
                 JSONProperty jsonProperty;
                 if (ctor != null && ((jsonProperty = m.getAnnotation(JSONProperty.class)) == null || !jsonProperty.ignore()) )
@@ -189,7 +193,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
                     throw new IllegalStateException("Classes with @JSONParameter constructors can't have adders.");
                 }
 
-                String javaPropertyName = propertyName(name, ADDER_PREFIX.length());
+                String javaPropertyName = propertyName(name, ADDER_PREFIX_LEN);
                 JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                 if (pair != null)
                 {

@@ -4,12 +4,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.svenson.test.FunkyNonProperties;
 import org.svenson.test.SubClass;
 import org.svenson.test.SuperClass;
 
 
 public class JavaObjectSupportTestCase
 {
+    private final static Logger log = LoggerFactory.getLogger(JavaObjectSupportTestCase.class);
+
+
     @Test
     public void testOverride()
     {
@@ -23,4 +29,11 @@ public class JavaObjectSupportTestCase
         assertThat(JavaObjectSupport.isOveriding(Object.class, SubClass.class), is(false));
     }
 
+
+    @Test
+    public void testFunkyNonProps()
+    {
+        final JSONClassInfo classInfo = new JavaObjectSupport().createClassInfo(FunkyNonProperties.class);
+        assertThat(classInfo.getPropertyNames().size(), is(0));
+    }
 }
