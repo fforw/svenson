@@ -12,10 +12,6 @@ import org.svenson.JSONParameters;
 import org.svenson.JSONProperty;
 import org.svenson.JSONReference;
 import org.svenson.JSONTypeHint;
-import org.svenson.converter.JSONConverter;
-import org.svenson.converter.TypeConverter;
-import org.svenson.converter.TypeConverterRepository;
-import org.svenson.util.Util;
 
 import javax.annotation.PostConstruct;
 
@@ -37,7 +33,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
     public JavaObjectSupport()
     {
     }
-    
+
 
     public JSONClassInfo createClassInfo(Class<?> cls)
     {
@@ -95,9 +91,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
 
         for (Method m : cls.getMethods())
         {
-            String name = m.getName();
-
-            if ((m.getModifiers() & Modifier.STATIC) != 0 || (m.getModifiers() & Modifier.PUBLIC) == 0 || name.equals("getClass"))
+            if (!shouldBeVisited(m))
             {
                 continue;
             }
@@ -113,6 +107,8 @@ public class JavaObjectSupport extends AbstractObjectSupport
             }
 
 
+            String name = m.getName();
+
             if (name.length() > SETTER_PREFIX_LEN && name.startsWith(SETTER_PREFIX) && m.getParameterTypes().length == 1)
             {
                 JSONProperty jsonProperty;
@@ -126,13 +122,13 @@ public class JavaObjectSupport extends AbstractObjectSupport
                 if (pair != null)
                 {
                     Method existing = pair.getSetterMethod();
-                    
-                    if (existing == null || isOveriding(m.getDeclaringClass(), existing.getDeclaringClass()))
+
+                    if (existing == null || isOverriding(m, existing) || isBestMatchSetter(pair, m))
                     {
                         pair.setSetterMethod(m);
                         pair.setAdderMethod(null);
                     }
-                    
+
                 }
                 else
                 {
@@ -158,8 +154,8 @@ public class JavaObjectSupport extends AbstractObjectSupport
                     if (pair != null)
                     {
                         Method existing = pair.getGetterMethod();
-                        
-                        if (existing == null || isOveriding(m.getDeclaringClass(), existing.getDeclaringClass()))
+
+                        if (existing == null || isOverriding(m, existing))
                         {
                             pair.setGetterMethod(m);
                         }
@@ -167,7 +163,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
                     else
                     {
                         javaNameToInfo.put(javaPropertyName, new JavaObjectPropertyInfo(javaPropertyName,
-                            m, null));
+                                m, null));
                     }
                 }
                 else if (name.length() > ISSER_PREFIX_LEN && name.startsWith(ISSER_PREFIX))
@@ -176,12 +172,16 @@ public class JavaObjectSupport extends AbstractObjectSupport
                     JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                     if (pair != null)
                     {
-                        pair.setGetterMethod(m);
+                        Method existing = pair.getGetterMethod();
+                        if (existing == null || isOverriding(m, existing))
+                        {
+                            pair.setGetterMethod(m);
+                        }
                     }
                     else
                     {
                         javaNameToInfo.put(javaPropertyName, new JavaObjectPropertyInfo(javaPropertyName,
-                            m, null));
+                                m, null));
                     }
                 }
             }
@@ -197,9 +197,13 @@ public class JavaObjectSupport extends AbstractObjectSupport
                 JavaObjectPropertyInfo pair = javaNameToInfo.get(javaPropertyName);
                 if (pair != null)
                 {
-                    if ( pair.getSetterMethod() == null)
+                    if (pair.getSetterMethod() == null)
                     {
-                        pair.setAdderMethod(m);
+                        Method existing = pair.getAdderMethod();
+                        if (existing == null || isOverriding(m, existing))
+                        {
+                            pair.setAdderMethod(m);
+                        }
                     }
                 }
                 else
@@ -271,22 +275,70 @@ public class JavaObjectSupport extends AbstractObjectSupport
         return new JSONClassInfo(cls, propertyInfos, ctor, ctorTypeHint, postConstructMethod);
     }
 
+    private boolean shouldBeVisited(Method m)
+    {
+        return !Modifier.isStatic(m.getModifiers())  && Modifier.isPublic(m.getModifiers()) && !m.isBridge() && !m.getName().equals("getClass");
+    }
+
+    private boolean isBestMatchSetter(JavaObjectPropertyInfo pair, Method m)
+    {
+        if (pair.getGetterMethod() != null) {
+            if (pair.getGetterMethod().getReturnType().equals(m.getParameterTypes()[0]))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            try
+            {
+                final Method getter = m.getDeclaringClass().getMethod(toGetterName(pair.getJavaPropertyName()));
+                if (getter.getReturnType().equals(m.getParameterTypes()[0]))
+                {
+                    return true;
+                }
+            }
+            catch (NoSuchMethodException e)
+            {
+                return true;
+            }
+        }
+
+        return pair.getSetterMethod() == null;
+    }
+
+    private String toGetterName(String javaPropertyName)
+    {
+        StringBuilder methodName = new StringBuilder();
+        methodName.append(GETTER_PREFIX)
+                .append(javaPropertyName);
+        final int firstPropNameLetter = GETTER_PREFIX.length();
+        methodName.setCharAt(firstPropNameLetter, Character.toUpperCase(methodName.charAt(firstPropNameLetter)));
+        return methodName.toString();
+    }
+
     /**
-     * Returns <code>true</code> if class a is a subclass of class b or if b is <code>null</code>. 
+     * Returns <code>true</code> if method a is a override by method b.
      * @param a
      * @param b
      * @return
      */
-    static boolean isOveriding(Class<?> a, Class<?> b)
+    static boolean isOverriding(Method a, Method b)
     {
-        if (b == null)
+        if (!a.getParameterTypes().equals(b.getParameterTypes()))
+        {
+            return false;
+        }
+
+
+        if (b.getDeclaringClass() == null)
         {
             return true;
         }
-        
-        Class<?> cls = a;
+
+        Class<?> cls = a.getDeclaringClass();
         Class<?> superClass;
-        while ( (superClass = cls.getSuperclass()) != null)
+        while ((superClass = cls.getSuperclass()) != null)
         {
             cls = superClass;
             if (cls.equals(b))
@@ -294,7 +346,7 @@ public class JavaObjectSupport extends AbstractObjectSupport
                 return true;
             }
         }
-        
+
         return false;
     }
 
