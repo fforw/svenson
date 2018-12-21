@@ -106,6 +106,17 @@ public class JavaObjectSupportTestCase {
     }
 
     @Test
+    public void shouldHandleOverloadAddableProperty() {
+
+        final JSONPropertyInfo property = classInfo.getPropertyInfo("overloadPlainValues");
+        assertThat(property.canAdd(), is(true));
+        property.add(object, "new value");
+
+
+        assertThat(object.getOverloadPlainValues(), hasItem("new value"));
+        assertThat((Iterable<String>) property.getProperty(object), hasItem("new value"));
+    }
+    @Test
     public void shouldHandleOverriddenPlainAddableProperty() {
 
         final JSONPropertyInfo property = classInfo.getPropertyInfo("overridePlainValues");

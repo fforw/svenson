@@ -1,6 +1,7 @@
 package org.svenson.info;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ public class BaseTestObject<D> implements TestObjectGeneric<D> {
     private String plain;
     private String overload;
     private final List<String> plainValues = new ArrayList<String>();
+    private final List<String> overloadPlainValues = new ArrayList<String>();
 
     public D getGeneric() {
         return generic;
@@ -78,6 +80,19 @@ public class BaseTestObject<D> implements TestObjectGeneric<D> {
     public void addPlainValues(String value){
         plainValues.add(value);
     }
+
+    public List<String> getOverloadPlainValues() {
+        return overloadPlainValues;
+    }
+
+    public void addOverloadPlainValues(Date any){
+        throw new UnsupportedOperationException();
+    }
+
+    public void addOverloadPlainValues(String value){
+        overloadPlainValues.add(value);
+    }
+
 
     public List<String> getOverridePlainValues() {
         throw new UnsupportedOperationException();
