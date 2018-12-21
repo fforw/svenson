@@ -142,6 +142,7 @@ public class ExecutionPlan {
             this.inner = inner;
         }
 
+        @JSONProperty(ignoreIfNull = true)
         @JSONConverter(type = DateConverter.class)
         public Date getDate() {
             return date;
