@@ -1,12 +1,12 @@
 package org.svenson.converter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 import java.util.Date;
 import java.util.regex.Pattern;
 
-import org.junit.Before;
+import org.junit.Before;    
 import org.junit.Ignore;
 import org.junit.Test;
 import org.svenson.JSON;
@@ -71,6 +71,6 @@ public class TypeConverterTestCase
         parser.setTypeConverterRepository(typeConverterRepository);
         
         BeanWithCCDate bean = parser.parse(BeanWithCCDate.class, json);
-        assertThat(bean.getDate(), is(Date.class));
+        assertThat(bean.getDate(), isA(Date.class));
     }
 }

@@ -1,9 +1,7 @@
 package org.svenson;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -173,7 +171,7 @@ public class JSONParserTestCase
 
         Map m = parser.parse(Map.class, "{\"foo\":\"foo!\"}");
         assertThat((String)m.get("foo"),is("foo!"));
-        assertThat(m,is(HashMap.class));
+        assertThat(m,isA(HashMap.class));
 
         Map<Class,Class> interfaceMappings = new HashMap<Class, Class>();
         interfaceMappings.put(Map.class,TreeMap.class);
@@ -181,7 +179,7 @@ public class JSONParserTestCase
 
         m = parser.parse(Map.class, "{\"foo\":\"foo!\"}");
         assertThat((String)m.get("foo"),is("foo!"));
-        assertThat(m,is(TreeMap.class));
+        assertThat(m,isA(TreeMap.class));
 
     }
 
@@ -233,12 +231,12 @@ public class JSONParserTestCase
         String json = "{\"child\":{\"foo\":\"bar!\"}}";
         ContainerBean containerBean = parser.parse(ContainerBean.class, json);
         assertThat(containerBean, is(notNullValue()));
-        assertThat(containerBean.getChildBean(), is(HashMap.class));
+        assertThat(containerBean.getChildBean(), isA(HashMap.class));
 
         parser.addTypeHint(".child", DynAttrsBean.class);
         containerBean = parser.parse(ContainerBean.class, json);
         assertThat(containerBean, is(notNullValue()));
-        assertThat(containerBean.getChildBean(), is(DynAttrsBean.class));
+        assertThat(containerBean.getChildBean(), isA(DynAttrsBean.class));
         DynAttrsBean b = (DynAttrsBean)containerBean.getChildBean();
         assertThat(b.getFoo(), is("bar!"));
     }
@@ -250,7 +248,7 @@ public class JSONParserTestCase
 
         Map containerBean = parser.parse(Map.class, json);
         assertThat(containerBean, is(notNullValue()));
-        assertThat(containerBean.get("b1"), is(HashMap.class));
+        assertThat(containerBean.get("b1"), isA(HashMap.class));
 
         parser.addTypeHint(new RegExPathMatcher("\\.b[0-9]"), DynAttrsBean.class);
         containerBean = parser.parse(Map.class, json);
@@ -276,7 +274,7 @@ public class JSONParserTestCase
     public void thatArraysCanBeParsedIntoDynamicProperties()
     {
         DynAttrsBean bean = parser.parse(DynAttrsBean.class, "{\"438793569376\":[42,12]}");
-        assertThat(bean.getProperty("438793569376"), is(ArrayList.class));
+        assertThat(bean.getProperty("438793569376"), isA(ArrayList.class));
     }
 
     @Test(expected = JSONParseException.class)

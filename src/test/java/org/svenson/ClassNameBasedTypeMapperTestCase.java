@@ -1,8 +1,7 @@
 package org.svenson;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 import java.util.List;
 
@@ -23,8 +22,8 @@ public class ClassNameBasedTypeMapperTestCase
         
         List foos = parser.parse(List.class, "[{\"type\":\"org.svenson.ClassNameBasedTypeMapperTestCase$Foo\"},{\"type\":\"org.svenson.ClassNameBasedTypeMapperTestCase$Bar\"}]");
         assertThat(foos.size(), is(2));
-        assertThat(foos.get(0), is(Foo.class));
-        assertThat(foos.get(1), is(Bar.class));
+        assertThat(foos.get(0), isA(Foo.class));
+        assertThat(foos.get(1), isA(Bar.class));
     }
 
     @Test
@@ -38,8 +37,8 @@ public class ClassNameBasedTypeMapperTestCase
         
         List foos = parser.parse(List.class, "[{\"type\":\"ClassNameBasedTypeMapperTestCase$Foo\"},{\"type\":\"ClassNameBasedTypeMapperTestCase$Bar\"}]");
         assertThat(foos.size(), is(2));
-        assertThat(foos.get(0), is(Foo.class));
-        assertThat(foos.get(1), is(Bar.class));
+        assertThat(foos.get(0), isA(Foo.class));
+        assertThat(foos.get(1), isA(Bar.class));
     }
     
     @Test
@@ -52,7 +51,7 @@ public class ClassNameBasedTypeMapperTestCase
         parser.setTypeMapper(mapper);
         
         Foo foo = parser.parse(Foo.class, "{\"type\":\"ClassNameBasedTypeMapperTestCase$Bar\"}");
-        assertThat(foo,is(Bar.class));
+        assertThat(foo,isA(Bar.class));
         
     }
     

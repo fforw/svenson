@@ -18,7 +18,7 @@ public class AdderTypeHintTestCase
 
         assertThat(obj, is(notNullValue()));
         assertThat(obj.getBars(), is(notNullValue()));
-        assertThat(obj.getBars().get(0), is(Bar.class));
+        assertThat(obj.getBars().get(0), isA(Bar.class));
     }
 
 }

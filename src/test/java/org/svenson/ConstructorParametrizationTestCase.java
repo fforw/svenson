@@ -1,5 +1,6 @@
 package org.svenson;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.svenson.matcher.SubtypeMatcher;
 import org.svenson.test.AddImmutables;
@@ -47,7 +48,7 @@ public class ConstructorParametrizationTestCase
 
         assertThat(o,is(notNullValue()));
         assertThat(o.getBar().size(),is(2));
-        assertThat(o.getBar().get(0),is(Bar.class));
+        assertThat(o.getBar().get(0), isA(Bar.class));
         assertThat(o.getAge(),is(33L));
     }
 
@@ -60,7 +61,7 @@ public class ConstructorParametrizationTestCase
 
         assertThat(o,is(notNullValue()));
         assertThat(o.getBar().size(),is(1));
-        assertThat(o.getBar().get("foo"),is(Bar.class));
+        assertThat(o.getBar().get("foo"), isA(Bar.class));
         assertThat(o.isFlag(),is(true));
     }
 
@@ -125,7 +126,7 @@ public class ConstructorParametrizationTestCase
             "{\"value\":{\"type\" : \"CTVExtension\"}}");
 
         assertThat(o,is(notNullValue()));
-        assertThat(o.getValue(),is(CTVExtension.class));
+        assertThat(o.getValue(),isA(CTVExtension.class));
         assertThat(o.getName(),is(nullValue()));
 
         CTORVariance o2 = parser.parse(CTORVariance.class,
@@ -158,8 +159,8 @@ public class ConstructorParametrizationTestCase
 
         assertThat(o, is(notNullValue()));
         assertThat(o.getValues(), is(notNullValue()));
-        assertThat(o.getValues().get(0), is(String.class));
-        assertThat(o.getValues().get(1), is(CTVExtension.class));
+        assertThat(o.getValues().get(0), isA(String.class));
+        assertThat(o.getValues().get(1), isA(CTVExtension.class));
     }
 
     @Test
@@ -171,8 +172,8 @@ public class ConstructorParametrizationTestCase
 
         assertThat(o,is(notNullValue()));
         assertThat(o.getValues(),is(notNullValue()));
-        assertThat(o.getValues().get("foo"),is(String.class));
-        assertThat(o.getValues().get("bar"),is(CTVExtension.class));
+        assertThat(o.getValues().get("foo"),isA(String.class));
+        assertThat(o.getValues().get("bar"),isA(CTVExtension.class));
     }
 
     @Test
@@ -196,7 +197,7 @@ public class ConstructorParametrizationTestCase
         assertThat( p2.getMap().get("foo"),is(nullValue()));
         assertThat( p2.getFoo(),is("abc"));
         o = p2.getMap().get("bar");
-        assertThat(o,is(List.class));
+        assertThat(o,isA(List.class));
         assertThat(((List)o).size(),is(3));
     }
 

@@ -1,8 +1,7 @@
 package org.svenson.util;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -143,7 +142,7 @@ public class JSONPathUtilTestCase
         pathUtil.setPropertyPath(l, "0.xxx", value);        
         Map<String, String> map = l.get(0);
         assertThat(map.get("xxx"), is(value));
-        assertThat(map, is(LinkedHashMap.class));
+        assertThat(map, isA(LinkedHashMap.class));
         
         
     }
