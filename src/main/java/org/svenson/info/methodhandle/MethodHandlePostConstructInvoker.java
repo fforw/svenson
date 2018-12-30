@@ -16,7 +16,7 @@ class MethodHandlePostConstructInvoker implements PostConstructInvoker {
     @Override
     public void invoke(Object o) {
         try {
-            handle.invokeExact(o);
+            handle.invoke(o);
         } catch (Throwable throwable) {
             throw new SvensonRuntimeException(throwable);
         }

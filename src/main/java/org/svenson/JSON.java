@@ -269,14 +269,8 @@ public class JSON
     public void dumpObject(JSONCharacterSink out, Object o,
             Collection<String> ignoredProps)
     {
-        try
-        {
             dumpObject(out, o, '\0', ignoredProps);
-        }
-        catch(StackOverflowError e)
-        {
-            throw new CyclicStructureException("Cyclic JSON structure: " + o, e);
-        }
+
     }
 
     /**
@@ -290,190 +284,204 @@ public class JSON
      */
     private void dumpObject(JSONCharacterSink out, Object o, char separator, Collection<String> ignoredProps)
     {
-        if (o == null)
+        try
         {
-            out.append("null");
-        }
-        else
-        {
-            Class oClass = o.getClass();
-
-            JSONifier jsonifier;
-
-            TypeConverter typeConverterFromClass = null;
-
-            if (oClass.isPrimitive())
+            if (o == null)
             {
-                out.append(o);
+                out.append("null");
             }
-            else if (Number.class.isAssignableFrom(oClass) || oClass.equals(Boolean.class) ||
-                oClass.equals(Character.class))
+            else
             {
-                out.append(o);
-            }
-            else if (o instanceof String)
-            {
-                quote(out, (String) o);
-            }
-            else if (o instanceof Collection)
-            {
-                out.append('[');
-                for (Iterator i = ((Collection) o).iterator(); i.hasNext();)
+                Class oClass = o.getClass();
+
+                JSONifier jsonifier;
+
+                TypeConverter typeConverterFromClass = null;
+
+                if (oClass.isPrimitive())
                 {
-                    dumpObject(out, i.next(), i.hasNext() ? ',' : '\0', ignoredProps);
+                    out.append(o);
                 }
-                out.append(']');
-            }
-            else if (o.getClass().isArray())
-            {
-                out.append('[');
-                int len = Array.getLength(o);
-                for (int i = 0; i < len; i++)
+                else if (Number.class.isAssignableFrom(oClass) || oClass.equals(Boolean.class) ||
+                    oClass.equals(Character.class))
                 {
-                    dumpObject(out, Array.get(o, i), ((i < (len - 1)) ? ',' : '\0'), ignoredProps);
+                    out.append(o);
                 }
-                out.append(']');
-            }
-            else if (o instanceof Map)
-            {
-                out.append('{');
-                Map m = (Map) o;
-                for (Iterator i = m.keySet().iterator(); i.hasNext();)
+                else if (o instanceof String)
                 {
-                    Object key = i.next();
+                    quote(out, (String) o);
+                }
+                else if (o instanceof Collection)
+                {
+                    out.append('[');
+                    for (Iterator i = ((Collection) o).iterator(); i.hasNext();)
+                    {
+                        dumpObject(out, i.next(), i.hasNext() ? ',' : '\0', ignoredProps);
+                    }
+                    out.append(']');
+                }
+                else if (o.getClass().isArray())
+                {
+                    out.append('[');
+                    int len = Array.getLength(o);
+                    for (int i = 0; i < len; i++)
+                    {
+                        dumpObject(out, Array.get(o, i), ((i < (len - 1)) ? ',' : '\0'), ignoredProps);
+                    }
+                    out.append(']');
+                }
+                else if (o instanceof Map)
+                {
+                    out.append('{');
+                    Map m = (Map) o;
+                    for (Iterator i = m.keySet().iterator(); i.hasNext();)
+                    {
+                        Object key = i.next();
 
-                    dumpObject(out, key.toString(), '\0', ignoredProps);
-                    out.append(':');
-                    dumpObject(out, m.get(key), i.hasNext() ? ',' : '\0', ignoredProps);
+                        dumpObject(out, key.toString(), '\0', ignoredProps);
+                        out.append(':');
+                        dumpObject(out, m.get(key), i.hasNext() ? ',' : '\0', ignoredProps);
+                    }
+                    out.append('}');
                 }
-                out.append('}');
-            }
-            else if ((jsonifier = getJSONifierForClass(oClass)) != null)
-            {
-                if (jsonifier instanceof SinkAwareJSONifier)
+                else if ((jsonifier = getJSONifierForClass(oClass)) != null)
                 {
-                    ((SinkAwareJSONifier)jsonifier).writeToSink(out, o);
+                    if (jsonifier instanceof SinkAwareJSONifier)
+                    {
+                        ((SinkAwareJSONifier)jsonifier).writeToSink(out, o);
+                    }
+                    else
+                    {
+                        out.append(jsonifier.toJSON(o));
+                    }
+                }
+                else if (o instanceof JSONable)
+                {
+                    out.append(((JSONable) o).toJSON());
+                }
+                else if (o instanceof Class)
+                {
+                    quote(out, ((Class)o).getName());
+                }
+                else if (o instanceof Enum)
+                {
+                    quote(out, ((Enum)o).name());
+                }
+                else if (typeConvertersByClass != null &&
+                    (typeConverterFromClass = typeConvertersByClass.get(o.getClass())) != null)
+                {
+                    Object value = typeConverterFromClass.toJSON(o);
+                    dumpObject(out, value, '\0', ignoredProps);
                 }
                 else
                 {
-                    out.append(jsonifier.toJSON(o));
-                }
-            }
-            else if (o instanceof JSONable)
-            {
-                out.append(((JSONable) o).toJSON());
-            }
-            else if (o instanceof Class)
-            {
-                quote(out, ((Class)o).getName());
-            }
-            else if (o instanceof Enum)
-            {
-                quote(out, ((Enum)o).name());
-            }
-            else if (typeConvertersByClass != null && 
-                (typeConverterFromClass = typeConvertersByClass.get(o.getClass())) != null)
-            {
-                Object value = typeConverterFromClass.toJSON(o);
-                dumpObject(out, value, '\0', ignoredProps);
-            }            
-            else
-            {
-                out.append('{');
-                boolean first = true;
+                    out.append('{');
+                    boolean first = true;
 
-                JSONClassInfo classInfo = TypeAnalyzer.getClassInfo(objectSupport,o.getClass());
+                    JSONClassInfo classInfo = TypeAnalyzer.getClassInfo(objectSupport,o.getClass());
 
-                for (JSONPropertyInfo propertyInfo : classInfo.getPropertyInfos())
-                {
-                    if (propertyInfo.isReadable())
+                    for (JSONPropertyInfo propertyInfo : classInfo.getPropertyInfos())
                     {
-                        if (!propertyInfo.isIgnore() && (ignoredProps == null || !ignoredProps.contains(propertyInfo.getJsonName())))
+                        if (propertyInfo.isReadable())
                         {
-
-                            Object value = propertyInfo.getProperty(o);
-
-                            if (value != null || !propertyInfo.isIgnoreIfNull())
+                            if (!propertyInfo.isIgnore() && (ignoredProps == null || !ignoredProps.contains(propertyInfo.getJsonName())))
                             {
-                                    TypeConverter typeConverter = propertyInfo.getTypeConverter(typeConverterRepository);
-                                    if (typeConverter != null)
+
+                                Object value = propertyInfo.getProperty(o);
+
+                                if (value != null || !propertyInfo.isIgnoreIfNull())
+                                {
+                                        TypeConverter typeConverter = propertyInfo.getTypeConverter(typeConverterRepository);
+                                        if (typeConverter != null)
+                                        {
+                                            value = typeConverter.toJSON(value);
+                                        }
+
+                                    String idProperty = propertyInfo.getLinkIdProperty();
+                                    if (idProperty != null)
                                     {
-                                        value = typeConverter.toJSON(value);
+                                        JSONBeanUtil beanUtil = JSONBeanUtil.defaultUtil();
+                                        if (value instanceof Collection)
+                                        {
+                                            List newList = new ArrayList();
+                                            for (Object childObject : ((Collection)value) )
+                                            {
+                                                newList.add(beanUtil.getProperty(childObject, idProperty));
+                                            }
+                                            value = newList;
+                                        }
+                                        else if (value.getClass().isArray())
+                                        {
+                                            List newList = new ArrayList();
+                                            int len = Array.getLength(value);
+                                            for (int i = 0; i < len; i++)
+                                            {
+                                                newList.add(beanUtil.getProperty(Array.get(value, i), idProperty));
+                                            }
+                                            value = newList;
+                                        }
+                                        else if (value instanceof Map)
+                                        {
+                                            Map newMap = new HashMap();
+                                            for (Map.Entry<Object,Object> e : ((Map<Object,Object>)value).entrySet())
+                                            {
+                                                newMap.put(e.getKey(), beanUtil.getProperty(e.getValue(), idProperty));
+                                            }
+                                            value = newMap;
+                                        }
+                                        else
+                                        {
+                                            value = beanUtil.getProperty(value, idProperty);
+                                        }
                                     }
 
-                                String idProperty = propertyInfo.getLinkIdProperty();
-                                if (idProperty != null)
-                                {
-                                    JSONBeanUtil beanUtil = JSONBeanUtil.defaultUtil();
-                                    if (value instanceof Collection)
+                                    if (!first)
                                     {
-                                        List newList = new ArrayList();
-                                        for (Object childObject : ((Collection)value) )
-                                        {
-                                            newList.add(beanUtil.getProperty(childObject, idProperty));
-                                        }
-                                        value = newList;                                            
+                                        out.append(',');
                                     }
-                                    else if (value.getClass().isArray())
-                                    {
-                                        List newList = new ArrayList();
-                                        int len = Array.getLength(value);
-                                        for (int i = 0; i < len; i++)
-                                        {
-                                            newList.add(beanUtil.getProperty(Array.get(value, i), idProperty));
-                                        }
-                                        value = newList;
-                                    }
-                                    else if (value instanceof Map)
-                                    {
-                                        Map newMap = new HashMap();
-                                        for (Map.Entry<Object,Object> e : ((Map<Object,Object>)value).entrySet())
-                                        {
-                                            newMap.put(e.getKey(), beanUtil.getProperty(e.getValue(), idProperty));
-                                        }
-                                        value = newMap;
-                                    }
-                                    else
-                                    {
-                                        value = beanUtil.getProperty(value, idProperty);
-                                    }
+                                    quote(out, propertyInfo.getJsonName());
+                                    out.append(':');
+                                    dumpObject(out, value, '\0', ignoredProps);
+                                    first = false;
                                 }
-
-                                if (!first)
-                                {
-                                    out.append(',');
-                                }
-                                quote(out, propertyInfo.getJsonName());
-                                out.append(':');
-                                dumpObject(out, value, '\0', ignoredProps);
-                                first = false;
                             }
                         }
-                    }
 
-                }
-                if (o instanceof DynamicProperties)
-                {
-                    DynamicProperties dynAttrs = (DynamicProperties) o;
-                    for (String name : dynAttrs.propertyNames())
+                    }
+                    if (o instanceof DynamicProperties)
                     {
-                        if (!first)
+                        DynamicProperties dynAttrs = (DynamicProperties) o;
+                        for (String name : dynAttrs.propertyNames())
                         {
-                            out.append(',');
+                            if (!first)
+                            {
+                                out.append(',');
+                            }
+                            first = false;
+                            quote(out, name);
+                            out.append(':');
+                            dumpObject(out, dynAttrs.getProperty(name), '\0', ignoredProps);
                         }
-                        first = false;
-                        quote(out, name);
-                        out.append(':');
-                        dumpObject(out, dynAttrs.getProperty(name), '\0', ignoredProps);
                     }
-                }
 
-                out.append('}');
+                    out.append('}');
+                }
+            }
+            if (separator != '\0')
+            {
+                out.append(separator);
             }
         }
-        if (separator != '\0')
+        catch(StackOverflowError e)
         {
-            out.append(separator);
+            throw new CyclicStructureException("Cyclic JSON structure: " + o, e);
+        }
+        catch(SvensonRuntimeException e)
+        {
+            if(e.getCause() instanceof StackOverflowError){
+                throw new CyclicStructureException("Cyclic JSON structure: " + o, e.getCause());
+            }
+            throw e;
         }
     }
 
