@@ -20,7 +20,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-              key: circleci-svenson-maven-{{ checksum "pom.xml" }}
+          key: circleci-svenson-maven-{{ checksum "pom.xml" }}
 
       - run: mvn package # run the actual tests
 
