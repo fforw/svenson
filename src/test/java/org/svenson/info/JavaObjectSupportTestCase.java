@@ -1,19 +1,43 @@
 package org.svenson.info;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.svenson.info.methodhandle.MethodHandleAccessFactory;
+import org.svenson.info.reflectasm.ReflectasmAccessFactory;
+import org.svenson.info.reflection.ReflectionAccessFactory;
 import org.svenson.test.FunkyNonProperties;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-
+@RunWith(Parameterized.class)
 public class JavaObjectSupportTestCase {
     private final static Logger log = LoggerFactory.getLogger(JavaObjectSupportTestCase.class);
-    private final JavaObjectSupport support = new JavaObjectSupport();
-    final JSONClassInfo classInfo = support.createClassInfo(TestObject.class);
+    private final JavaObjectSupport support;
+    final JSONClassInfo classInfo;
     final TestObject object = new TestObject();
+
+
+    public JavaObjectSupportTestCase(AccessFactory factory) {
+        support = new JavaObjectSupport(factory);
+        classInfo = support.createClassInfo(TestObject.class);
+    }
+
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> parameters() {
+        return Arrays.asList(
+                new Object[]{new MethodHandleAccessFactory()},
+                new Object[]{new ReflectasmAccessFactory()},
+                new Object[]{new ReflectionAccessFactory()}
+        );
+    }
 
     @Test
     public void shouldHandlePlainProperty() {
@@ -116,6 +140,7 @@ public class JavaObjectSupportTestCase {
         assertThat(object.getOverloadPlainValues(), hasItem("new value"));
         assertThat((Iterable<String>) property.getProperty(object), hasItem("new value"));
     }
+
     @Test
     public void shouldHandleOverriddenPlainAddableProperty() {
 

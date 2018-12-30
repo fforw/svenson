@@ -5,23 +5,23 @@ import org.openjdk.jmh.annotations.*;
 import java.util.concurrent.TimeUnit;
 
 public class BenchMark {
-    @Fork(value = 1, warmups = 0)
+    @Fork(value = 1, warmups = 1)
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @Timeout(time = 30, timeUnit = TimeUnit.SECONDS)
-    @Warmup(iterations = 1)
-    @Measurement(iterations = 2, time = 5)
+    @Warmup(iterations = 5)
+    @Measurement(iterations = 5, time = 15)
     public void parser(ExecutionPlan plan) {
-        plan.parser.parse(ExecutionPlan.Bean.class, plan.json);
+        plan.deserializer.read( plan.json,ExecutionPlan.Bean.class);
     }
 
-    @Fork(value = 1, warmups = 0)
+    @Fork(value = 1, warmups = 1)
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     @Timeout(time = 30, timeUnit = TimeUnit.SECONDS)
-    @Warmup(iterations = 1)
-    @Measurement(iterations = 2, time = 5)
+    @Warmup(iterations = 5)
+    @Measurement(iterations = 5, time = 15)
     public void generator(ExecutionPlan plan) {
-        plan.generator.forValue(plan.dump);
+        plan.serializer.dump(plan.dump);
     }
 }

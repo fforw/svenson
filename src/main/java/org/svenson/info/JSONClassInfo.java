@@ -1,11 +1,9 @@
 package org.svenson.info;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,10 +26,10 @@ public class JSONClassInfo
     protected final Map<String, JSONPropertyInfo> propertyInfos;
 
     private final List<JSONPropertyInfo> sortedPropertyInfos;
-    private final Method postConstructMethod;
+    private final PostConstructInvoker postConstruct;
 
     public JSONClassInfo(Class<?> cls, Map<String, ? extends JSONPropertyInfo> propertyInfos, Constructor<?> ctor,
-                         Class<?> ctorTypeHint, Method postConstructMethod)
+                         Class<?> ctorTypeHint, PostConstructInvoker postConstruct)
     {
         if (cls == null)
         {
@@ -78,7 +76,7 @@ public class JSONClassInfo
         }
         
         this.sortedPropertyInfos = copy;
-        this.postConstructMethod = postConstructMethod;
+        this.postConstruct = postConstruct;
     }
 
 
@@ -114,8 +112,9 @@ public class JSONClassInfo
         return constructorInfo;
     }
 
-    public Method getPostConstructMethod()
+    public PostConstructInvoker getPostConstructMethod()
     {
-        return postConstructMethod;
+        return postConstruct;
     }
+
 }

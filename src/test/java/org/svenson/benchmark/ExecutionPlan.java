@@ -1,14 +1,20 @@
 package org.svenson.benchmark;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.JsonAdapter;
 import org.openjdk.jmh.annotations.*;
 import org.svenson.JSON;
 import org.svenson.JSONParser;
 import org.svenson.JSONProperty;
-import org.svenson.converter.ComplexDateConverter;
-import org.svenson.converter.DateConverter;
 import org.svenson.converter.DefaultTypeConverterRepository;
 import org.svenson.converter.JSONConverter;
+import org.svenson.info.JavaObjectSupport;
+import org.svenson.info.ObjectSupport;
+import org.svenson.info.methodhandle.MethodHandleAccessFactory;
+import org.svenson.info.reflectasm.ReflectasmAccessFactory;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,10 +23,26 @@ import java.util.Random;
 @State(Scope.Benchmark)
 public class ExecutionPlan {
 
+    public enum Framework {
+        SVENSON,
+        GSON
+    }
+
+    public enum MethodAccess {
+        DEFAULT,
+        METHOD_HANDLE,
+        REFLECTASM
+    }
+
     public enum Scenario {
         PLAIN,
         TYPE_CONVERT
     }
+
+    @Param({
+            "GSON",
+            "SVENSON"})
+    public Framework framework;
 
     @Param({"1", "2"})
     public int nested;
@@ -31,10 +53,13 @@ public class ExecutionPlan {
     @Param({"PLAIN", "TYPE_CONVERT"})
     public Scenario scenario;
 
+    @Param({"DEFAULT", "METHOD_HANDLE", "REFLECTASM"})
+    public MethodAccess methodAccess;
 
-    public JSONParser parser;
 
-    public JSON generator;
+    public Deserializer deserializer;
+
+    public Serializer serializer;
 
     public String json;
     public Bean dump;
@@ -42,13 +67,76 @@ public class ExecutionPlan {
 
     @Setup(Level.Invocation)
     public void setUp() {
-        DefaultTypeConverterRepository typeConverterRepository = new DefaultTypeConverterRepository();
-        typeConverterRepository.addTypeConverter(new DateConverter());
-        typeConverterRepository.addTypeConverter(new ComplexDateConverter());
-        parser = new JSONParser();
-        parser.setTypeConverterRepository(typeConverterRepository);
-        generator = JSON.defaultJSON();
-        generator.setTypeConverterRepository(typeConverterRepository);
+        switch (framework) {
+            case SVENSON:
+                DefaultTypeConverterRepository typeConverterRepository = new DefaultTypeConverterRepository();
+                typeConverterRepository.addTypeConverter(new TimestampTypeConverter());
+                ObjectSupport support;
+
+                switch (methodAccess) {
+                    case REFLECTASM:
+                        support = new JavaObjectSupport(new ReflectasmAccessFactory());
+                        break;
+                    case METHOD_HANDLE:
+                        support = new JavaObjectSupport(new MethodHandleAccessFactory());
+                        break;
+                    default:
+                    case DEFAULT:
+                        support = new JavaObjectSupport();
+                        break;
+
+                }
+
+
+                final JSONParser parser = new JSONParser();
+                parser.setObjectSupport(support);
+                parser.setTypeConverterRepository(typeConverterRepository);
+                final JSON generator = new JSON(support, '"');
+                generator.setTypeConverterRepository(typeConverterRepository);
+
+                this.deserializer = new Deserializer() {
+                    @Override
+                    public <T> T read(String json, Class<T> type) {
+                        return parser.parse(type, json);
+                    }
+                };
+
+                this.serializer = new Serializer() {
+                    @Override
+                    public String dump(Object object) {
+                        return generator.forValue(object);
+                    }
+                };
+                break;
+            case GSON:
+                final Gson gson = new GsonBuilder()
+                        .setDateFormat(DateFormat.LONG)
+                        .create();
+
+                switch (methodAccess) {
+                    case DEFAULT:
+                        break;
+                    default:
+                        throw new IllegalStateException("unsupported method access" + methodAccess);
+                }
+
+                this.deserializer = new Deserializer() {
+                    @Override
+                    public <T> T read(String json, Class<T> type) {
+                        return gson.fromJson(json, type);
+                    }
+                };
+
+                this.serializer = new Serializer() {
+                    @Override
+                    public String dump(Object object) {
+                        return gson.toJson(object);
+                    }
+                };
+
+                break;
+        }
+
 
         Bean root = new Bean();
 
@@ -66,7 +154,7 @@ public class ExecutionPlan {
                 current.getBeans().add(bean);
             }
 
-            switch (scenario){
+            switch (scenario) {
                 case TYPE_CONVERT:
                     current.setDate(new Date());
                     break;
@@ -80,7 +168,7 @@ public class ExecutionPlan {
             current = child;
         }
 
-        json = JSON.defaultJSON().forValue(root);
+        json = serializer.dump(root);
         dump = root;
 
     }
@@ -104,6 +192,7 @@ public class ExecutionPlan {
         private List<Bean> beans;
         private Bean inner;
 
+        @JsonAdapter(TimestampAdapter.class)
         private Date date;
 
         @JSONProperty(ignoreIfNull = true)
@@ -143,7 +232,7 @@ public class ExecutionPlan {
         }
 
         @JSONProperty(ignoreIfNull = true)
-        @JSONConverter(type = DateConverter.class)
+        @JSONConverter(type = TimestampTypeConverter.class)
         public Date getDate() {
             return date;
         }

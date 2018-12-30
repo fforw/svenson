@@ -3,6 +3,7 @@ package org.svenson.info;
 import org.svenson.JSONParameter;
 import org.svenson.JSONParameters;
 import org.svenson.JSONTypeHint;
+import org.svenson.info.reflection.ReflectionPostConstructInvoker;
 
 import javax.annotation.PostConstruct;
 import java.lang.annotation.Annotation;
@@ -13,13 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 final class JSONClassInfoCollector {
+    private final AccessFactory factory;
     private final Class<?> cls;
     private final Map<String, JsonProperty> javaBeanProperties = new HashMap<String, JsonProperty>();
     private Constructor<?> constructor;
     private Class<?> constructorTypeHint;
     private Method postConstructMethod;
 
-    public JSONClassInfoCollector(Class<?> cls) {
+    public JSONClassInfoCollector(AccessFactory factory, Class<?> cls) {
+        this.factory = factory;
         this.cls = cls;
     }
 
@@ -77,9 +80,9 @@ final class JSONClassInfoCollector {
                 final String name = jbMethod.toPropertyName(method);
                 if (javaBeanProperties.containsKey(name)) {
                     final JsonProperty property = javaBeanProperties.get(name);
-                    javaBeanProperties.put(name, property.merge(new JsonProperty(cls, name, jbMethod.type(method))));
+                    javaBeanProperties.put(name, property.merge(new JsonProperty(factory, cls, name, jbMethod.type(method))));
                 } else {
-                    javaBeanProperties.put(name, new JsonProperty(cls, name, jbMethod.type(method)));
+                    javaBeanProperties.put(name, new JsonProperty(factory, cls, name, jbMethod.type(method)));
                 }
             }
         }
@@ -87,7 +90,9 @@ final class JSONClassInfoCollector {
 
 
     public JSONClassInfo toClassInfo() {
-        return new JSONClassInfo(cls, getPropertyInfos(), constructor, constructorTypeHint, postConstructMethod);
+        final Map<String, JSONPropertyInfo> propertyInfos = getPropertyInfos();
+        final PostConstructInvoker postConstructExecutor = postConstructMethod != null ? factory.createPostConstructInvoker(postConstructMethod) : new NonePostConstructInvoker();
+        return new JSONClassInfo(cls, propertyInfos, constructor, constructorTypeHint, postConstructExecutor);
     }
 
     private static boolean isPublicDeclaredMethod(Method m) {

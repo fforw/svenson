@@ -18,12 +18,14 @@ import static org.svenson.info.JavaBeanMethod.*;
 import static org.svenson.info.Reflection.resolveAnnotation;
 
 final class JsonProperty {
+    private final AccessFactory factory;
     private final Class<?> declaringClass;
     private final String name;
     private final Class<?> type;
     private final JavaBeanMethod readMethod;
 
-    public JsonProperty(Class<?> declaringClass, String name, Class<?> type) {
+    public JsonProperty(AccessFactory factory, Class<?> declaringClass, String name, Class<?> type) {
+        this.factory = factory;
         this.declaringClass = declaringClass;
         this.name = name;
         this.type = type;
@@ -143,9 +145,9 @@ final class JsonProperty {
         }
 
         PropertyTypeConverterResolver converterResolver = converterResolver(getterMethod, setterMethod);
-        Getter getter = getterMethod != null ? new ReflectionGetter(getterMethod) : new UnreadableGetter(name);
-        Setter setter = setterMethod != null ? new ReflectionSetter(setterMethod) : new UnwriteableSetter(name);
-        Adder adder = setterMethod==null && adderMethod!= null ? new ReflectionAdder(adderMethod) : new UnwriteableAdder(name);
+        Getter getter = getterMethod != null ? factory.createGetter(getterMethod) : new UnreadableGetter(name);
+        Setter setter = setterMethod != null ? factory.createSetter(setterMethod) : new UnwriteableSetter(name);
+        Adder adder = setterMethod==null && adderMethod!= null ? factory.createAdder(adderMethod) : new UnwriteableAdder(name);
 
         return new JavaObjectPropertyInfo(
                 name,

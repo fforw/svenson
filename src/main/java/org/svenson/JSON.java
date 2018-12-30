@@ -2,7 +2,6 @@ package org.svenson;
 
 import java.io.Writer;
 import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

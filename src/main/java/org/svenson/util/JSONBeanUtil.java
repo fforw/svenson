@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.svenson.DynamicProperties;
-import org.svenson.JSONParser;
 import org.svenson.TypeAnalyzer;
 import org.svenson.info.JSONClassInfo;
 import org.svenson.info.JSONPropertyInfo;

@@ -2,7 +2,6 @@ package org.svenson;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,12 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.svenson.converter.DefaultTypeConverterRepository;
 import org.svenson.converter.TypeConverter;
-import org.svenson.info.ConstructorInfo;
-import org.svenson.info.JSONClassInfo;
-import org.svenson.info.JSONPropertyInfo;
-import org.svenson.info.JavaObjectSupport;
-import org.svenson.info.ObjectSupport;
-import org.svenson.info.ParameterInfo;
+import org.svenson.info.*;
 import org.svenson.matcher.EqualsPathMatcher;
 import org.svenson.matcher.PathMatcher;
 import org.svenson.tokenize.JSONCharacterSource;
@@ -409,11 +403,8 @@ public class JSONParser
 
                 if (newClassInfo != null)
                 {
-                    Method postConstructMethod = newClassInfo.getPostConstructMethod();
-                    if (postConstructMethod != null)
-                    {
-                        postConstructMethod.invoke(t);
-                    }
+                    PostConstructInvoker postConstructMethod = newClassInfo.getPostConstructMethod();
+                    postConstructMethod.invoke(t);
                 }
 
             }
@@ -425,11 +416,8 @@ public class JSONParser
 
                 if (newClassInfo != null)
                 {
-                    Method postConstructMethod = newClassInfo.getPostConstructMethod();
-                    if (postConstructMethod != null)
-                    {
-                        postConstructMethod.invoke(t);
-                    }
+                    PostConstructInvoker postConstructMethod = newClassInfo.getPostConstructMethod();
+                    postConstructMethod.invoke(t);
                 }
             }
             else if (type == TokenType.STRING && Enum.class.isAssignableFrom(targetType) )
@@ -529,11 +517,8 @@ public class JSONParser
 
                     if (classInfo != null)
                     {
-                        Method postConstructMethod = classInfo.getPostConstructMethod();
-                        if (postConstructMethod != null)
-                        {
-                            postConstructMethod.invoke(newTarget);
-                        }
+                        PostConstructInvoker postConstructMethod = classInfo.getPostConstructMethod();
+                        postConstructMethod.invoke(newTarget);
                     }
 
                 }
@@ -545,11 +530,8 @@ public class JSONParser
                     newTarget = DelayedConstructor.unwrap(newTarget);
                     if (classInfo != null)
                     {
-                        Method postConstructMethod = classInfo.getPostConstructMethod();
-                        if (postConstructMethod != null)
-                        {
-                            postConstructMethod.invoke(newTarget);
-                        }
+                        PostConstructInvoker postConstructMethod = classInfo.getPostConstructMethod();
+                        postConstructMethod.invoke(newTarget);
                     }
                 }
                 else
@@ -751,11 +733,8 @@ public class JSONParser
 
                     if (newClassInfo != null)
                     {
-                        Method postConstructMethod = newClassInfo.getPostConstructMethod();
-                        if (postConstructMethod != null)
-                        {
-                            postConstructMethod.invoke(newTarget);
-                        }
+                        PostConstructInvoker postConstructMethod = newClassInfo.getPostConstructMethod();
+                        postConstructMethod.invoke(newTarget);
                     }
                 }
                 else if (valueType == TokenType.BRACKET_OPEN)
@@ -816,11 +795,8 @@ public class JSONParser
 
                         if (newClassInfo != null)
                         {
-                            Method postConstructMethod = newClassInfo.getPostConstructMethod();
-                            if (postConstructMethod != null)
-                            {
-                                postConstructMethod.invoke(newTarget);
-                            }
+                            PostConstructInvoker postConstructMethod = newClassInfo.getPostConstructMethod();
+                            postConstructMethod.invoke(newTarget);
                         }
                     }
                     else
