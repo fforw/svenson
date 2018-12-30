@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.*;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-import org.junit.Before;    
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.svenson.JSON;
