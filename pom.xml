@@ -38,6 +38,10 @@
 
     <inceptionYear>2008</inceptionYear>
 
+    <properties>
+        <exclude.tests>org.svenson.benchmark.BenchMark</exclude.tests>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -80,6 +84,9 @@
                 <version>2.22.1</version>
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
+                    <excludedGroups>
+                        ${exclude.tests}
+                    </excludedGroups>
                 </configuration>
             </plugin>
 
@@ -172,6 +179,17 @@
             </extension>
         </extensions>
     </build>
+
+    <profiles>
+        <profile>
+            <id>benchmark</id>
+            <properties>
+                <exclude.tests></exclude.tests>
+            </properties>
+
+        </profile>
+
+    </profiles>
 
     <dependencies>
         <dependency>

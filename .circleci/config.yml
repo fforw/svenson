@@ -22,7 +22,7 @@ jobs:
             - ~/.m2
           key: circleci-svenson-maven-{{ checksum "pom.xml" }}
 
-      - run: mvn package # run the actual tests
+      - run: mvn package -P benchmark # run the actual tests
 
       - store_test_results:
           # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
@@ -31,3 +31,5 @@ jobs:
       - store_artifacts:
           # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: target/svenson*.jar
+      - store_artifacts:
+          path: target/benchmark.md

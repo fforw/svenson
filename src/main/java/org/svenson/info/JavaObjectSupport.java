@@ -11,7 +11,7 @@ public class JavaObjectSupport implements ObjectSupport {
     private final AccessFactory factory;
 
     public JavaObjectSupport() {
-        this(new MethodHandleAccessFactory());
+        this(new ReflectionAccessFactory());
     }
 
     public JavaObjectSupport(AccessFactory factory) {
