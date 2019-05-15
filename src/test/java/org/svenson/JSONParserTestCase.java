@@ -20,17 +20,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.svenson.matcher.RegExPathMatcher;
-import org.svenson.test.Bar;
-import org.svenson.test.Bean;
-import org.svenson.test.BeanWithClassProperty;
-import org.svenson.test.BeanWithEnum;
-import org.svenson.test.BeanWithStringAdder;
-import org.svenson.test.ContainerBean;
-import org.svenson.test.DynAttrsBean;
-import org.svenson.test.FooBean;
-import org.svenson.test.InnerBean;
-import org.svenson.test.MediaEntry;
-import org.svenson.test.SomeEnum;
+import org.svenson.test.*;
 
 public class JSONParserTestCase
 {
@@ -361,5 +351,13 @@ public class JSONParserTestCase
         assertThat(bean.getValues().get(0), is("foo"));
         assertThat(bean.getValues().get(1), is( nullValue()));
         assertThat(bean.getValues().get(2), is("bar"));
+    }
+
+    @Test
+    public void testBeanWithIgnoredInvalidProperties() {
+        BeanIgnoringInvalidProperties bean = JSONParser.defaultJSONParser()
+                .parse(BeanIgnoringInvalidProperties.class, "{\"stringArray\": \"single string\", \"longValue\": 2}");
+        assertThat(bean.getLongValue(), is(2L));
+        assertThat(bean.getStringArray(), is(nullValue()));
     }
 }
