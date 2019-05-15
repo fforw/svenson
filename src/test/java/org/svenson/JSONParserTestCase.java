@@ -358,6 +358,6 @@ public class JSONParserTestCase
         BeanIgnoringInvalidProperties bean = JSONParser.defaultJSONParser()
                 .parse(BeanIgnoringInvalidProperties.class, "{\"stringArray\": \"single string\", \"longValue\": 2}");
         assertThat(bean.getLongValue(), is(2L));
-        assertThat(bean.getStringArray(), is(nullValue()));
+        assertThat(bean.getStringCollection(), is(nullValue()));
     }
 }

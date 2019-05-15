@@ -7,16 +7,16 @@ import java.util.Collection;
 @IgnoreOnInvalidProperties
 public class BeanIgnoringInvalidProperties {
 
-    private Collection<String> stringArray;
+    private Collection<String> stringCollection;
 
     private Long longValue;
 
-    public Collection<String> getStringArray() {
-        return stringArray;
+    public Collection<String> getStringCollection() {
+        return stringCollection;
     }
 
-    public void setStringArray(Collection<String> stringArray) {
-        this.stringArray = stringArray;
+    public void setStringCollection(Collection<String> stringCollection) {
+        this.stringCollection = stringCollection;
     }
 
     public Long getLongValue() {
