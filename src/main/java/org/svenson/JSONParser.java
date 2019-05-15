@@ -856,7 +856,16 @@ public class JSONParser
             {
                 if (!isIgnoredOnParse)
                 {
-                    propertyInfo.setProperty(cx.target,value);
+                    try {
+                        propertyInfo.setProperty(cx.target, value);
+                    } catch(SvensonRuntimeException sre) {
+                        if(cx.target.getClass().isAnnotationPresent(IgnoreOnInvalidProperties.class)) {
+                            log.warn("Ignored invalid property: {} of type: {}", propertyInfo.getJavaPropertyName(), cx.target.getClass().getCanonicalName());
+                        }
+                        else {
+                            throw sre;
+                        }
+                    }
                 }
             }
             else if (containerIsMap)
