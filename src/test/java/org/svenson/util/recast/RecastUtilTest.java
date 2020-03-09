@@ -68,6 +68,21 @@ public class RecastUtilTest
 
     }
 
+    @Test
+    public void testRecastingJSONParameterAnnotatedClasses()
+    {
+        //language=JSON
+        final RecastJSONParamTarget result = recast(RecastJSONParamTarget.class, "{\n" +
+            "    \"name\": " +
+            "\"JSONParam-01\",\n" +
+            "    \"num\": 93823\n" +
+            "}");
+
+        assertThat(result.getName(), is("JSONParam-01"));
+        assertThat(result.getNum(), is(93823));
+
+    }
+
 
     private <T> T recast(Class<T> cls, String json)
     {

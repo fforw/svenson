@@ -1,8 +1,10 @@
 package org.svenson.util;
 
 import org.apache.commons.beanutils.ConvertUtils;
+import org.svenson.DelayedConstructor;
 import org.svenson.SvensonRuntimeException;
 import org.svenson.TypeAnalyzer;
+import org.svenson.info.ConstructorInfo;
 import org.svenson.info.JSONClassInfo;
 import org.svenson.info.JSONPropertyInfo;
 import org.svenson.info.JavaObjectSupport;
@@ -93,10 +95,22 @@ public class RecastUtil
 
         try
         {
-            final T instance = cls.newInstance();
+            final Object instance;
+
+            final ConstructorInfo constructorInfo = classInfo.getConstructorInfo();
+            final boolean isDelayedContruction = constructorInfo != null;
+            if (isDelayedContruction)
+            {
+                instance = new DelayedConstructor<Object>(constructorInfo);
+            }
+            else
+            {
+                instance = cls.newInstance();
+            }
+
             for (JSONPropertyInfo info : classInfo.getPropertyInfos())
             {
-                if (!info.isIgnore() && info.isWriteable())
+                if (!info.isIgnore() && ( info.isWriteable() || isDelayedContruction))
                 {
 
 
@@ -146,7 +160,14 @@ public class RecastUtil
                 }
             }
 
-            return instance;
+            if (isDelayedContruction)
+            {
+                return (T)((DelayedConstructor)instance).construct();
+            }
+            else
+            {
+                return (T)instance;
+            }
         }
         catch (InstantiationException e)
         {
