@@ -2,19 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a23c8a5b-4163-4245-91e2-2abd7a07d366" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/dependency-check-suppress.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_jcl_over_slf4j_1_7_7.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_jul_to_slf4j_1_7_7.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_beanutils_commons_beanutils_1_9_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_beanutils_commons_beanutils_1_9_4.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/svenson/util/RecastUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/svenson/util/RecastUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/svenson/util/recast/RecastUtilTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/svenson/util/recast/RecastUtilTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/svenson.iml" beforeDir="false" afterPath="$PROJECT_DIR$/svenson.iml" afterDir="false" />
     </list>
-    <ignored path="svenson.iws" />
-    <ignored path=".idea/workspace.xml" />
-    <ignored path="$PROJECT_DIR$/target/" />
-    <ignored path=".idea/dataSources.local.xml" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -66,28 +60,6 @@
   <component name="FavoritesManager">
     <favorites_list name="svenson" />
   </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="547">
-              <caret line="155" lean-forward="true" selection-start-line="155" selection-end-line="155" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dependency-check-suppress.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
-  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -95,17 +67,6 @@
         <option value="Class" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>perform</find>
-      <find>&lt;licenses&gt;&lt;license&gt;&lt;name&gt;The Apache Software License, Version 2.0&lt;/name&gt;&lt;url&gt;http://www.apache.org/licenses/LICENSE-2.0.txt&lt;/url&gt;&lt;distribution&gt;repo&lt;/distribution&gt;&lt;/license&gt;&lt;/licenses&gt;</find>
-      <find>distributionManagement</find>
-      <find>release</find>
-      <find>sign</find>
-      <find>org.slf4j</find>
-      <find>nexus</find>
-    </findStrings>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -118,63 +79,6 @@
   <component name="GitLogSettings">
     <option name="myDateState">
       <MyDateState />
-    </option>
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead/ListVarianceContainer.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/ComplexLookaheadTestCase.java" />
-        <option value="$PROJECT_DIR$/src/log4j2-test.xml" />
-        <option value="$PROJECT_DIR$/test/log4j2-test.xml" />
-        <option value="$PROJECT_DIR$/src/org/svenson/info/JavaObjectPropertyInfo.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/reflectasm/reflectasm/ReflectAsmObjectSupport.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/TypeAnalyzer.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/JSONProperty.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/JSONParameter.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/ConstructorParametrization.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/JSON.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/info/JSONClassInfo.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/ConstructorParsingPlaceholder.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/ConstructorParametrization2.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/JSONTypeHint.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/info/ParameterInfo.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/info/ConstructorInfo.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/ConstructorParametrization3.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/InnerImmutable.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/Immutable.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/TypedListCTOR.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/Qux.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/TypedMapCTOR.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/ListOfImmutables.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/MapOfImmutables.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/AddImmutables.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/info/JavaObjectSupport.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/AdderTypeHintTestcase.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/AdderTypeHintTestCase.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/AdderTypeHint.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/DelayedConstructor.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/CTVExtension.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/CTORVariance.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/CTORListVariance.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/CTORMapVariance.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/AbstractPropertyValueBasedTypeMapper.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/test/CTVBase.java" />
-        <option value="$PROJECT_DIR$/src/org/svenson/JSONParser.java" />
-        <option value="$PROJECT_DIR$/test/org/svenson/ConstructorParametrizationTestCase.java" />
-        <option value="$PROJECT_DIR$/src/test/java/org/svenson/Ox93TestCase.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/svenson/DelayedConstructor.java" />
-        <option value="$PROJECT_DIR$/src/test/java/org/svenson/test/CTORObject.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/svenson/JSONParser.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/svenson/util/JSONBuilder.java" />
-        <option value="$PROJECT_DIR$/src/test/java/org/svenson/util/JSONBuilderTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/svenson/info/JavaObjectSupport.java" />
-        <option value="$PROJECT_DIR$/src/test/java/org/svenson/test/CTORReadOnly.java" />
-        <option value="$PROJECT_DIR$/src/test/java/org/svenson/test/CTORIgnoredSetter.java" />
-        <option value="$PROJECT_DIR$/src/test/java/org/svenson/ConstructorParametrizationTestCase.java" />
-        <option value="$PROJECT_DIR$/dependency-check-suppress.xml" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-      </list>
     </option>
   </component>
   <component name="MavenImportPreferences">
@@ -194,6 +98,7 @@
     <option name="width" value="1920" />
     <option name="height" value="1053" />
   </component>
+  <component name="ProjectId" id="1YtRHZgMTM4FrX21c9CA8KmNrBl" />
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
       <profile-state>
@@ -225,115 +130,87 @@
   <component name="ProjectReloadState">
     <option name="STATE" value="0" />
   </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="svenson" type="b2602c69:ProjectViewProjectNode" />
-              <item name="svenson" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="svenson" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-    </panes>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="recentsLimit" value="5" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="options.lastSelected" value="preferences.pluginManager" />
-    <property name="GoToClass.includeJavaFiles" value="false" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
-    <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="161" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="171" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="177" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="1086" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="161" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="171" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="177" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="1086" />
     <property name="FullScreen" value="false" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="LayoutCode.rearrangeEntriesJava" value="false" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="MemberChooser.sorted" value="false" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
-    <property name="last_directory_selection" value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="161" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="171" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="177" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="1086" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="161" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="171" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="177" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="1086" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="dynamic.classpath" value="false" />
     <property name="extract.method.default.visibility" value="private" />
+    <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/test/org/svenson/test/complexlookahead" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="options.lastSelected" value="preferences.pluginManager" />
+    <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
+    <property name="recentsLimit" value="5" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="org.svenson.test" />
-      <recent name="org.svenson.info" />
-      <recent name="org.svenson" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/org/svenson/reflectasm" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="org.svenson.test" />
-      <recent name="org.svenson" />
-      <recent name="org.svenson.test.complexlookahead" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/test/java/org/svenson" />
       <recent name="$PROJECT_DIR$/src/test/resources/org.svenson" />
       <recent name="$PROJECT_DIR$/src/test/resources" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/org/svenson/reflectasm" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.svenson.util.recast" />
+      <recent name="org.svenson.test" />
+      <recent name="org.svenson" />
+      <recent name="org.svenson.test.complexlookahead" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.svenson.test" />
+      <recent name="org.svenson.info" />
+      <recent name="org.svenson" />
+    </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="JUnit.JavaObjectSupportTestCase.testFunkyNonProps">
-    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
-      <Host>localhost</Host>
-      <Port>5050</Port>
-    </configuration>
+  <component name="RunManager" selected="JUnit.All in svenson">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -347,6 +224,7 @@
           <option name="containerStateName" value="" />
         </value>
       </option>
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" />
       <method v="2">
@@ -359,6 +237,7 @@
           <option name="containerStateName" value="" />
         </value>
       </option>
+      <option name="TEST_OBJECT" value="CLASS" />
       <option name="VM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" />
       <properties />
@@ -409,20 +288,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="JSONBuilderTest.testInclude" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="svenson" />
-      <option name="PACKAGE_NAME" value="org.svenson.util" />
-      <option name="MAIN_CLASS_NAME" value="org.svenson.util.JSONBuilderTest" />
-      <option name="METHOD_NAME" value="testInclude" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="JavaObjectSupportTestCase.testFunkyNonProps" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="svenson" />
       <option name="PACKAGE_NAME" value="org.svenson.info" />
@@ -437,7 +302,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RecastUtilTest.testRecastingJSONParameterAnnotatedClasses" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="svenson" />
+      <option name="PACKAGE_NAME" value="org.svenson.util.recast" />
+      <option name="MAIN_CLASS_NAME" value="org.svenson.util.recast.RecastUtilTest" />
+      <option name="METHOD_NAME" value="testRecastingJSONParameterAnnotatedClasses" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="TEST_OBJECT" value="class" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="moduleWithDependencies" />
@@ -447,6 +327,7 @@
       </method>
     </configuration>
     <configuration default="true" type="TestNG">
+      <option name="TEST_OBJECT" value="CLASS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="moduleWithDependencies" />
@@ -489,18 +370,18 @@
     </configuration>
     <list>
       <item itemvalue="JUnit.All in svenson" />
-      <item itemvalue="JUnit.JSONBuilderTest.testInclude" />
       <item itemvalue="JUnit.ConstructorParametrizationTestCase.testIgnored" />
       <item itemvalue="JUnit.ConstructorParametrizationTestCase.testReadOnly" />
       <item itemvalue="JUnit.JavaObjectSupportTestCase.testFunkyNonProps" />
+      <item itemvalue="JUnit.RecastUtilTest.testRecastingJSONParameterAnnotatedClasses" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.JavaObjectSupportTestCase.testFunkyNonProps" />
         <item itemvalue="JUnit.All in svenson" />
+        <item itemvalue="JUnit.RecastUtilTest.testRecastingJSONParameterAnnotatedClasses" />
+        <item itemvalue="JUnit.JavaObjectSupportTestCase.testFunkyNonProps" />
         <item itemvalue="JUnit.ConstructorParametrizationTestCase.testReadOnly" />
         <item itemvalue="JUnit.ConstructorParametrizationTestCase.testIgnored" />
-        <item itemvalue="JUnit.JSONBuilderTest.testInclude" />
       </list>
     </recent_temporary>
   </component>
@@ -549,43 +430,9 @@
       <workItem from="1545307429637" duration="977000" />
       <workItem from="1545572659101" duration="3971000" />
       <workItem from="1545746652066" duration="137000" />
+      <workItem from="1583759818416" duration="807000" />
     </task>
     <servers />
-  </component>
-  <component name="TestHistory">
-    <history-entry file="All_in_svenson - 2017.04.30 at 13h 47m 09s.xml">
-      <configuration name="All in svenson" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_svenson - 2017.04.30 at 13h 55m 41s.xml">
-      <configuration name="All in svenson" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ConstructorParametrizationTestCase_testIgnored - 2017.04.30 at 13h 52m 51s.xml">
-      <configuration name="ConstructorParametrizationTestCase.testIgnored" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ConstructorParametrizationTestCase_testIgnored - 2017.04.30 at 13h 53m 03s.xml">
-      <configuration name="ConstructorParametrizationTestCase.testIgnored" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ConstructorParametrizationTestCase_testReadOnly - 2017.04.30 at 13h 54m 42s.xml">
-      <configuration name="ConstructorParametrizationTestCase.testReadOnly" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ConstructorParametrizationTestCase_testReadOnly - 2017.04.30 at 13h 55m 33s.xml">
-      <configuration name="ConstructorParametrizationTestCase.testReadOnly" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="JSONBuilderTest_testInclude - 2016.03.23 at 14h 36m 48s.xml">
-      <configuration name="JSONBuilderTest.testInclude" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="JSONBuilderTest_testInclude - 2016.03.23 at 14h 37m 07s.xml">
-      <configuration name="JSONBuilderTest.testInclude" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="JSONBuilderTest_testInclude - 2016.03.23 at 14h 37m 39s.xml">
-      <configuration name="JSONBuilderTest.testInclude" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="JSONBuilderTest_testInclude - 2016.03.23 at 14h 38m 45s.xml">
-      <configuration name="JSONBuilderTest.testInclude" configurationId="JUnit" />
-    </history-entry>
-  </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="64712000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -595,43 +442,6 @@
       <are-packages-shown value="true" />
       <is-autoscroll-to-source value="true" />
     </todo-panel>
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="0" y="25" width="1920" height="1055" extended-state="6" />
-    <editor active="true" />
-    <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.67071825" visible="true" weight="0.2683706" />
-      <window_info id="Structure" order="1" sideWeight="0.67071825" side_tool="true" weight="0.24908425" />
-      <window_info id="Designer" order="2" />
-      <window_info id="UI Designer" order="3" />
-      <window_info id="Favorites" order="4" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32572615" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32397407" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39937758" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32941177" />
-      <window_info anchor="bottom" id="Version Control" order="7" visible="true" weight="0.32869378" />
-      <window_info anchor="bottom" id="Changes" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32073435" />
-      <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="12" />
-      <window_info anchor="bottom" id="Application Servers" order="13" />
-      <window_info anchor="bottom" id="Tool Output" order="14" weight="0.32941177" />
-      <window_info anchor="bottom" id="Preview" order="15" />
-      <window_info anchor="bottom" id="Docker" order="16" show_stripe_button="false" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24947916" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="Palette&#9;" order="5" />
-      <window_info anchor="right" id="Maven Projects" order="6" />
-      <window_info anchor="right" id="PsiViewer" order="7" />
-      <window_info anchor="right" id="Maven" order="8" />
-    </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -654,292 +464,96 @@
       <collection />
     </option>
   </component>
+  <component name="WindowStateProjectService">
+    <state x="768" y="272" width="374" height="569" key="#com.intellij.ide.util.MemberChooser" timestamp="1583759930014">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="768" y="272" width="374" height="569" key="#com.intellij.ide.util.MemberChooser/0.27.1920.1053@0.27.1920.1053" timestamp="1583759930014" />
+    <state x="100" y="127" width="1720" height="853" key="DiffContextDialog" timestamp="1583760340765">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="100" y="127" width="1720" height="853" key="DiffContextDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1583760340765" />
+    <state width="1409" height="277" key="GridCell.Tab.0.bottom" timestamp="1583760633961">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1409" height="277" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1583760633961" />
+    <state width="1409" height="277" key="GridCell.Tab.0.center" timestamp="1583760633961">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1409" height="277" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1583760633961" />
+    <state width="1409" height="277" key="GridCell.Tab.0.left" timestamp="1583760633961">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1409" height="277" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1583760633961" />
+    <state width="1409" height="277" key="GridCell.Tab.0.right" timestamp="1583760633961">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1409" height="277" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1583760633961" />
+    <state width="1409" height="342" key="GridCell.Tab.1.bottom" timestamp="1583760628376">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1409" height="342" key="GridCell.Tab.1.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1583760628376" />
+    <state width="1409" height="342" key="GridCell.Tab.1.center" timestamp="1583760628375">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1409" height="342" key="GridCell.Tab.1.center/0.27.1920.1053@0.27.1920.1053" timestamp="1583760628375" />
+    <state width="1409" height="342" key="GridCell.Tab.1.left" timestamp="1583760628375">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1409" height="342" key="GridCell.Tab.1.left/0.27.1920.1053@0.27.1920.1053" timestamp="1583760628375" />
+    <state width="1409" height="342" key="GridCell.Tab.1.right" timestamp="1583760628376">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1409" height="342" key="GridCell.Tab.1.right/0.27.1920.1053@0.27.1920.1053" timestamp="1583760628376" />
+    <state width="495" height="73" key="javadoc.popup.new" timestamp="1583760273040">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="495" height="73" key="javadoc.popup.new/0.27.1920.1053@0.27.1920.1053" timestamp="1583760273040" />
+    <state x="623" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1583760491920">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="623" y="259" width="672" height="678" key="search.everywhere.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1583760491920" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/org/svenson/util/JSONPathUtil.java</url>
           <line>366</line>
-          <properties />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/org/svenson/info/JavaObjectPropertyInfo.java</url>
           <line>286</line>
-          <properties />
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/test/org/svenson/JSONParserTestCase.java</url>
           <line>109</line>
-          <properties />
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/org/svenson/info/JavaObjectPropertyInfo.java</url>
           <line>343</line>
-          <properties />
           <option name="timeStamp" value="39" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/test/org/svenson/ConstructorParametrizationTestCase.java</url>
           <line>116</line>
-          <properties />
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/org/svenson/ConstructorParametrizationTestCase.java</url>
           <line>207</line>
-          <properties />
           <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/org/svenson/util/recast/RecastUtilTest.java</url>
+          <line>91</line>
+          <option name="timeStamp" value="47" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="jar:///usr/local/java/jdk1.7/jre/lib/rt.jar!/sun/reflect/NativeConstructorAccessorImpl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="38" selection-start-line="38" selection-end-line="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/local/java/jdk1.7/jre/lib/rt.jar!/sun/reflect/ConstructorAccessor.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/local/java/jdk1.7/jre/lib/rt.jar!/sun/reflect/CallerSensitive.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/local/java/jdk1.7/src.zip!/java/lang/reflect/Constructor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="508" column="18" selection-start-line="508" selection-start-column="18" selection-end-line="508" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/local/java/jdk1.7/src.zip!/java/lang/Class.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="1516" column="28" selection-start-line="1516" selection-start-column="28" selection-end-line="1516" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="13" column="18" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/local/java/jdk1.7/jre/lib/rt.jar!/java/util/Map.class">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/resources/log4j2-test.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/Ox93TestCase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="18" column="69" selection-start-line="18" selection-start-column="69" selection-end-line="18" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/10571721.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/JSONParameter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="20" column="26" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/test/CtorParams.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/test/CTORVariance.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/test/CTORMapVariance.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/test/CTORObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="12" column="24" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/SinkAwareJSONifier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="2" column="29" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/JSONCharacterSink.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/DelayedConstructor.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/util/JSONBuilderTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="94" column="56" selection-start-line="94" selection-start-column="56" selection-end-line="94" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/test/CTORIgnoredSetter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="41" column="24" lean-forward="true" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/test/CTORReadOnly.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="37" lean-forward="true" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/ConstructorParametrizationTestCase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="233" column="53" lean-forward="true" selection-start-line="233" selection-start-column="53" selection-end-line="233" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/util/JSONBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7515">
-          <caret line="522" column="7" selection-start-line="522" selection-start-column="7" selection-end-line="522" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/info/JavaObjectPropertyInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="63" column="18" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
-          <folding>
-            <element signature="e#1391#1392#0" expanded="true" />
-            <element signature="e#1426#1427#0" expanded="true" />
-            <element signature="e#1579#1580#0" expanded="true" />
-            <element signature="e#1614#1615#0" expanded="true" />
-            <element signature="e#4914#4915#0" expanded="true" />
-            <element signature="e#4948#4949#0" expanded="true" />
-            <element signature="e#9796#9797#0" expanded="true" />
-            <element signature="e#9830#9831#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/reflectasm/reflectasm/ReflectAsmPropertyInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-          <folding>
-            <element signature="e#9353#9354#0" expanded="true" />
-            <element signature="e#9388#9389#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/JSONParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="13815">
-          <caret line="939" column="18" selection-start-line="939" selection-start-column="18" selection-end-line="939" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/tokenize/JSONTokenizer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6150">
-          <caret line="419" column="4" selection-start-line="419" selection-start-column="4" selection-end-line="419" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/info/JavaObjectSupport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1575">
-          <caret line="105" column="13" selection-start-line="105" selection-start-column="13" selection-end-line="105" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/reflectasm/reflectasm/ReflectAsmObjectSupport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="45" column="60" selection-start-line="45" selection-start-column="60" selection-end-line="45" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/info/JavaObjectSupportTestCase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/org/svenson/test/FunkyNonProperties.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-          <folding>
-            <element signature="e#126#127#0" expanded="true" />
-            <element signature="e#161#162#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/svenson/info/AbstractObjectSupport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="28" selection-start-line="10" selection-start-column="28" selection-end-line="10" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dependency-check-suppress.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
-          <caret line="155" lean-forward="true" selection-start-line="155" selection-end-line="155" />
-        </state>
-      </provider>
-    </entry>
   </component>
   <component name="masterDetails">
     <states>
