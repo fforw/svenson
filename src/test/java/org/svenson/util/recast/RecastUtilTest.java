@@ -2,6 +2,7 @@ package org.svenson.util.recast;
 
 import org.junit.Test;
 import org.svenson.JSONParser;
+import org.svenson.test.SomeEnum;
 import org.svenson.util.RecastUtil;
 
 import static org.hamcrest.MatcherAssert.*;
@@ -102,14 +103,22 @@ public class RecastUtilTest
 
         {
             //language=JSON
-            final RecastObjectPropTarget result = recast(RecastObjectPropTarget.class, "{\n" +
-                "    \"value\": " +
-                "23934\n" +
-                "}");
+            final RecastObjectPropTarget result = recast(RecastObjectPropTarget.class, "{\"value\": 23934}");
 
             assertThat((Long) result.getValue(), is(23934L));
 
         }
+    }
+
+
+    @Test
+    public void testRecastingEnumProps()
+    {
+        //language=JSON
+        final RecastEnumPropTarget result = recast(RecastEnumPropTarget.class, "{\"someEnum\": \"VAL2\"}");
+
+        assertThat(result.getSomeEnum(), is(SomeEnum.VAL2));
+
     }
 
 
