@@ -74,12 +74,12 @@ public class RecastUtil
 
     public static <T> T recast(Class<T> cls, Object input, ObjectSupport objectSupport)
     {
-        if (cls == null || cls.equals(Object.class))
+        if (input == null || cls == null || cls.equals(Object.class) || cls.equals(input.getClass()))
         {
             return (T) input;
         }
 
-        if (input == null || input instanceof Boolean || input instanceof Number || input instanceof String)
+        if (input instanceof Boolean || input instanceof Number || input instanceof String)
         {
             if (cls.isInstance(input))
             {

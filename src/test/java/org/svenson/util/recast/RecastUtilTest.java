@@ -121,6 +121,24 @@ public class RecastUtilTest
 
     }
 
+    @Test
+    public void testRecastingPOJOS()
+    {
+
+        final RecastTarget t = new RecastTarget();
+        t.setName("Recast-POJO");
+        t.setNum(1111);
+
+        //language=JSON
+        final RecastTarget result = RecastUtil.recast(RecastTarget.class, t);
+
+        // we expect the exact same instance when doing an unnecessary recast
+        assertThat(result == t, is(true));
+        assertThat(result.getName(), is("Recast-POJO"));
+        assertThat(result.getNum(), is(1111));
+
+    }
+
 
     private <T> T recast(Class<T> cls, String json)
     {
