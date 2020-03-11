@@ -128,7 +128,7 @@ public class RecastUtil
                         for (Object elem : (Collection) value)
                         {
                             out.add(
-                                recast(typeHint, elem)
+                                recast(typeHint, elem, objectSupport)
                             );
                         }
                         recastValue = out;
@@ -144,7 +144,10 @@ public class RecastUtil
                         {
                             out.put(
                                 e.getKey(),
-                                recast(typeHint, e.getValue()
+                                recast(
+                                    typeHint,
+                                    e.getValue(),
+                                    objectSupport
                                 )
                             );
                         }
@@ -154,7 +157,11 @@ public class RecastUtil
                     }
                     else
                     {
-                        recastValue = recast(info.getType(), value);
+                        recastValue = recast(
+                            info.getType(),
+                            value,
+                            objectSupport
+                        );
                     }
                     util.setProperty(instance, info.getJsonName(), recastValue);
                 }
