@@ -117,8 +117,8 @@ public class RecastUtil
                     final Object value = util.getProperty(input, info.getJsonName());
 
                     final Object recastValue;
-                    final boolean isList = info.getType().isAssignableFrom(List.class);
-                    final boolean isSet = info.getType().isAssignableFrom(Set.class);
+                    final boolean isList = List.class.isAssignableFrom(info.getType());
+                    final boolean isSet = Set.class.isAssignableFrom(info.getType());
                     if (isList || isSet)
                     {
                         final Collection<Object> out = isSet ? new HashSet<Object>() : new ArrayList<Object>();
@@ -134,7 +134,7 @@ public class RecastUtil
                         recastValue = out;
 
                     }
-                    else if (info.getType().isAssignableFrom(Map.class))
+                    else if (Map.class.isAssignableFrom(info.getType()))
                     {
                         final Map<String, Object> inputMap = (Map<String, Object>) value;
                         final Map<String, Object> out = new HashMap<String, Object>(capacity(inputMap.size()));

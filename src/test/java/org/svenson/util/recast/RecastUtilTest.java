@@ -46,6 +46,7 @@ public class RecastUtilTest
 
     }
 
+
     @Test
     public void testRecastingPOJOsWithMapProps()
     {
@@ -68,6 +69,7 @@ public class RecastUtilTest
 
     }
 
+
     @Test
     public void testRecastingJSONParameterAnnotatedClasses()
     {
@@ -81,6 +83,33 @@ public class RecastUtilTest
         assertThat(result.getName(), is("JSONParam-01"));
         assertThat(result.getNum(), is(93823));
 
+    }
+
+
+    @Test
+    public void testRecastingObjectTypedProps()
+    {
+        {
+
+            //language=JSON
+            final RecastObjectPropTarget result = recast(RecastObjectPropTarget.class, "{\n" +
+                "    \"value\": " +
+                "\"ObjProp-01\"\n" +
+                "}");
+
+            assertThat((String) result.getValue(), is("ObjProp-01"));
+        }
+
+        {
+            //language=JSON
+            final RecastObjectPropTarget result = recast(RecastObjectPropTarget.class, "{\n" +
+                "    \"value\": " +
+                "23934\n" +
+                "}");
+
+            assertThat((Long) result.getValue(), is(23934L));
+
+        }
     }
 
 
