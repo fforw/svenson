@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.2.xsd">
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
    <suppress>
       <notes><![CDATA[
 	This suppresses a CVE referring to the slf4j-ext module and an EventData class that isn't contained
@@ -9,5 +9,14 @@
       ]]></notes>
       <gav regex="true">^org\.slf4j:slf4j-api:.*$</gav>
       <cpe>cpe:/a:slf4j:slf4j</cpe>
+  </suppress>
+
+  <suppress>
+     <notes><![CDATA[
+      CVE-2021-37533 refers to commons-net which somehow triggers a false posivite for commons-io, 
+      commons-beanutils and commons-collections, none of which have dependencies to commons-net.        
+     ]]></notes>
+     <cve>CVE-2021-37533</cve>
    </suppress>
+
 </suppressions>
