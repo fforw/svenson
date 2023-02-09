@@ -1,16 +1,12 @@
 package org.svenson.info;
 
-import java.beans.Introspector;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
+import org.svenson.util.IntrospectionUtil;
 
 public abstract class AbstractObjectSupport implements ObjectSupport
 {
-
-
     protected static String propertyName(String name, int prefixLen)
     {
-        return Introspector.decapitalize(name.substring(prefixLen));
+        return IntrospectionUtil.decapitalize(name.substring(prefixLen));
     }
 
 }

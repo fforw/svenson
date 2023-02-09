@@ -1,6 +1,5 @@
 package org.svenson.util;
 
-import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
@@ -16,11 +15,6 @@ import org.svenson.SvensonRuntimeException;
  */
 public class ExceptionWrapper
 {
-    public static SvensonRuntimeException wrap(IntrospectionException e)
-    {
-        return new SvensonRuntimeException(e);
-    }
-
     public static SvensonRuntimeException wrap(IllegalAccessException e)
     {
         return new SvensonRuntimeException(e);
