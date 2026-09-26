@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code.svenson</groupId>
     <artifactId>svenson</artifactId>
-    <version>1.6.2-SNAPSHOT</version>
+    <version>1.6.2</version>
     <name>svenson</name>
     <packaging>jar</packaging>
     <description>JSON parser/generator for Java</description>
@@ -21,7 +21,7 @@
         <connection>scm:git:https://github.com/fforw/svenson.git</connection>
         <developerConnection>scm:git:git@github.com:fforw/svenson.git</developerConnection>
         <url>https://github.com/fforw/svenson/</url>
-        <tag>HEAD</tag>
+        <tag>svenson-1.6.2</tag>
     </scm>
 
     <developers>
