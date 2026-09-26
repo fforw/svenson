@@ -75,21 +75,17 @@
                 </configuration>
             </plugin>
 
+            <!-- Not bound to a phase: it needs an NVD API key (-DnvdApiKey=...) and
+                 a lengthy database download, which a release must not depend on.
+                 Run it on demand with mvn dependency-check:check -->
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>8.0.2</version>
+                <version>13.0.0</version>
                 <configuration>
                     <suppressionFile>${basedir}/dependency-check-suppress.xml</suppressionFile>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>aggregate</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
