@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeMap;
 
 import org.junit.Before;
@@ -331,11 +330,18 @@ public class JSONParserTestCase
     @Test
     public void testTypeDistance()
     {
-        assertThat(JSONParser.getTypeDistance(Collection.class, Collection.class, 1), is(nullValue()));
-        assertThat(JSONParser.getTypeDistance(Collection.class, List.class,1), is(1));
-        assertThat(JSONParser.getTypeDistance(Collection.class, Set.class,1), is(1));
-        assertThat(JSONParser.getTypeDistance(Collection.class, SortedSet.class,1), is(2));
+        assertThat(JSONParser.getTypeDistance(Root.class, Root.class, 1), is(nullValue()));
+        assertThat(JSONParser.getTypeDistance(Root.class, Child.class,1), is(1));
+        assertThat(JSONParser.getTypeDistance(Root.class, OtherChild.class,1), is(1));
+        assertThat(JSONParser.getTypeDistance(Root.class, GrandChild.class,1), is(2));
     }
+
+    // The JDK's collection interfaces are no fixture: JDK 21 put
+    // SequencedCollection between List and Collection
+    interface Root {}
+    interface Child extends Root {}
+    interface OtherChild extends Root {}
+    interface GrandChild extends Child {}
     
     @Test
     public void thatParsingNullValuesWorks()
