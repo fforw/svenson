@@ -897,7 +897,7 @@ public class JSONParser
                     if (distance < leastTypeDistance)
                     {
                         leastTypeDistance = distance;
-                        best = curInterface;
+                        best = e.getValue();
                     }
                 }
             }

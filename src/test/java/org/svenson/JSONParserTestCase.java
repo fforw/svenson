@@ -184,6 +184,19 @@ public class JSONParserTestCase
 
     }
 
+    @Test
+    public void thatAnInterfaceAboveTheMappedOnesGetsTheClosestMapping()
+    {
+        JSONParser parser = new JSONParser();
+
+        // Iterable has no mapping of its own; Collection is the closest of the mapped interfaces below it
+        Iterable i = parser.parse(Iterable.class, "[1,7]");
+        assertThat(i,is(ArrayList.class));
+        Iterator it = i.iterator();
+        assertThat((Long)it.next(),is(1l));
+        assertThat((Long)it.next(),is(7l));
+    }
+
     @Test(expected = JSONParseException.class)
     public void testGarbage1()
     {
